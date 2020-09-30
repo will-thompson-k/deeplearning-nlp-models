@@ -69,7 +69,7 @@ numpy==1.19.0
 ## Citation
 
 ```python 
-@misc{seeplearning-nlp-models,
+@misc{deeplearning-nlp-models,
   author = {Thompson, Will},
   url = {https://github.com/will-thompson-k/deeplearning-nlp-models},
   year = {2020}
