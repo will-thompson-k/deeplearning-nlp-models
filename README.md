@@ -21,6 +21,10 @@ details and a self-contained Jupyter notebook.
 ### Embeddings
 - [ ] [Word2Vec embeddings (skip-gram)](notebooks/word2vec/README.md)
 
+### Attention
+- [ ] [Attention (i.e. the original Transformer)](notebooks/attention/README.md)
+
+
 ## Setup
 
 You can install the repo using `pip`:
