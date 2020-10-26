@@ -1,6 +1,6 @@
 from nlpmodels.models.transformer_blocks import sublayers,attention,decoder,encoder
 import torch.nn as nn
-from copy import deepcopy
+import torch
 from nlpmodels.utils.transformer_batch import TransformerBatch
 
 
@@ -11,21 +11,23 @@ class Transformer(nn.Module):
     This is an encoder-decoder style architecture.
 
     The hyper-params are derived from the paper's specifications.
+
+    Derived in part from logic found in "Annotated Transformer": https://nlp.seas.harvard.edu/2018/04/03/attention.html.
     """
 
     def __init__(self, source_vocab_size: int, target_vocab_size: int, num_layers_per_stack: int = 6,
                  dim_model: int = 512, dim_ffn: int = 2048, num_heads: int = 8,
                  max_length: int = 1000, dropout: float = 0.1):
         """
-           Args:
-                source_vocab_size (int):
-                target_vocab_size (int):
-                num_layers_per_stack (int):
-                dim_model (int):
-                dim_ffn (int):
-                num_heads (int):
-                max_length (int):
-                dropout (float):
+        Args:
+            source_vocab_size (int): size of the source vocabulary.
+            target_vocab_size (int): size of the target vocabulary.
+            num_layers_per_stack (int): number of sequential encoder/decoder layers within each block.
+            dim_model (int): size of the embedding space.
+            dim_ffn (int): size of the residual/skip-connection hidden layer.
+            num_heads (int): number of simultaneous attention heads calculated during attention.
+            max_length (int): the max_seq_length of the input/output sequencies.
+            dropout (float): Hyper-parameter used in drop-out regularization in training.
         """
         super(Transformer, self).__init__()
 
@@ -36,7 +38,6 @@ class Transformer(nn.Module):
 
         # (3) Pass features through encoder block
         self._encoder_block = encoder.CompositeEncoder(
-            #dim_model
             encoder.EncoderBlock(max_length, attention.MultiHeadedAttention(num_heads, dim_model, dropout),
                                  sublayers.PositionWiseFFNLayer(dim_model, dim_ffn), dropout), num_layers_per_stack)
 
@@ -47,7 +48,6 @@ class Transformer(nn.Module):
 
         # (6) Pass encoder output + output embedding to  decoder block
         self._decoder_block = decoder.CompositeDecoder(
-            #dim_model
             decoder.DecoderBlock(max_length, attention.MultiHeadedAttention(num_heads, dim_model, dropout),
                                  attention.MultiHeadedAttention(num_heads, dim_model, dropout),
                                  sublayers.PositionWiseFFNLayer(dim_model, dim_ffn),
@@ -58,7 +58,7 @@ class Transformer(nn.Module):
         # (8) compute softmax
         self._final_softmax = nn.LogSoftmax(dim=-1)
 
-        # Xavier norm all the parameters
+        # Xavier norm all the parameters that are not fixed
         self._init_parameters()
 
     def _init_parameters(self):
@@ -70,23 +70,47 @@ class Transformer(nn.Module):
             if p.dim() - 1:
                 nn.init.xavier_uniform_(p)
 
-    def _encode(self, src, src_mask):
+    def _encode(self, src: torch.Tensor, src_mask: torch.Tensor) -> torch.Tensor:
+        """
+        Calculate all the layers in the encoder side of the model.
+        Args:
+            src (torch.Tensor): matrix of (batch_size, max_seq_length) size from source sequence.
+            src_mask (torch.Tensor): matrix of (batch_size, max_seq_length) masking source so model doesn't see padding.
 
+        Returns:
+            encoder "memory" matrix of (batch_size, max_seq_length, dim_model) for decoder block.
+        """
         embeddings = self._input_embeddings(src)
         pos_encoding = self._input_pe(embeddings)
 
         return self._encoder_block(pos_encoding, src_mask)
 
-    def _decode(self, memory, src_mask, tgt, tgt_mask):
+    def _decode(self, memory: torch.Tensor, src_mask: torch.Tensor, tgt: torch.Tensor, tgt_mask: torch.Tensor) -> torch.Tensor:
+        """
+        Calculate all the layers in the decoder side of the model.
+        Args:
+            memory (torch.Tensor): matrix of (batch_size, max_seq_length, dim_model) size from encoder output.
+            src_mask (torch.Tensor): matrix of (batch_size, max_seq_length) masking source so model doesn't see padding.
+            tgt (torch.Tensor): matrix of (batch_size, max_seq_length) size of target sequence.
+            tgt_mask (torch.Tensor): matrix of (batch_size, max_seq_length) masking target  Masking target so model
+            doesn't see padding or next sequential values.
 
+        Returns:
+            encoder "memory" matrix of (batch_size, max_seq_length, dim_model) for decoder block.
+        """
         embeddings = self._output_embeddings(tgt)
         pos_encoding = self._output_pe(embeddings)
 
         return self._decoder_block(pos_encoding, memory, src_mask, tgt_mask)
 
-    def forward(self, data: TransformerBatch):
+    def forward(self, data: TransformerBatch) -> torch.Tensor:
         """
         Main call of transformer model. Pass through encoder-decoder architecture.
+
+        Args:
+            data(TransformerBatch): Class of batch data containing source, source_mask, target, target_mask.
+        Returns:
+            output matrix of probabilities of size (batch_size,max_seq_length,target_vocab_size).
         """
 
         encode = self._encode(data.src, data.src_mask)
@@ -102,7 +126,7 @@ if __name__ == '__main__':
     utils.set_seed_everywhere()
     args = Namespace(
         # Model hyper-parameters
-        num_layers_per_stack=1,  # original value = 6
+        num_layers_per_stack=2,  # original value = 6
         dim_model=512,
         dim_ffn=2048,
         num_heads=8,
@@ -113,7 +137,7 @@ if __name__ == '__main__':
         # Training hyper-parameters
         num_epochs=30,
         learning_rate=0.0,
-        batch_size=50,
+        batch_size=128,
     )
 
     train_dataloader, vocab_source, vocab_target = transformer_dataset.TransformerDataset.get_training_dataloader(args)
@@ -123,5 +147,5 @@ if __name__ == '__main__':
                                     args.num_layers_per_stack, args.dim_model,
                                     args.dim_ffn, args.num_heads, args.max_sequence_length,
                                     args.dropout)
-    trainer = train.TransformerTrainer(args, vocab_target_size, vocab_target.eos_index, model, train_dataloader)
+    trainer = train.TransformerTrainer(args, vocab_target_size, vocab_target.mask_index, model, train_dataloader)
     trainer.run()

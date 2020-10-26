@@ -64,11 +64,11 @@ Here are some models I want to implement in the near future:
 - [ ] GloVe embeddings
 - [ ] TextCNN
 - [ ] Encoder-Decoder RNN
-- [ ] BERT
+- [ ] GPT
+- [ ] BERT (maybe all the BERTs)
 - [ ] ELMo
 - [ ] XLNet
-- [ ] GPT
-- [ ] T5
+- [ ] T5 (also by Google: Performer attention-model)
 
 ## Requirements
 

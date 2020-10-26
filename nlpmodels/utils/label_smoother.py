@@ -12,14 +12,16 @@ class LabelSmoothingLossFunction(nn.Module):
     distribution over the vocabulary with the peak at the index where y==1.
 
     Attention (2017) uses smoothing hyper-param == 0.1.
+
+    Derived in part from logic found in "Annotated Transformer": https://nlp.seas.harvard.edu/2018/04/03/attention.html.
     """
 
     def __init__(self, vocab_size: int, padding_idx: int, smoothing: float = 0.1):
         """
         Args:
-            vocab_size (int):
-            padding_idx (int):
-            smoothing (float):
+            vocab_size (int): Size of target dictionary.
+            padding_idx (int): Index of padding token in the target dictionary.
+            smoothing (float): hyper-parameter used in smoothing.
         """
         super(LabelSmoothingLossFunction, self).__init__()
         self._criterion = nn.KLDivLoss(size_average=False)
@@ -27,8 +29,16 @@ class LabelSmoothingLossFunction(nn.Module):
         self._smoothing = smoothing
         self._vocab_size = vocab_size
 
-    def forward(self, yhat, target):
+    def forward(self, yhat: torch.Tensor, target: torch.Tensor) -> Variable:
+        """
+        Main function call of label smoother.
+        Args:
+            yhat (torch.Tensor): A sequence of (max_seq_length,target_vocab_size) probability values.
+            target (torch.Tensor): A 1D sequence indicating the token values of the target.
 
+        Returns:
+            Variable object containing the loss function.
+        """
         # yhat should be (max_seq_length,target_vocab_size)
         # y should be 1D max_seq_length
         assert yhat.size(1) == self._vocab_size

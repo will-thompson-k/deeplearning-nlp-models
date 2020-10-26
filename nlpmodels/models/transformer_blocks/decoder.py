@@ -51,7 +51,10 @@ class DecoderBlock(nn.Module):
             src_mask (torch.Tensor): Masking source so model doesn't see padding.
             tgt_mask (torch.Tensor): Masking target so model doesn't see padding or next sequential values.
         """
+        # first self-attention on the decoder[l-1] layer
         x = self._add_norm_layer_1(x, lambda x: self._self_attention(x, x, x, tgt_mask))
+        # then encoder-decoder attention where the query is decoder[l-1]
+        # and the key,value pairs are from the encoder memory derived from source.
         x = self._add_norm_layer_2(x, lambda x: self._source_attention(x, memory, memory, src_mask))
         x = self._add_norm_layer_3(x, self._feed_forward)
         return x

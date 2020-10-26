@@ -4,7 +4,7 @@ from argparse import Namespace
 import torch.nn as nn
 from torch.utils.data import DataLoader
 from nlpmodels.utils import optims, label_smoother, transformer_batch
-import numpy as np
+from typing import Tuple
 
 
 class Word2VecTrainer(object):
@@ -14,10 +14,10 @@ class Word2VecTrainer(object):
 
     def __init__(self,args: Namespace,model: nn.Module,train_data: DataLoader):
         """
-             Args:
-                 args (Namespace): a class containing all the parameters associated with run
-                 model (nn.Module): a PyTorch model
-                 train_data (DataLoader): a data loader that provides batches for running
+         Args:
+             args (Namespace): a class containing all the parameters associated with run
+             model (nn.Module): a PyTorch model
+             train_data (DataLoader): a data loader that provides batches for running
          """
         self._args = args
         self._model = model
@@ -61,22 +61,23 @@ class TransformerTrainer(object):
     '''
     Trainer class for the Transformer model.
     '''
-    def __init__(self, args: Namespace,vocab_target_size: int, eos_index: int, model: nn.Module, train_data: DataLoader):
+    def __init__(self, args: Namespace,vocab_target_size: int, pad_index: int, model: nn.Module, train_data: DataLoader):
         """
-             Args:
-                 args (Namespace): a class containing all the parameters associated with run
-                 vocab_target_size (int): size of target dictionary
-                 eos_index (int): index of eos token
-                 model (nn.Module): a PyTorch model
-                 train_data (DataLoader): a data loader that provides batches for running
+        Args:
+             args (Namespace): a class containing all the parameters associated with run
+             vocab_target_size (int): size of target dictionary
+             pad_index (int): index of pad token.
+             model (nn.Module): a PyTorch model
+             train_data (DataLoader): a data loader that provides batches for running
          """
         self._args = args
         self._model = model
         self._train_data = train_data
 
         self._loss_function = label_smoother.LabelSmoothingLossFunction(vocab_size=vocab_target_size,
-                                                                        padding_idx=eos_index, smoothing=args.label_smoothing)
+                                                                        padding_idx=pad_index, smoothing=args.label_smoothing)
 
+        # Noam optimizer per the paper (varies LR of Adam optimizer as a function of step)
         self._optimizer = optims.NoamOptimizer.get_transformer_noam_optimizer(args,model)
 
     def run(self):
@@ -112,14 +113,23 @@ class TransformerTrainer(object):
                 # step 5. use optimizer to take gradient step
                 self._optimizer.step()
 
+                # NOTE: Usually worth while measuring the loss from the eval curve, especially when considering
+                # early stopping. For this experiment, just running on training set entirely.
+
                 # status bar
                 pbar.set_postfix(loss=loss.item())
 
         print("Finished Training...")
 
     @staticmethod
-    def _reformat_data(data):
+    def _reformat_data(data: Tuple) -> transformer_batch.TransformerBatch:
+        """
 
+        Args:
+            data (Tuple): The tuples of LongTensors to be converted into a Batch object.
+        Returns:
+            TransformerBatch object containing data for a given batch.
+        """
         # (batch,seq) shape tensors
         source_integers, target_integers = data
 

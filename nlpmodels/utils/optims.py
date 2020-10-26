@@ -12,6 +12,8 @@ class NoamOptimizer(object):
     Tunes the LR of optimizer class during training by doing the following:
     (1) During warm-up, the LR increases linearly.
     (2) Afterwards, the warm_up steps decreases ~ 1/sqrt(step_number).
+
+    Derived in part from logic found in "Annotated Transformer": https://nlp.seas.harvard.edu/2018/04/03/attention.html.
     """
 
     def __init__(self, dim_model: int, factor: float, warm_up: int, optimizer: Optimizer):
@@ -45,6 +47,9 @@ class NoamOptimizer(object):
         self._optimizer.step()
 
     def zero_grad(self):
+        """
+        Clears out the gradients.
+        """
         self._optimizer.zero_grad()
 
     def calc_lr(self) -> float:
