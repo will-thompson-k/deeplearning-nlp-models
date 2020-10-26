@@ -36,7 +36,7 @@ class SkipGramDataset(AbstractNLPDataset):
                         dictionary (NLPVocabulary): a dictionary built off of the training data to map tokens <-> idxs.
                         context_size (int): the window around each input word to derive context pairings.
                         train (bool): a "train" flag to indicate we want to sub-sample the training set.
-                    Output:
+                    Returns:
                         list of (input_idx, context_idx) pairs to be used for negative sampling loss problem.
         """
         data_partitions = []
@@ -65,7 +65,7 @@ class SkipGramDataset(AbstractNLPDataset):
                 dictionary (NLPVocabulary): a dictionary built off of the training data to map tokens <-> idxs.
                 context_size (int): the window around each input word to derive context pairings.
                 train (bool): a "train" flag to indicate we want to sub-sample the training set.
-            Output:
+            Returns:
                 list of (input_idx, context_idx) pairs to be used for negative sampling loss problem.
         """
         train_data = []
@@ -84,7 +84,7 @@ class SkipGramDataset(AbstractNLPDataset):
             Args:
                 context_size (int): size of the window to derive context words
                 thresh (float): a hyper-parameter to be used in frequent word sub-sampling
-            Output:
+            Returns:
                 (torch.Dataloader, NLPVocabulary) tuple to be used downstream in training.
         """
         context, thresh, batch_size = args
@@ -104,7 +104,7 @@ class SkipGramDataset(AbstractNLPDataset):
             Args:
                 context_size (int): size of the window to derive context words
                 thresh (float): a hyper-parameter to be used in frequent word sampling
-            Output:
+            Returns:
                 (NLPDataset,NLPVocabulary) tuple to be used downstream in training.
         """
         context_size, thresh = args

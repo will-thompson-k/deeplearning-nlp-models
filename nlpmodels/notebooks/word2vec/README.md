@@ -1,12 +1,13 @@
-# Word2vec: Skip-gram Implementation
+# Word2vec: Skip-gram via Negative Sampling
 
 This is the implementation of the Skip-gram model in the paper:  <br> &nbsp;&nbsp;&nbsp;&nbsp;
 Mikolov et al. ["Distributed Representations of Words and Phrases
     and their Compositionality"](https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf) 2013. 
 
-![t-SNE visualization of embeddings from original paper.](../../media/word2vec_embeddings.png)
+![t-SNE visualization of embeddings from original paper.](../../../media/word2vec_embeddings.png)
 
-(note: all images are from paper)
+Image source: Mikolov et al. (2013)
+
 ## Contents
 
 - [Jupyter Notebook](#Notebook)
@@ -21,7 +22,7 @@ Mikolov et al. ["Distributed Representations of Words and Phrases
 
 ## Notebook
 
-Check out the Jupyter notebook [here](word2vec.ipynb) to see how to run the code!
+Check out the Jupyter notebook [here](word2vec.ipynb) to run the code.
 
 
 ## Usage
@@ -59,12 +60,12 @@ A traditional **bag-of-words** (i.e. "BOW") approach extracts heuristic-defined 
 These are often **frequency-based**, where the frequency of a term is thought to be proportional to its signal.
 We know this hypothesis isn't totally accurate - for instance, the word "the" may appear very frequently, but
 lack any meaningful value- so massaging through pre-processing and/or frequency transformations is usually required 
-to tweak terms. These "independent" features are then sub-selected and combined as weak predictors to developer a 
+to tweak terms. These independent features usually either used as input to downstream feature transforms or are directly combined to developer a 
 stronger composite prediction about some target.
 
 Suppose that we were interested in boosting our model's signal by gaining contextual understanding of the words in a text.
-This is the premise of the **"distribution hypothesis"**, that words that are close in proximity in a sentence share meaning. 
-Word embeddings present a representation that gets closer to semantic meaning than a purely frequency-based approach.
+This is the premise of the **"distributional hypothesis"**, that words that are close in proximity in a sentence share meaning. 
+Word embeddings present a representation that gets closer to semantic meaning versus a purely frequency-based approach.
 
 Embeddings are one of the most frequent forms of **"transfer learning"** found in NLP. Taking some set of documents (preferably very,very large), 
 word embeddings are trained to express the context of words found together within this corpus in a lower dimensional encoding 
@@ -78,48 +79,65 @@ While there are many popular embeddings, word2vec is one of the most popular cla
 With the word2vec style of embedding problem, there are 2 arguments: an input/target word and a 
 collection of surrounding words (i.e "context").
 
-One style of word2vec tries to map multiple the context to a given target ("CBOW", or continuous bag of words). 
-The other style, "skip-gram" attempts to take an input word and map it to a context. This implementation is
+One style of word2vec tries to map multiple the context to a given target. This is called **"CBOW"**, or continuous bag of words. 
+The other style, **"skip-gram"** attempts to take an input word and map it to a context. This implementation is
 concerned with the latter.
 
-![Skipgram diagram](../../media/skipgram_diagram.png)
+![Skipgram diagram](../../../media/skipgram_diagram.png)
+
+Image source: Mikolov et al. (2013)
 
 
 ### Negative_Sampling
 
 The canonical skip-gram problem is here:
 
-![Skipgram canonical](../../media/skipgram_canonical.png)
+![Skipgram canonical](../../../media/skipgram_canonical.png)  
+Image source: Mikolov et al. (2013)
 
-where each of those probabilities are calculated by a softmax probability calculation.
 
-However, this approach suffers from being *extremely* slow as the denominator needs to be calculated for each word
+where each of those probabilities are calculated by a softmax probability calculation.  
+
+Note that there are actually 2 sets of embeddings being trained in a word2vec problem: input embeddings and output embeddings.
+While most applications are concerned with the input embeddings, output (context) embeddings have interesting potential applications
+with topic modeling.  
+
+The softmax approach suffers from being *extremely* slow as the denominator needs to be calculated for each word
 in the vocabulary.
 
-This paper by Mikolov et al. proposed a novel way of getting around this computational hurdle. Instead of
-framing the problem as a multi-class classification problem, it treated it as a *k+1* set of binary classification problems.
-For each positive (input,context) example, there are k random negative samples drawn to train the model.
+This paper made a pretty incredible insight into how to get around this computational hurdle. Instead of
+framing the problem as a multi-class classification problem, it treats the problem as a binary classification
+problem where `y:=1` means the 2 words are in the same context window and `y:=0` means they are not. This type of target
+is similar to that found in the metric learning and "few shot learner" (FSL) family of problems where the model is learning
+a representation such that the words within the same context are within a close distance. To accomplish this distance learning,
+there are k random negative samples drawn for every positive (input,context) example to train the model how to differentiate the 2 cases.
+Thus, instead of a large multi-class problem we've reduced it into a **k+1** set of **binary classification** problems.
 
-![Skipgram NGS](../../media/skipgram_NGS.png)
+![Skipgram NGS](../../../media/skipgram_NGS.png)  
+Image source: Mikolov et al. (2013)
 
-This paper includes a number of other insights to speed up computation, including sub-sampling frequent words.
+
+This paper made another suggestion on how to reduce computation time further via sub-sampling frequent words. The intuition behind
+this idea is quite simple: for words that frequently appear within the corpus there are diminishing returns to samples that contain
+the word. This empirically can significantly speed up the amount of time to fit the model.
 
 ## Features
 
-This implementation contains the following from the paper:
-- [ ] frequent word sub-sampling
-- [ ] negative sampling 
+- [ ] Self-contained "library" of word2vec model re-implementation, tokenizer, 
+dictionary, data loader, and re-producible notebook example
+- [ ] Implementation of frequent word sub-sampling ( in `nlpmodels/utils/skipgram_dataset`)
+- [ ] Implementation of negative sampling  (in `nlpmodels/models/word2vec` )
 
 ## References
 
-These implementations were helpful:
+For more in-depth explanations of embeddings and word2vec, I recommend reading the following:
+1. The original paper (linked above)
+2. https://kelvinniu.com/posts/word2vec-and-negative-sampling/ (skip-grams clearly explained)
+3. https://colah.github.io/posts/2014-07-NLP-RNNs-Representations/ (really well-written treatment by Chris Colah)
+
+These implementations were helpful when I was working through some nuances:
 1. https://github.com/Andras7/word2vec-pytorch
 2. https://github.com/theeluwin/pytorch-sgns
-
-I thought this high-level explanation of skip-grams was well-written: https://kelvinniu.com/posts/word2vec-and-negative-sampling/.
-
-For a more thorough review of embeddings and their properties, Chris Colah's piece https://colah.github.io/posts/2014-07-NLP-RNNs-Representations/
-is a fantastic read.
 
 ## Citation
 

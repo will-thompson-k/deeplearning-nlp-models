@@ -3,11 +3,12 @@
 
 This repository contains the re-implementation of a handful of "deep" NLP papers in PyTorch.  
 
-Each model implementation is intended to be compact and interpretable and is accompanied by an overview of the paper's 
-details and a self-contained Jupyter notebook.
+Each model implementation is intended to be compact and interpretable and is accompanied by a brief overview of the paper's 
+details as well as a self-contained Jupyter notebook.
 
 ## Contents
 
+- [Features](#Features)
 - [Models](#Models)
 - [Setup](#Setup)
 - [Structure](#Structure)
@@ -16,13 +17,25 @@ details and a self-contained Jupyter notebook.
 - [Citation](#Citation)
 - [License](#License)
 
+## Features
+
+This repository has the following features:
+
+- [ ] **Model Breakdowns**: A brief explanation of the model and its components are provided in separate README.md files.
+- [ ] **Jupyter Notebooks**: Model instantiation and running are provided for each model.
+- [ ] **Complete Model Utilities**: Tokenizers, datasetloaders, dictionaries, and all the custom utilities required for each problem.
+- [ ] **Documented Code**: Classes and methods are described in docstrings and comments.
+- [ ] **Multiple Dataset Libraries**: Both *HuggingFaces* and *torchtext* (i.e. Pytorch) datasets are used in examples.
+
 ## Models
 
 ### Embeddings
-- [ ] [Word2Vec embeddings (skip-gram)](notebooks/word2vec/README.md)
+- [ ] [Word2Vec::Skip-gram embeddings (Negative Sampling)](nlpmodels/notebooks/word2vec/README.md)
 
-### Attention
-- [ ] [Attention (i.e. the original Transformer)](notebooks/attention/README.md)
+### Sequence-to-Sequence Models
+
+#### Transformers
+- [ ] [O.G. Transformer ("Attention is All You Need")](nlpmodels/notebooks/transformer/README.md)
 
 
 ## Setup
@@ -30,7 +43,7 @@ details and a self-contained Jupyter notebook.
 You can install the repo using `pip`:
 
 ```python
-python -m pip install git+https://github.com/will-thompson-k/deeplearning-nlp-models 
+pip install git+https://github.com/will-thompson-k/deeplearning-nlp-models 
 ```
 
 ## Structure
@@ -41,7 +54,7 @@ Here is a breakdown of the repository:
 - [ ] `nlpmodels/utils`: Contains all the auxiliary classes related to building a model, 
 including datasets, vocabulary, tokenizers and trainer classes.
 - [ ] `nlpmodels/tests`: Coverage.
-- [ ] `notebooks/`: Contains the notebooks and write-ups for each model implementation.
+- [ ] `nlpmodels/notebooks`: Contains the notebooks and write-ups for each model implementation.
 
 
 ## Roadmap
@@ -49,25 +62,31 @@ including datasets, vocabulary, tokenizers and trainer classes.
 Here are some models I want to implement in the near future:
 
 - [ ] GloVe embeddings
-- [ ] Attention / the Transformer
-- [ ] BERT (maybe all the BERTs)
+- [ ] TextCNN
+- [ ] Encoder-Decoder RNN
+- [ ] BERT
 - [ ] ELMo
-- [ ] GPT-2
-- [ ] GPT-3
 - [ ] XLNet
-
+- [ ] GPT
+- [ ] T5
 
 ## Requirements
+
+You can install the requirements here:
+
+```python
+pip install -r requirements.txt 
+```
 
 Python 3.6+
 
 Here are the package requirements (found in requirements.txt)
 
-datasets==1.0.2  
-torch==1.5.1  
-pytest==5.4.3  
-tqdm==4.45.0  
-numpy==1.19.0  
+- [ ] numpy==1.19.1
+- [ ] tqdm==4.50.2
+- [ ] torch==1.6.0
+- [ ] datasets==1.0.2
+- [ ] torchtext==0.8.0a0+c851c3e
 
 
 ## Citation

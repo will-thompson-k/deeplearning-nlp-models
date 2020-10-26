@@ -20,7 +20,7 @@ def get_cosine_similar(target_word : str, word_to_idx : dict, embeddings : torch
             target_word (str): token of interest
             word_to_idx (dict): word to index map
             embeddings (torch.Tensor): embedding vectors
-        Output:
+        Returns:
             returns a list of (token, cosine_similarity) pairs.
     """
     cos = nn.CosineSimilarity(dim=0)
