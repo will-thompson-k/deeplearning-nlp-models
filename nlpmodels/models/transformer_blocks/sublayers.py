@@ -13,7 +13,7 @@ class AddAndNormWithDropoutLayer(nn.Module):
         self._norm = nn.BatchNorm1d(size, momentum=None, affine=False)
         self._dropout = nn.Dropout(dropout)
 
-    def forward(self, x: torch.Tensor, sublayer: nn.Module) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, sublayer) -> torch.Tensor:
         # print(x.shape)
         batch_normed = self._norm(x)
         transformed = sublayer(batch_normed)
@@ -22,7 +22,7 @@ class AddAndNormWithDropoutLayer(nn.Module):
 
 class PositionWiseFFNLayer(nn.Module):
     """
-    Implements the position-wise FFN sublayer.
+    Implements the position-wise FFN sublayer. This can be thought of as 2 convolution layers with kernel size 1.
     """
     def __init__(self, dim_model: int, dim_ffn: int):
         super(PositionWiseFFNLayer, self).__init__()
@@ -32,7 +32,7 @@ class PositionWiseFFNLayer(nn.Module):
 
     def forward(self, x) -> torch.Tensor:
         """
-        Applies max(0,x) (i.e. RelU) + convoluted linear layers.
+        Applies max(0,x) (i.e. RelU) + linear layers.
         """
         return self._W2(self._relu(self._W1(x)))
 
