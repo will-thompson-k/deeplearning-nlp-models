@@ -51,10 +51,10 @@ including datasets, vocabulary, tokenizers and trainer classes.
 
 This repository has the following features:
 
-- [ ] model breakdowns: A brief explanation of the model and its components are provided in separate README.md files.
-- [ ] tutorials: Jupyter notebooks showing how to train the models.
-- [ ] model utilities: Tokenizers, dataset loaders, dictionaries, and all the custom utilities required for each problem.
-- [ ] multiple dataset APIs: Both *HuggingFaces* and *torchtext* (i.e. Pytorch) datasets are used in examples.
+- [ ] <ins>model breakdowns</ins>: A brief explanation of the model and its components are provided in separate README.md files.
+- [ ] <ins>tutorials</ins>: Jupyter notebooks showing how to train the models.
+- [ ] <ins>model utilities</ins>: Tokenizers, dataset loaders, dictionaries, and all the custom utilities required for each problem.
+- [ ] <ins>multiple dataset APIs</ins>: Both *HuggingFaces* and *torchtext* (i.e. Pytorch) datasets are used in examples.
 
 
 ## Roadmap
