@@ -127,6 +127,7 @@ the word. This empirically can significantly speed up the amount of time to fit 
 dictionary, data loader, and re-producible notebook example
 - [ ] Implementation of frequent word sub-sampling ( in `nlpmodels/utils/skipgram_dataset`)
 - [ ] Implementation of negative sampling  (in `nlpmodels/models/word2vec` )
+- [ ] Huggingfaces dataset usage
 
 ## References
 

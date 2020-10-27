@@ -117,35 +117,3 @@ class Transformer(nn.Module):
         decode = self._decode(encode, data.src_mask, data.tgt, data.tgt_mask)
 
         return self._final_softmax(self._final_linear(decode))
-
-
-if __name__ == '__main__':
-    # TESTING THE MODEL
-    from nlpmodels.utils import train, utils, transformer_dataset
-    from argparse import Namespace
-    utils.set_seed_everywhere()
-    args = Namespace(
-        # Model hyper-parameters
-        num_layers_per_stack=2,  # original value = 6
-        dim_model=512,
-        dim_ffn=2048,
-        num_heads=8,
-        max_sequence_length=20,  # original value = 1000
-        dropout=0.1,
-        # Label smoothing loss function hyper-parameters
-        label_smoothing=0.1,
-        # Training hyper-parameters
-        num_epochs=30,
-        learning_rate=0.0,
-        batch_size=128,
-    )
-
-    train_dataloader, vocab_source, vocab_target = transformer_dataset.TransformerDataset.get_training_dataloader(args)
-    vocab_source_size = len(vocab_source)
-    vocab_target_size = len(vocab_target)
-    model = Transformer(vocab_source_size, vocab_target_size,
-                                    args.num_layers_per_stack, args.dim_model,
-                                    args.dim_ffn, args.num_heads, args.max_sequence_length,
-                                    args.dropout)
-    trainer = train.TransformerTrainer(args, vocab_target_size, vocab_target.mask_index, model, train_dataloader)
-    trainer.run()
