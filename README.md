@@ -8,24 +8,15 @@ details as well as a self-contained Jupyter notebook.
 
 ## Contents
 
-- [Features](#Features)
 - [Models](#Models)
 - [Setup](#Setup)
 - [Structure](#Structure)
+- [Features](#Features)
 - [Roadmap](#Roadmap)
 - [Requirements](#Requirements)
 - [Citation](#Citation)
 - [License](#License)
 
-## Features
-
-This repository has the following features:
-
-- [ ] **Model Breakdowns**: A brief explanation of the model and its components are provided in separate README.md files.
-- [ ] **Jupyter Notebooks**: Model instantiation and running are provided for each model.
-- [ ] **Complete Model Utilities**: Tokenizers, datasetloaders, dictionaries, and all the custom utilities required for each problem.
-- [ ] **Documented Code**: Classes and methods are described in docstrings and comments.
-- [ ] **Multiple Dataset Libraries**: Both *HuggingFaces* and *torchtext* (i.e. Pytorch) datasets are used in examples.
 
 ## Models
 
@@ -56,6 +47,15 @@ including datasets, vocabulary, tokenizers and trainer classes.
 - [ ] `nlpmodels/tests`: Coverage.
 - [ ] `nlpmodels/notebooks`: Contains the notebooks and write-ups for each model implementation.
 
+## Features
+
+This repository has the following features:
+
+- [ ] model breakdowns: A brief explanation of the model and its components are provided in separate README.md files.
+- [ ] tutorials: Jupyter notebooks showing how to train the models.
+- [ ] model utilities: Tokenizers, dataset loaders, dictionaries, and all the custom utilities required for each problem.
+- [ ] multiple dataset APIs: Both *HuggingFaces* and *torchtext* (i.e. Pytorch) datasets are used in examples.
+
 
 ## Roadmap
 
@@ -63,12 +63,12 @@ Here are some models I want to implement in the near future:
 
 - [ ] GloVe embeddings
 - [ ] TextCNN
-- [ ] Encoder-Decoder RNN
+- [ ] Char-RNN
 - [ ] GPT
 - [ ] BERT (maybe all the BERTs)
 - [ ] ELMo
 - [ ] XLNet
-- [ ] T5 (also by Google: Performer attention-model)
+- [ ] T5 and Performer
 
 ## Requirements
 
