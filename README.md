@@ -1,17 +1,17 @@
 # deeplearning-nlp-models
 
 
-This repository contains the re-implementation of a handful of "deep" NLP papers in PyTorch.  
+This repository contains the re-implementation of a handful of "deep" NLP papers in PyTorch.
 
-Each model implementation is intended to be compact and interpretable and is accompanied by a brief overview of the paper's 
-details as well as a self-contained Jupyter notebook.
+The goal of this pet project is to get into the weeds of some of these most recent model architectures and 
+is by no means a comprehensive library.  
 
 ## Contents
 
 - [Models](#Models)
+- [Features](#Features)
 - [Setup](#Setup)
 - [Structure](#Structure)
-- [Features](#Features)
 - [Roadmap](#Roadmap)
 - [Requirements](#Requirements)
 - [Citation](#Citation)
@@ -26,7 +26,17 @@ details as well as a self-contained Jupyter notebook.
 ### Sequence-to-Sequence Models
 
 #### Transformers
-- [ ] [O.G. Transformer ("Attention is All You Need")](nlpmodels/notebooks/transformer/README.md)
+- [ ] [The O.G. Transformer ("Attention is All You Need")](nlpmodels/notebooks/transformer/README.md)
+
+
+## Features
+
+This repository has the following features:
+
+- [ ] <ins>model breakdowns</ins>: A brief explanation of the model and its components are provided in separate README.md files.
+- [ ] <ins>tutorials</ins>: Jupyter notebooks showing how to run the models.
+- [ ] <ins>model utilities</ins>: Tokenizers, dataset loaders, dictionaries, and all the custom utilities required for each problem.
+- [ ] <ins>multiple dataset APIs</ins>: Both *HuggingFaces* and *torchtext* (i.e. Pytorch) datasets are used in examples.
 
 
 ## Setup
@@ -44,18 +54,8 @@ Here is a breakdown of the repository:
 - [ ] `nlpmodels/models`: The model code for each paper.
 - [ ] `nlpmodels/utils`: Contains all the auxiliary classes related to building a model, 
 including datasets, vocabulary, tokenizers and trainer classes.
-- [ ] `nlpmodels/tests`: Coverage.
+- [ ] `nlpmodels/tests`: Light (and by no means comprehensive) coverage.
 - [ ] `nlpmodels/notebooks`: Contains the notebooks and write-ups for each model implementation.
-
-## Features
-
-This repository has the following features:
-
-- [ ] <ins>model breakdowns</ins>: A brief explanation of the model and its components are provided in separate README.md files.
-- [ ] <ins>tutorials</ins>: Jupyter notebooks showing how to train the models.
-- [ ] <ins>model utilities</ins>: Tokenizers, dataset loaders, dictionaries, and all the custom utilities required for each problem.
-- [ ] <ins>multiple dataset APIs</ins>: Both *HuggingFaces* and *torchtext* (i.e. Pytorch) datasets are used in examples.
-
 
 ## Roadmap
 
@@ -69,6 +69,8 @@ Here are some models I want to implement in the near future:
 - [ ] ELMo
 - [ ] XLNet
 - [ ] T5 and Performer
+
+Also, I eventually am going to re-train those models that can leverage GPUs.
 
 ## Requirements
 

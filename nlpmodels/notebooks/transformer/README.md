@@ -7,6 +7,8 @@ Vaswani et al. ["Attention is All You Need"](https://arxiv.org/pdf/1706.03762.pd
 
 Image source: Vaswani et al. (2017)
 
+(*) Note: This implementation draws heavily from the "Annotated Transformer" [here](https://nlp.seas.harvard.edu/2018/04/03/attention.html).
+
 ## Contents
 
 - [Jupyter Notebook](#Notebook)
@@ -59,6 +61,9 @@ trainer.run()
 
 ## Background
 
+### The predecessor to Transformer: RNN
+
+
 Prior to the Transformer, the dominant architecture found in sequence models was the
 recurrent network (i.e. RNN). While the convolutional network shares parameters across space,
 the recurrent model shares parameters across the time dimension (left to right in a sequence). At each time step,
@@ -73,48 +78,68 @@ the prior decoder hidden state(s).
 
 2 different challenges confront the RNN class of models. 
 
+### RNN and learning complex context
+
 First, there is a challenge of specifying an RNN architecture capable of learning enough context to aid in 
-predicting longer and more complex sequences. This has been a continual area of development. The first breakthrough was to 
+predicting longer and more complex sequences. This has been an area of continual innovation. The first breakthrough was to 
 swap out the "vanilla" (i.e. Elmann) RNN cells with the gated RNN networks such as the GRU and LTSM. These RNN cells
 have the ability to learn short-term context as well as long-term context between words given their ability to control
 how quickly the hidden states are updated to remember "older" (i.e. further back in the sequence) versus "newer"
-information. This would overcome the "vanishing gradient" problem, where the model's ability to update deeper (read: earlier) 
-weights in the model was hindered by the fact that weight changes back-propogating during an update would diminish to 0.
+information. This helps overcome the "vanishing gradient" problem, where the model's ability to update deeper (read: earlier) 
+weights in the model is hindered by the fact that weight changes back-propogating during an update would diminish to 0.
 
-While these models were dominantly better than vanilla RNNs, they were 
-shown in BLEU (language translation) benchmarks that as target sequences would increase in length, the accuracy of the model would rapidly deteriorate. 
+While these models outperform vanilla RNNs, through BLEU (language translation) benchmarks it was demonstrated that
+that model accuracy would decay as target sequences would increase in length. 
 This led to the development of the "attention" mechanism. The insight was to add "attention" between the encoder and decoder blocks (called "encoder-decoder attention"). 
 The attention mechanism would not just pass the final hidden state from the encoder, but instead all of the hidden states derived in the encoder stack.
 Then for each time step in the decoder block, a "context" state would be derived as a function of these hidden states where the 
 decoder could determine which words (via their hidden state) to "pay attention to" in the source sequence in order to predict 
-the next word. This breakthrough was effective in fixing the problem of deteriorating performance. 
+the next word. This breakthrough was shown to extend the prediction power of RNNs in longer sequences. 
 
-Second, due to the sequential nature of how RNNs are computed, RNNs can be notoriously slow to train at scale since given they are 
-difficult to parallelize (and therefore cannot leverage GPUs or general parallel computing). 
-This proves a blocker for increasing the complexity of RNN-based architectures.  
+### Sequential computation difficult to parallelize
 
+Second, due to the sequential nature of how RNNs are computed, RNNs can be slow to train at scale (for a different perspective,
+see Andrej Kaparthy's blog post on RNNs [here](http://karpathy.github.io/2015/05/21/rnn-effectiveness/)).
 
 ## Transformer
 
-The authors' critical insight to overcoming this hurdle was that the sequential nature of RNNs were not a necessary feature in order to capture the intra-word context 
-within sequence-sequence models. Their realization was that "attention is all you need". Instead of processing 
-words left to right in a sequence, "self-attention" could be leveraged to encode the relative importance of words in a sequence. This is the 
-basis of "the Transformer".
+The authors' critical insight to overcoming these challenges was that the sequential computation behind RNNs
+was not necessary to capture intra-word context within sequence-sequence models. 
+Their realization was that "attention is all you need". Instead of processing 
+words left to right in a sequence, "self-attention" could be leveraged to encode the relative importance of words in a sequence
+that is processed in its entirety. 
 
-The Transformer model is also an encoder-decoder architecture, but with a few modifications. 
+The Transformer model is also an encoder-decoder architecture, but with a different series of layers (and sub-layers) worth noting.
 
-First, the Transformer model breaks the dependency of processing sequences in a time-dependent manner via "positional encoding",
-which encodes the relative position of words in a sequence for the model to use in down stream tasks.
+I touch upon some of them below.
 
-Second, the attention (dot-product attention) mechanism is utilized in multiple ways in order for the model to learn
-the importance of words within a sequence as well as between the encoder-decoder block.
+### Positional Encoding
 
-The Transformer model have set the record on a number of benchmarks. It has also spawned a number of research efforts 
-into other transformer-based architectures by multiple research groups, among them BERT (encoder only Transformer),
-GPT (decoder only Transformer), as well as ELMO, XLNET, and other *BERTs (lots of Sesame Street). Further, 
+tbd. Probs a sinusoidal plot (from test).
+
+### Attention (Self and Encoder-Decoder Attention)
+
+tbd. Probs some key,value, query graphs + attention plots (see notebook).
+
+### Label Smoothing
+
+tbd. Probs a plot showing 2 distributions + mention recent Google Research paper.
+
+### Noam Optimization
+
+tbd. Probs a LR plot (from test).
+
+### Overall
+
+The Transformer model have set the record on a number of translation benchmarks. It has also spawned a number of research efforts 
+into other transformer-based architectures by multiple research groups, among them BERT (encoder-only Transformer),
+GPT (decoder-only Transformer), as well as ELMO, XLNET, and other *BERTs (lots of Sesame Street). Further, 
 a large amount of effort has been poured into different attention mechanism (for instance, sparsity-based attention).
 
-You can find my implementation [here](../../../transformer.py) with detailed comments. 
+### Code
+
+You can find the implementation [here](../../../transformer.py) with detailed comments. This model has a number of details
+that I did not cover that are worth reviewing.
 
 ## Features
 
@@ -130,13 +155,15 @@ dictionary, data loader, and re-producible notebook example
 
 These implementations were helpful when I was working through some nuances:
 1. https://nlp.seas.harvard.edu/2018/04/03/attention.html (Harvard's NLP group. This was extremely helpful and I leveraged it a significant amount).
-2. https://www.tensorflow.org/tutorials/text/transformer (Transformer tutorial found on Tensorflow website).
-3. https://github.com/lilianweng/transformer-tensorflow (Lilian Weng's implementation).
+2. https://pytorch.org/tutorials/beginner/transformer_tutorial.html (Pytorch has its own transformer class).
+3. https://www.tensorflow.org/tutorials/text/transformer (Transformer tutorial found on Tensorflow website).
 4. https://github.com/tensorflow/tensor2tensor/blob/master/tensor2tensor/models/transformer.py (Original code in Tensorflow).
 
 In terms of explaining the intuition of the model, I thought these were well-written:
 1. Original paper (link found above)
-2. http://jalammar.github.io/illustrated-transformer/( nice visualizations)
+2. https://lilianweng.github.io/lil-log/2018/06/24/attention-attention.html (Lilian Weng's overview of the Transformer is very thorough and worth a read).
+3. http://jalammar.github.io/illustrated-transformer/( nice visualizations)
+
 
 ## Citation
 

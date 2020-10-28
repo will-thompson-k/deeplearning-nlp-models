@@ -12,7 +12,8 @@ Image source: Mikolov et al. (2013)
 
 - [Jupyter Notebook](#Notebook)
 - [Example Usage](#Usage)
-- [Motivation of Using Embeddings](#Motivation)
+- [Motivation of Using Embeddings](#Background)
+- [Applications in Transfer Learning](#Transfer_Learning)
 - [Skip-gram](#Skip-gram)
     * [Negative Sampling](#Negative_Sampling)
 - [Features](#Features)
@@ -54,7 +55,7 @@ trainer.run()
 embeddings = model.get_embeddings()
 ```
 
-## Motivation
+## Background
 
 A traditional **bag-of-words** (i.e. "BOW") approach extracts heuristic-defined features from a given text.
 These are often **frequency-based**, where the frequency of a term is thought to be proportional to its signal.
@@ -67,12 +68,24 @@ Suppose that we were interested in boosting our model's signal by gaining contex
 This is the premise of the **"distributional hypothesis"**, that words that are close in proximity in a sentence share meaning. 
 Word embeddings present a representation that gets closer to semantic meaning versus a purely frequency-based approach.
 
+While there are many popular embeddings, word2vec is one of the most popular class of embedding models. Many NLP packages 
+contain embeddings derived from different data sources using different methods.
+
+## Transfer_Learning
+
 Embeddings are one of the most frequent forms of **"transfer learning"** found in NLP. Taking some set of documents (preferably very,very large), 
 word embeddings are trained to express the context of words found together within this corpus in a lower dimensional encoding 
 (lower with respect to the vocabulary, which can be on the order of ~10-100k's). While it is usually hard to interpret the 
-meaning of these latent variables, they can be "transferred" to many other downstream NLP tasks (usually with fewer data points).
+meaning of these latent variables, they can be "transferred" to many other downstream NLP tasks (usually with fewer data points). 
 
-While there are many popular embeddings, word2vec is one of the most popular class of embedding models.
+For example, embeddings can be used as numerical representations of tokens in classic ML NLP models to make inferences. 
+Researchers are looking at best practices for transferring embeddings trained on one corpus and applying them to other problems
+ (such as this paper [here](https://arxiv.org/abs/1702.01417), where they de-mean
+the word embeddings and find it boosts the transferability).
+
+Of course, embeddings can also be used as token representations in DL models as well. More often then not, embeddings are used
+to represent tokens in one of the first layers of a DL architecture and serve as inputs to subsequent layers.
+
 
 ## Skip-gram
 

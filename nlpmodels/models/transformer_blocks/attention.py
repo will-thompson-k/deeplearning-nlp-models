@@ -48,7 +48,7 @@ class MultiHeadedAttention(nn.Module):
 
     def compute_attention(self,query: torch.Tensor, key: torch.Tensor, value: torch.Tensor, mask: torch.Tensor):
         """
-        Attention function to compute dot-product attention between query,
+        Attention function to compute scaled dot-product attention between query,
         key and determine which values to "pay attention to".
 
 
@@ -66,7 +66,7 @@ class MultiHeadedAttention(nn.Module):
         # Scaled dot-product calculation (Q,K) -> scores
         # NOTE: bmm is only for 3D tensors. matmul considers last 2 dimensions in batch matrix multiplication.
         scores = torch.matmul(query, key.transpose(2,3)) / math.sqrt(self._dim_keys)
-        # Wherever mask == False is where padding is, so set scores to inf low for softmax calculation
+        # Wherever mask == False is where padding is, so set scores to -inf for softmax calculation
         scores = scores.masked_fill(mask == False, -1e9)
         # Calculate soft-max of scores -> attention_probas (probabilities for each value)
         attention_probas = self._dropout(F.softmax(scores, dim=-1))

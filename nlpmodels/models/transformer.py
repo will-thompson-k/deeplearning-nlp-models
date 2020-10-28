@@ -2,6 +2,8 @@ from nlpmodels.models.transformer_blocks import sublayers,attention,decoder,enco
 import torch.nn as nn
 import torch
 from nlpmodels.utils.transformer_batch import TransformerBatch
+from nlpmodels.utils import train,transformer_dataset
+from argparse import Namespace
 
 
 class Transformer(nn.Module):
@@ -56,7 +58,10 @@ class Transformer(nn.Module):
         # (7) put through final linear layer
         self._final_linear = nn.Linear(dim_model, target_vocab_size)
         # (8) compute softmax
-        self._final_softmax = nn.LogSoftmax(dim=-1)
+        # NOTE: Annotated Transformer uses log(softmax) and hands that to KL divergence,
+        # but this doesn't make sense to me. KL divergence has the log term already in it when
+        # calculating the cross-entropy between 2 distributions.
+        self._final_softmax = nn.Softmax(dim=-1)
 
         # Xavier norm all the parameters that are not fixed
         self._init_parameters()
@@ -116,4 +121,35 @@ class Transformer(nn.Module):
         encode = self._encode(data.src, data.src_mask)
         decode = self._decode(encode, data.src_mask, data.tgt, data.tgt_mask)
 
-        return self._final_softmax(self._final_linear(decode))
+        yhat =  self._final_softmax(self._final_linear(decode))
+
+        return yhat
+
+#
+# if __name__ == '__main__':
+#     args = Namespace(
+#         # Model hyper-parameters
+#         num_layers_per_stack=2,  # original value = 6
+#         dim_model=512,
+#         dim_ffn=2048,
+#         num_heads=8,
+#         max_sequence_length=20,  # original value = 1000
+#         dropout=0.1,
+#         # Label smoothing loss function hyper-parameters
+#         label_smoothing=0.1,
+#         # Training hyper-parameters
+#         num_epochs=15,
+#         learning_rate=0.0,
+#         batch_size=128,
+#     )
+#
+#     train_dataloader, vocab_source, vocab_target = transformer_dataset.TransformerDataset.get_training_dataloader(args)
+#     vocab_source_size = len(vocab_source)
+#     vocab_target_size = len(vocab_target)
+#     model = Transformer(vocab_source_size, vocab_target_size,
+#                                     args.num_layers_per_stack, args.dim_model,
+#                                     args.dim_ffn, args.num_heads, args.max_sequence_length,
+#                                     args.dropout)
+#     trainer = train.TransformerTrainer(args, vocab_target_size, vocab_target.mask_index, model, train_dataloader)
+#
+#     trainer.run()

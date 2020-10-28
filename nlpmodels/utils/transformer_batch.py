@@ -6,7 +6,7 @@ class TransformerBatch(object):
     """
     Transformer batch data class encapsulating src, tgt, and related masks.
 
-    Derived in part from logic found in "Annotated Transformer": https://nlp.seas.harvard.edu/2018/04/03/attention.html.
+    Borrowed from the "Annotated Transformer": https://nlp.seas.harvard.edu/2018/04/03/attention.html.
     """
     def __init__(self, src: torch.Tensor, tgt: torch.Tensor, pad: int = 0):
         """

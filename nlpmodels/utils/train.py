@@ -104,6 +104,7 @@ class TransformerTrainer(object):
                 y_hat = self._model(data)
 
                 # step 3. compute the loss
+                # convert y_hat into size (batch_size*max_seq_length,target_vocab_size)
                 loss = self._loss_function(y_hat.contiguous().view(-1, y_hat.size(-1)),
                                            data.tgt_y.contiguous().view(-1))
 
@@ -113,8 +114,8 @@ class TransformerTrainer(object):
                 # step 5. use optimizer to take gradient step
                 self._optimizer.step()
 
-                # NOTE: Usually worth while measuring the loss from the eval curve, especially when considering
-                # early stopping. For this experiment, just running on training set entirely.
+                # NOTE: Usually makes sense to measure the loss from the val set (and add early stopping).
+                # For this experiment, just running on training set entirely as an example.
 
                 # status bar
                 pbar.set_postfix(loss=loss.item())

@@ -40,11 +40,12 @@ class NoamOptimizer(object):
         """
         # change learning rate in optimizer
         self._step += 1
-        self._rate = self.calc_lr()
-        for p in self._optimizer.param_groups:
-            p['lr'] = self._rate
-        # call optimizer's step function
-        self._optimizer.step()
+        self._rate = self.calc_lr(self._step)
+        if self._optimizer is not None:
+            for p in self._optimizer.param_groups:
+                p['lr'] = self._rate
+            # call optimizer's step function
+            self._optimizer.step()
 
     def zero_grad(self):
         """
@@ -52,7 +53,7 @@ class NoamOptimizer(object):
         """
         self._optimizer.zero_grad()
 
-    def calc_lr(self) -> float:
+    def calc_lr(self,step:int) -> float:
         """
         Implements the LR schedule described in Attention (2017).
 
@@ -60,7 +61,7 @@ class NoamOptimizer(object):
             New learning rate as a function of step.
         """
         return self._factor * ((self._dim_model ** (-0.5)) *
-                               min(self._step ** (-0.5), (self._step * self._warm_up ** (-1.5))))
+                               min(step ** (-0.5), (step * self._warm_up ** (-1.5))))
 
     @classmethod
     def get_transformer_noam_optimizer(cls, args: Namespace, model: nn.Module):
