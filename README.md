@@ -3,7 +3,7 @@
 
 This repository contains the re-implementation of a handful of "deep" NLP papers in PyTorch.
 
-The goal of this pet project is to get into the weeds of some of these most recent model architectures and 
+The goal of this project is to get into the weeds of some of these most recent model architectures and 
 is by no means a comprehensive library.  
 
 ## Contents
