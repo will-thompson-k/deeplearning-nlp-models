@@ -23,9 +23,8 @@ is by no means a comprehensive library.
 ### Embeddings
 - [ ] [Word2Vec::Skip-gram embeddings (Negative Sampling)](nlpmodels/notebooks/word2vec/README.md)
 
-### Sequence-to-Sequence Models
+### Transformers
 
-#### Transformers
 - [ ] [The O.G. Transformer ("Attention is All You Need")](nlpmodels/notebooks/transformer/README.md)
 
 

@@ -57,11 +57,10 @@ class Transformer(nn.Module):
 
         # (7) put through final linear layer
         self._final_linear = nn.Linear(dim_model, target_vocab_size)
-        # (8) compute softmax
-        # NOTE: Annotated Transformer uses log(softmax) and hands that to KL divergence,
-        # but this doesn't make sense to me. KL divergence has the log term already in it when
-        # calculating the cross-entropy between 2 distributions.
-        self._final_softmax = nn.Softmax(dim=-1)
+        # (8) compute log(softmax) only because KL divergence expects log probabilities
+        # From KLDivergence documents: "As with NLLLoss, the input given is expected to contain log-probabilities
+        # and is not restricted to a 2D Tensor."
+        self._final_softmax = nn.LogSoftmax(dim=-1)
 
         # Xavier norm all the parameters that are not fixed
         self._init_parameters()
