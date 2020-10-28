@@ -7,11 +7,13 @@ class NLPVocabulary(object):
     A vocabulary class used to map tokens to indices and calculate word frequencies.
     Design inspired by https://github.com/joosthub/PyTorchNLPBook.
     """
-    def __init__(self,  mask_token: str = "<MASK>", unk_token: str = "<UNK>"):
+    def __init__(self,  mask_token: str = "<MASK>", unk_token: str = "<UNK>", eos_token: str = "<EOS>"):
         """
-            Args:
-                mask_token (str) : token name used for masking
-                unk_token (str) : token used for unknown words
+        Args:
+            mask_token (str) : token name used for masking
+            unk_token (str) : token used for unknown words
+            eos_token (str) : token used for end-of-string (sequence models)
+
         """
         self._token_to_idx = {}
         self._idx_to_token = {}
@@ -19,17 +21,19 @@ class NLPVocabulary(object):
 
         self.unk_token = unk_token
         self.mask_token = mask_token
+        self.eos_token = eos_token
         self._proba_thresh = 0
 
         self.mask_index = self.add_token(self.mask_token)
         self.unk_index = self.add_token(self.unk_token)
+        self.eos_index = self.add_token(self.eos_token)
 
     def add_token(self, token : str) -> int:
         """
         Add token to dictionary, return index.
             Args:
                 token (str) : token name used for masking
-            Output:
+            Returns:
                 return the index associated with token.
         """
         if token in self._token_to_idx:
@@ -47,7 +51,7 @@ class NLPVocabulary(object):
         Add token to dictionary, return index.
             Args:
                 tokens (List[str]) : tokens to be added to dictionary
-            Output:
+            Returns:
                 return the indices associated with tokens.
         """
         return [self.add_token(token) for token in tokens]
@@ -57,7 +61,7 @@ class NLPVocabulary(object):
         Lookup index of token.
             Args:
                 token (str) : token to be used as key
-            Output:
+            Returns:
                 return the index associated with token.
         """
         if token not in self._token_to_idx:
@@ -69,7 +73,7 @@ class NLPVocabulary(object):
         Lookup token of index.
             Args:
                 index (int) : index to be used as key
-            Output:
+            Returns:
                 return the token associated with index.
         """
         if index not in self._idx_to_token:
@@ -81,7 +85,7 @@ class NLPVocabulary(object):
         Lookup word count of index.
             Args:
                 index (int) : index to be used as key
-            Output:
+            Returns:
                 return map of index to word count
         """
         if index not in self._word_count:
@@ -100,7 +104,7 @@ class NLPVocabulary(object):
         """
         Provides word discard probabilities
 
-            Output:
+            Returns:
                 np.array of word probabilities
         """
         word_frequency = self.get_word_frequencies()
@@ -112,7 +116,7 @@ class NLPVocabulary(object):
         """
          Provides word frequencies
 
-             Output:
+             Returns:
                  np.array of word frequencies
         """
         word_counts_by_index = np.array([self._word_count[index] for index in range(len(self._idx_to_token))])
@@ -130,7 +134,7 @@ class NLPVocabulary(object):
         Class method to return vocabulary object
             Args:
                 data (List[List[str]]): get list of tokens
-            Output:
+            Returns:
                  return class
         """
         dictionary = cls()

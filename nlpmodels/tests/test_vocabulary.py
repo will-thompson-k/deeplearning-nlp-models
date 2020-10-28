@@ -12,8 +12,8 @@ def test_vocabulary_expected_tokens():
     ]
     vocab = vocabulary.NLPVocabulary.build_vocabulary(data)
 
-    # should be 52 tokens in the dictionary + <MASK> + <UNK>
-    assert len(vocab) == 54
+    # should be 52 tokens in the dictionary + <MASK> + <UNK> + <EOS>
+    assert len(vocab) == 55
 
 
 def test_vocabulary_get_unk_token():

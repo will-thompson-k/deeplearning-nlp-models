@@ -22,10 +22,10 @@ class BasicEnglishTokenizer(object):
         """
         Function to tokenize a string within tokenizer.
 
-            Args:
-                line (str): the line to be tokenized
-            Output:
-                a list of tokens
+        Args:
+            line (str): the line to be tokenized
+        Returns:
+            a list of tokens
         """
         line = line.lower()
         for pattern_re, replaced_str in self._patterns_dict:
@@ -39,14 +39,15 @@ class BasicEnglishTokenizer(object):
         return line
 
 
-def tokenize_corpus_basic(text: List[str]) -> List[List[str]]:
+def tokenize_corpus_basic(text: List[str],removal: bool = True) -> List[List[str]]:
     """
     Function to tokenize a list of strings (corpus).
 
-        Args:
-            text (str): a list of strings to be converted into tokens.
-        Output:
-            a list of a list of tokens.
+    Args:
+        text (str): a list of strings to be converted into tokens.
+        removal (bool): remove token list if it is empty
+    Returns:
+        a list of a list of tokens.
     """
     tokenizer = BasicEnglishTokenizer()
     new_text = []
@@ -54,7 +55,7 @@ def tokenize_corpus_basic(text: List[str]) -> List[List[str]]:
     for line in text:
         # tokenize sentence
         tokens = [x for x in tokenizer.tokenize(line) if x not in string.punctuation]
-        if not tokens:
+        if not tokens and removal:
             continue
         new_text.append(tokens)
 
