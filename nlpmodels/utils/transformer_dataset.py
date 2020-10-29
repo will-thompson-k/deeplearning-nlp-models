@@ -1,4 +1,3 @@
-from argparse import Namespace
 from typing import Tuple, Any, List
 
 import torch
@@ -67,13 +66,16 @@ class TransformerDataset(AbstractNLPDataset):
         return train_loader, vocab_source, vocab_target
 
     @staticmethod
-    def padded_string_to_integer(token_list: List[List[str]], max_sequence_length: int, vocab: NLPVocabulary) -> List[
-        List[int]]:
+    def padded_string_to_integer(token_list: List[List[str]],
+                                 max_sequence_length: int, vocab: NLPVocabulary) -> List[List[int]]:
         """
         Args:
-            token_list (List[List[str]]):List of tokens to be converted to indices.
-            max_sequence_length (int): Maximimum length of sequence for each target, source sequence.
-            vocab (NLPVocabulary): Dictionary to look up indices for each token.
+            token_list (List[List[str]]):
+                List of tokens to be converted to indices.
+            max_sequence_length (int):
+                Maximimum length of sequence for each target, source sequence.
+            vocab (NLPVocabulary):
+                Dictionary to look up indices for each token.
 
         Returns:
             Sequence of indicies with EOS and PAD indices.
@@ -128,13 +130,3 @@ class TransformerDataset(AbstractNLPDataset):
     @classmethod
     def get_testing_dataloader(cls, *args):
         pass
-
-
-if __name__ == '__main__':
-    args_test = Namespace(
-        batch_size=100,
-        max_sequence_length=10,
-    )
-    # y,_,_ = TransformerDataset.get_training_data(max_sequence_length=10)
-    y, _, _ = TransformerDataset.get_training_dataloader(args_test)
-    print(f"tested transformer dataset successfully")

@@ -2,7 +2,7 @@ import numpy as np
 import torch
 
 
-class TransformerBatch(object):
+class TransformerBatch:
     """
     Transformer batch data class encapsulating src, tgt, and related masks.
 

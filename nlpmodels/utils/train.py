@@ -9,7 +9,7 @@ from tqdm import tqdm
 from nlpmodels.utils import optims, label_smoother, transformer_batch
 
 
-class Word2VecTrainer(object):
+class Word2VecTrainer:
     '''
     Trainer class for the word2vec model.
     '''
@@ -59,7 +59,7 @@ class Word2VecTrainer(object):
         print("Finished Training...")
 
 
-class TransformerTrainer(object):
+class TransformerTrainer:
     '''
     Trainer class for the Transformer model.
     '''

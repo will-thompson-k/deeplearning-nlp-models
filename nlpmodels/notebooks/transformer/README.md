@@ -12,6 +12,7 @@ Image source: Vaswani et al. (2017)
 ## Contents
 
 - [Jupyter Notebook](#Notebook)
+- [Code](#Code)
 - [Example Usage](#Usage)
 - [Background](#Background)
 - [Transformer](#Transformer)
@@ -24,6 +25,11 @@ Image source: Vaswani et al. (2017)
 
 Check out the Jupyter notebook [here](transformer.ipynb) to run the code.
 
+## Code
+
+You can find the implementation [here](../../../models/transformer.py) with detailed comments. 
+This model has a number of details
+that I do not cover here that are worth reviewing.
 
 ## Usage
 
@@ -115,18 +121,48 @@ I touch upon some of them below.
 
 ### Positional Encoding
 
-To encode the relative 
+Unlike the RNN, the Transformer does not process words in a sequence along the time dimension, but instead simultaneously
+a la a feed forward network. In order to encode the relative position of tokens in a sequence, the model employs a positional 
+encoding via a series of `sin(pos,wave_number)` and `cos(pos,wave_number)` functions where position is along the sequence length.
 
 ![Positional encodings over sequence length](../../../media/transformer_positional_encoding.png)
 
+In this plot you can see the different wave functions along the sequence length.
+
+These fixed positional encodings are added to word embeddings of the same dimension such that these tensors capture both
+relative _semantic_ and _positional_ relationships between words. These representations are then passed down stream into the
+encoder and decoder stacks.
 
 ### Attention (Self and Encoder-Decoder Attention)
 
-tbd. Probs some key,value, query graphs + attention plots (see notebook).
+The positional embeddings described above are then passed to the encoder-decoder stacks where the attention mechanism
+is used to identify the contextual relationship between words. Attention can be thought of a mechanism that scales
+values along the input sequence by values computing using "query" and "key" pairs. While attention mechanisms are an active
+area of research, the authors used a scaled dot-product attention calculation. 
+
+As the model trains these parameters, this mechanism
+emphasizes the importance of different terms in learning the context within a sequence as well as across the source and target
+sequences. Multiple attention layers (called attention heads) are calculated simultaneously in each layer sequentially
+in both the encoder and decoders. This architecture is thought to give enough degrees of freedom to capture the relationships
+between words.
+
+![Scaled dot-product attention](../../../media/transformer_scaled_dot_product_attention.png)
+
+There are 2 forms of attention leveraged in this model: "self-attention" and "encoder-decoder" attention.
+Self-attention is used within the encoder and decoder separately to identify which tokens to "pay attention to" 
+as these components work to learn the relative importance of words in a sequence. The encoder-decoder attention, much like
+the attention mentioned in the previous RNN models, are using the attention mechanism to predict each word in the target
+sequence based on the encoder output as well as all terms prior in the target sequence. To achieve this auto-regressive
+processing in the decoder, masking is used to mask out the attention values from all position values that follow the target
+index.
 
 ### Label Smoothing
 
-tbd. Probs a plot showing 2 distributions + mention recent Google Research paper.
+Label smoothing is glossed over in the paper, but is a method to improve robustness in multi-class classification . 
+Rather than using the usual cross entropy loss function with a one hot encoding target,
+the target is transformed into a probability distribution with a peak probability at the target index. Taking these
+2 distributions (the predicted probabilities and "smoothed" y distribution), the KL Divergence divergence is calculated.
+For a treatment on why label smoothing helps, check out this [paper](https://arxiv.org/pdf/1906.02629.pdf).
 
 ### Noam Scheduler
 
@@ -144,11 +180,6 @@ The Transformer model have set the record on a number of translation benchmarks.
 into other transformer-based architectures by multiple research groups, among them BERT (encoder-only Transformer),
 GPT (decoder-only Transformer), as well as ELMO, XLNET, and other *BERTs (lots of Sesame Street). Further, 
 a large amount of effort has been poured into different attention mechanism (for instance, sparsity-based attention).
-
-### Code
-
-You can find the implementation [here](../../../transformer.py) with detailed comments. This model has a number of details
-that I did not cover that are worth reviewing.
 
 ## Features
 

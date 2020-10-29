@@ -3,7 +3,7 @@ import string
 from typing import List
 
 
-class BasicEnglishTokenizer(object):
+class BasicEnglishTokenizer:
     """
     Tokenizer useful for normalizing words and generating tokens.
     (Design inspired by torchtext.data.utils )

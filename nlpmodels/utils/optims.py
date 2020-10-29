@@ -5,7 +5,7 @@ import torch.nn as nn
 from torch.optim.optimizer import Optimizer
 
 
-class NoamOptimizer(object):
+class NoamOptimizer:
     """
     Noam optimizer that implements the Noam Learning rate schedule mentioned in
     "Attention is all you need" (2017).
@@ -14,7 +14,8 @@ class NoamOptimizer(object):
     (1) During warm-up, the LR increases linearly.
     (2) Afterwards, the warm_up steps decreases ~ 1/sqrt(step_number).
 
-    Derived in part from logic found in "Annotated Transformer": https://nlp.seas.harvard.edu/2018/04/03/attention.html.
+    Derived in part from logic found in "Annotated Transformer":
+    https://nlp.seas.harvard.edu/2018/04/03/attention.html.
     """
 
     def __init__(self, dim_model: int, factor: float, warm_up: int, optimizer: Optimizer):
@@ -43,8 +44,8 @@ class NoamOptimizer(object):
         self._step += 1
         self._rate = self.calc_lr(self._step)
         if self._optimizer is not None:
-            for p in self._optimizer.param_groups:
-                p['lr'] = self._rate
+            for param in self._optimizer.param_groups:
+                param['lr'] = self._rate
             # call optimizer's step function
             self._optimizer.step()
 

@@ -3,8 +3,7 @@
 
 This repository contains the re-implementation of a handful of "deep" NLP papers in PyTorch.
 
-The goal of this project is to get into the weeds of some of these most recent model architectures and 
-is by no means a comprehensive library.  
+The goal of this project is to get into the weeds of some of the most recent deep learning model architectures. 
 
 ## Contents
 
@@ -33,7 +32,7 @@ is by no means a comprehensive library.
 This repository has the following features:
 
 - [ ] <ins>model breakdowns</ins>: A brief explanation of the model and its components are provided in separate README.md files.
-- [ ] <ins>annotated code</ins>: Verbose comments and docstrings through out the code.
+- [ ] <ins>annotated code</ins>: Verbose comments and docstrings throughout the code base.
 - [ ] <ins>tutorials</ins>: Jupyter notebooks showing how to run the models and some simple analyses of the model results.
 - [ ] <ins>model utilities</ins>: Tokenizers, dataset loaders, dictionaries, and all the custom utilities required for each problem.
 - [ ] <ins>multiple dataset APIs</ins>: Both *HuggingFaces* and *torchtext* (i.e. Pytorch) datasets are used in examples.

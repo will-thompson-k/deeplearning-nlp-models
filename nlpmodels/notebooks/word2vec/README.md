@@ -11,6 +11,7 @@ Image source: Mikolov et al. (2013)
 ## Contents
 
 - [Jupyter Notebook](#Notebook)
+- [Code](#Code)
 - [Example Usage](#Usage)
 - [Motivation of Using Embeddings](#Background)
 - [Applications in Transfer Learning](#Transfer_Learning)
@@ -25,6 +26,9 @@ Image source: Mikolov et al. (2013)
 
 Check out the Jupyter notebook [here](word2vec.ipynb) to run the code.
 
+## Code
+
+You can find the implementation [here](../../../models/word2vec.py) with comments.
 
 ## Usage
 

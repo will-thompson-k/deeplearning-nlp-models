@@ -4,7 +4,8 @@ import torch
 import torch.nn as nn
 
 from nlpmodels.models.transformer_blocks.attention import MultiHeadedAttention
-from nlpmodels.models.transformer_blocks.sublayers import AddAndNormWithDropoutLayer, PositionWiseFFNLayer
+from nlpmodels.models.transformer_blocks.sublayers import AddAndNormWithDropoutLayer, \
+    PositionWiseFFNLayer
 
 
 class EncoderBlock(nn.Module):
@@ -17,14 +18,19 @@ class EncoderBlock(nn.Module):
     Computes  x -> self_attn -> addNorm -> src_attn -> FFN -> addNorm.
     """
 
-    def __init__(self, size: int, self_attention: MultiHeadedAttention, feed_forward: PositionWiseFFNLayer,
+    def __init__(self, size: int, self_attention: MultiHeadedAttention,
+                 feed_forward: PositionWiseFFNLayer,
                  dropout: float):
         """
         Args:
-            size (int): This hyper-parameter is used for the BatchNorm layers.
-            self_attention (MultiHeadedAttention): The multi-headed attention layer that is used for self-attention.
-            feed_forward (PositionWiseFFNLayer): The feed forward layer applied after attention for further transformation.
-            dropout (float): Hyper-parameter used in drop-out regularization in training.
+            size (int):
+                This hyper-parameter is used for the BatchNorm layers.
+            self_attention (MultiHeadedAttention):
+                The multi-headed attention layer that is used for self-attention.
+            feed_forward (PositionWiseFFNLayer):
+                The feed forward layer applied after attention for further transformation.
+            dropout (float):
+                Hyper-parameter used in drop-out regularization in training.
         """
         super(EncoderBlock, self).__init__()
         self._size = size
@@ -37,17 +43,17 @@ class EncoderBlock(nn.Module):
         # (4) add + norm layer
         self._add_norm_layer_2 = AddAndNormWithDropoutLayer(size, dropout)
 
-    def forward(self, x: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
+    def forward(self, values: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
         """
         Main function call for encoder block.
-        maps x -> self_attn -> addNorm -> FFN -> addNorm.
+        maps values -> self_attn -> addNorm -> FFN -> addNorm.
         Args:
-            x (torch.Tensor): Either embedding(src) or encoder[l-1] output.
+            values (torch.Tensor): Either embedding(src) or encoder[l-1] output.
             mask (torch.Tensor): Masking source so model doesn't see padding.
         """
-        x = self._add_norm_layer_1(x, lambda x: self._self_attention(x, x, x, mask))
-        x = self._add_norm_layer_2(x, self._feed_forward)
-        return x
+        values = self._add_norm_layer_1(values, lambda x: self._self_attention(x, x, x, mask))
+        values = self._add_norm_layer_2(values, self._feed_forward)
+        return values
 
 
 class CompositeEncoder(nn.Module):

@@ -5,16 +5,20 @@ from torch.autograd import Variable
 
 class LabelSmoothingLossFunction(nn.Module):
     """
-    Implementation of label smoothing, a technique useful to improve robustness in multi-class classification
+    Implementation of label smoothing,
+    a technique useful to improve robustness in multi-class classification
     that uses soft max.
 
-    Rather than making the target a specific token_index, this loss function creates a probability distribution
-    for each observation centered at the target and employs KL Divergence to minimize the cross entropy between
+    Rather than making the target a specific token_index,
+    this loss function creates a probability distribution
+    for each observation centered at the target and employs KL Divergence
+    to minimize the cross entropy between
     the 2 distributions (predicted probabilites and "smoothed" y distribution).
 
     Attention (2017) uses smoothing hyper-param == 0.1.
 
-    Borrowed from the "Annotated Transformer": https://nlp.seas.harvard.edu/2018/04/03/attention.html.
+    Design inspired by "Annotated Transformer":
+    https://nlp.seas.harvard.edu/2018/04/03/attention.html.
     """
 
     def __init__(self, vocab_size: int, padding_idx: int, smoothing: float = 0.1):
@@ -34,8 +38,10 @@ class LabelSmoothingLossFunction(nn.Module):
         """
         Main function call of label smoother.
         Args:
-            yhat (torch.Tensor): A sequence of (batch_size*max_seq_length,target_vocab_size) probability values.
-            target (torch.Tensor): A 1D sequence of (batch_size) indicating the token values of the target (one-hot-encoding).
+            yhat (torch.Tensor):
+                A sequence of (batch_size*max_seq_length,target_vocab_size) probability values.
+            target (torch.Tensor):
+                A 1D sequence of (batch_size) indicating the token values of the target (one-hot-encoding).
 
         Returns:
             Variable object containing the loss function.
@@ -47,10 +53,22 @@ class LabelSmoothingLossFunction(nn.Module):
         # return KL divergence
         return self._criterion(yhat, Variable(true_dist, requires_grad=False))
 
-    def _compute_label_smoothing(self, target, yhat):
+    def _compute_label_smoothing(self, target: torch.Tensor, yhat: torch.Tensor) -> torch.Tensor:
+        """
+
+        Args:
+            yhat (torch.Tensor):
+                A sequence of (batch_size*max_seq_length,target_vocab_size) probability values.
+            target (torch.Tensor):
+                A 1D sequence of (batch_size) indicating the token values of the target (one-hot-encoding).
+
+        Returns:
+            a target_smooth distribution that is (batch_size*max_seq_length,target_vocab_size)
+
+        """
         assert yhat.size(1) == self._vocab_size
 
-        # generate distribution of same distribution as yhat
+        # generate matrix of the same distribution as yhat (copy)
         true_dist = yhat.data.clone()
         # fill with the smoothing values / vocab_size so that probabilities add to 1.0
         true_dist.fill_(self._smoothing / (self._vocab_size - 2))
