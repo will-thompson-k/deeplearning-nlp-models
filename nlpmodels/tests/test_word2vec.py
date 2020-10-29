@@ -1,7 +1,9 @@
-from nlpmodels.models import word2vec
 from argparse import Namespace
-import torch
+
 import numpy as np
+import torch
+
+from nlpmodels.models import word2vec
 from nlpmodels.utils import utils
 
 utils.set_seed_everywhere()

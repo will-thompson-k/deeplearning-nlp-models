@@ -1,7 +1,8 @@
+from argparse import Namespace
+
 import torch
 import torch.nn as nn
 from torch.optim.optimizer import Optimizer
-from argparse import Namespace
 
 
 class NoamOptimizer(object):

@@ -1,5 +1,6 @@
-from nlpmodels.utils.label_smoother import LabelSmoothingLossFunction
 import torch
+
+from nlpmodels.utils.label_smoother import LabelSmoothingLossFunction
 
 
 def test_label_smoothing():

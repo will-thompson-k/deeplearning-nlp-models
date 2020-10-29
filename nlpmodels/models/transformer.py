@@ -1,9 +1,8 @@
-from nlpmodels.models.transformer_blocks import sublayers, attention, decoder, encoder
-import torch.nn as nn
 import torch
+import torch.nn as nn
+
+from nlpmodels.models.transformer_blocks import sublayers, attention, decoder, encoder
 from nlpmodels.utils.transformer_batch import TransformerBatch
-from nlpmodels.utils import train, transformer_dataset
-from argparse import Namespace
 
 
 class Transformer(nn.Module):

@@ -1,7 +1,8 @@
-from nlpmodels.utils.vocabulary import NLPVocabulary
-from nlpmodels.utils.transformer_dataset import TransformerDataset
-from nlpmodels.utils.transformer_batch import TransformerBatch
 import torch
+
+from nlpmodels.utils.transformer_batch import TransformerBatch
+from nlpmodels.utils.transformer_dataset import TransformerDataset
+from nlpmodels.utils.vocabulary import NLPVocabulary
 
 
 def test_transformer_batch_dimensions():

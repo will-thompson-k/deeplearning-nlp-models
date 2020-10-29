@@ -1,10 +1,12 @@
-from nlpmodels.models import transformer
-from nlpmodels.utils.vocabulary import NLPVocabulary
-from nlpmodels.utils.transformer_dataset import TransformerDataset
-from nlpmodels.utils.transformer_batch import TransformerBatch
 from argparse import Namespace
+
 import torch
+
+from nlpmodels.models import transformer
 from nlpmodels.utils import utils
+from nlpmodels.utils.transformer_batch import TransformerBatch
+from nlpmodels.utils.transformer_dataset import TransformerDataset
+from nlpmodels.utils.vocabulary import NLPVocabulary
 
 utils.set_seed_everywhere()
 

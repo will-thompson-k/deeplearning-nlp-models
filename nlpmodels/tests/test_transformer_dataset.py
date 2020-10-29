@@ -1,7 +1,9 @@
+from argparse import Namespace
+
+import torch
+
 from nlpmodels.utils.transformer_dataset import TransformerDataset
 from nlpmodels.utils.vocabulary import NLPVocabulary
-import torch
-from argparse import Namespace
 
 
 def test_padded_string_to_integer_conversion():

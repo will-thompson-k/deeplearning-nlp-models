@@ -1,8 +1,10 @@
-import torch.nn as nn
-import torch
-from nlpmodels.models.transformer_blocks.sublayers import AddAndNormWithDropoutLayer, PositionWiseFFNLayer
-from nlpmodels.models.transformer_blocks.attention import MultiHeadedAttention
 from copy import deepcopy
+
+import torch
+import torch.nn as nn
+
+from nlpmodels.models.transformer_blocks.attention import MultiHeadedAttention
+from nlpmodels.models.transformer_blocks.sublayers import AddAndNormWithDropoutLayer, PositionWiseFFNLayer
 
 
 class DecoderBlock(nn.Module):

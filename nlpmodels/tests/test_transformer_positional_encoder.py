@@ -1,7 +1,6 @@
-from nlpmodels.models.transformer_blocks import sublayers
 import torch
-import numpy as np
-import matplotlib.pyplot as plt
+
+from nlpmodels.models.transformer_blocks import sublayers
 
 
 def test_transformer_positional_encoding():

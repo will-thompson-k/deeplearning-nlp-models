@@ -1,13 +1,13 @@
+from argparse import Namespace
+from typing import Tuple, Any, List
+
+import torch
 from torch.utils.data import DataLoader
+from torchtext.experimental.datasets import Multi30k
+
 from nlpmodels.utils.dataset import AbstractNLPDataset
 from nlpmodels.utils.tokenizer import tokenize_corpus_basic
 from nlpmodels.utils.vocabulary import NLPVocabulary
-from typing import Tuple, Any, List
-from torchtext.experimental.datasets import Multi30k
-from argparse import Namespace
-import numpy as np
-import torch
-from torch.autograd import Variable
 
 
 class TransformerDataset(AbstractNLPDataset):

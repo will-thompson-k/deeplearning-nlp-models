@@ -1,6 +1,7 @@
-from nlpmodels.utils.optims import NoamOptimizer
 # import matplotlib.pyplot as plt
 import numpy as np
+
+from nlpmodels.utils.optims import NoamOptimizer
 
 
 def test_noam_optimization():

@@ -1,10 +1,12 @@
-import torch.optim as optim
-from tqdm import tqdm
 from argparse import Namespace
-import torch.nn as nn
-from torch.utils.data import DataLoader
-from nlpmodels.utils import optims, label_smoother, transformer_batch
 from typing import Tuple
+
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader
+from tqdm import tqdm
+
+from nlpmodels.utils import optims, label_smoother, transformer_batch
 
 
 class Word2VecTrainer(object):
