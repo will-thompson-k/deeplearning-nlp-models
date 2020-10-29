@@ -1,8 +1,8 @@
-from nlpmodels.models.transformer_blocks import sublayers,attention,decoder,encoder
+from nlpmodels.models.transformer_blocks import sublayers, attention, decoder, encoder
 import torch.nn as nn
 import torch
 from nlpmodels.utils.transformer_batch import TransformerBatch
-from nlpmodels.utils import train,transformer_dataset
+from nlpmodels.utils import train, transformer_dataset
 from argparse import Namespace
 
 
@@ -34,7 +34,7 @@ class Transformer(nn.Module):
         super(Transformer, self).__init__()
 
         # (1) Read src/input embeddings
-        self._input_embeddings = sublayers.NormalizedEmbeddingsLayer(source_vocab_size,dim_model)
+        self._input_embeddings = sublayers.NormalizedEmbeddingsLayer(source_vocab_size, dim_model)
         # (2) calculate src/input pe
         self._input_pe = sublayers.PositionalEncodingLayer(dim_model, dropout, max_length)
 
@@ -44,7 +44,7 @@ class Transformer(nn.Module):
                                  sublayers.PositionWiseFFNLayer(dim_model, dim_ffn), dropout), num_layers_per_stack)
 
         # (4) calculate target/output embeddings
-        self._output_embeddings = sublayers.NormalizedEmbeddingsLayer(target_vocab_size,dim_model)
+        self._output_embeddings = sublayers.NormalizedEmbeddingsLayer(target_vocab_size, dim_model)
         # (5) calculate target/output pe
         self._output_pe = sublayers.PositionalEncodingLayer(dim_model, dropout, max_length)
 
@@ -89,7 +89,8 @@ class Transformer(nn.Module):
 
         return self._encoder_block(pos_encoding, src_mask)
 
-    def _decode(self, memory: torch.Tensor, src_mask: torch.Tensor, tgt: torch.Tensor, tgt_mask: torch.Tensor) -> torch.Tensor:
+    def _decode(self, memory: torch.Tensor, src_mask: torch.Tensor, tgt: torch.Tensor,
+                tgt_mask: torch.Tensor) -> torch.Tensor:
         """
         Calculate all the layers in the decoder side of the model.
         Args:
@@ -120,7 +121,7 @@ class Transformer(nn.Module):
         encode = self._encode(data.src, data.src_mask)
         decode = self._decode(encode, data.src_mask, data.tgt, data.tgt_mask)
 
-        yhat =  self._final_softmax(self._final_linear(decode))
+        yhat = self._final_softmax(self._final_linear(decode))
 
         return yhat
 

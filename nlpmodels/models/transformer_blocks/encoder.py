@@ -1,6 +1,6 @@
 import torch.nn as nn
 import torch
-from nlpmodels.models.transformer_blocks.sublayers import AddAndNormWithDropoutLayer,PositionWiseFFNLayer
+from nlpmodels.models.transformer_blocks.sublayers import AddAndNormWithDropoutLayer, PositionWiseFFNLayer
 from nlpmodels.models.transformer_blocks.attention import MultiHeadedAttention
 from copy import deepcopy
 
@@ -14,7 +14,9 @@ class EncoderBlock(nn.Module):
 
     Computes  x -> self_attn -> addNorm -> src_attn -> FFN -> addNorm.
     """
-    def __init__(self, size: int, self_attention: MultiHeadedAttention, feed_forward: PositionWiseFFNLayer, dropout: float):
+
+    def __init__(self, size: int, self_attention: MultiHeadedAttention, feed_forward: PositionWiseFFNLayer,
+                 dropout: float):
         """
         Args:
             size (int): This hyper-parameter is used for the BatchNorm layers.
@@ -51,6 +53,7 @@ class CompositeEncoder(nn.Module):
     The encoder stack of the Transformer.
     Pass the input through N encoder blocks then Add+Norm layer the output.
     """
+
     def __init__(self, layer: EncoderBlock, num_layers: int):
         """
         Args:
@@ -58,7 +61,7 @@ class CompositeEncoder(nn.Module):
             num_layers (int): Number of layers in the encoder block.
         """
         super(CompositeEncoder, self).__init__()
-        self._layers = nn.ModuleList([deepcopy(layer)]*num_layers)
+        self._layers = nn.ModuleList([deepcopy(layer)] * num_layers)
         self._add_norm = nn.BatchNorm1d(layer._size, momentum=None, affine=False)
 
     def forward(self, x: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
@@ -75,4 +78,3 @@ class CompositeEncoder(nn.Module):
         for layer in self._layers:
             x = layer(x, mask)
         return self._add_norm(x)
-

@@ -5,18 +5,18 @@ from nlpmodels.utils.transformer_batch import TransformerBatch
 from argparse import Namespace
 import torch
 from nlpmodels.utils import utils
+
 utils.set_seed_everywhere()
 
 
 def test_input_output_dims_transformer():
-
     test_1_args = Namespace(
-        num_layers_per_stack = 2,
-        dim_model = 512,
-        dim_ffn = 2048,
-        num_heads = 8,
-        max_sequence_length = 20,
-        dropout = 0.1,
+        num_layers_per_stack=2,
+        dim_model=512,
+        dim_ffn=2048,
+        num_heads=8,
+        max_sequence_length=20,
+        dropout=0.1,
     )
 
     # mock dataset
@@ -38,4 +38,4 @@ def test_input_output_dims_transformer():
     yhat = model(data)
 
     # assert all dimensions are correct
-    assert yhat.size() == torch.Size([batch_size,max_seq_length,len(dictionary_target)])
+    assert yhat.size() == torch.Size([batch_size, max_seq_length, len(dictionary_target)])

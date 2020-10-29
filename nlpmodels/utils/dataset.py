@@ -2,10 +2,11 @@ from abc import abstractmethod, ABC
 from torch.utils.data import Dataset
 
 
-class AbstractNLPDataset(Dataset,ABC):
+class AbstractNLPDataset(Dataset, ABC):
     """
         Abstract base class for dataset class.
     """
+
     @abstractmethod
     def __len__(self):
         pass
@@ -26,7 +27,7 @@ class AbstractNLPDataset(Dataset,ABC):
 
     @classmethod
     @abstractmethod
-    def get_training_dataloader(cls,*args):
+    def get_training_dataloader(cls, *args):
         pass
 
     @classmethod

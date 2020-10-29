@@ -9,6 +9,7 @@ class AddAndNormWithDropoutLayer(nn.Module):
     The is a residual (skip) connection layer, where we add+batch_norm (w/ dropout) a sub-layer in the
     encoder and decoder blocks.
     """
+
     def __init__(self, size: int, dropout: float):
         """
 
@@ -46,6 +47,7 @@ class PositionWiseFFNLayer(nn.Module):
     Note that in this implementation dim_ffn > dim_model.
 
     """
+
     def __init__(self, dim_model: int, dim_ffn: int):
         """
         Args:
@@ -82,7 +84,7 @@ class PositionalEncodingLayer(nn.Module):
     Derived in part from logic found in "Annotated Transformer": https://nlp.seas.harvard.edu/2018/04/03/attention.html.
     """
 
-    def __init__(self,  dim_model: int, dropout: float, max_length: int):
+    def __init__(self, dim_model: int, dropout: float, max_length: int):
         """
 
         Args:
@@ -101,8 +103,8 @@ class PositionalEncodingLayer(nn.Module):
         div_term = torch.exp(torch.arange(0., dim_model, 2) *
                              -(math.log(10000.0) / dim_model))
         # frequency decomposition for each position in the sequence. (position, wave_length)
-        p[:, 0::2] = torch.sin(position * div_term) # dim 2i
-        p[:, 1::2] = torch.cos(position * div_term) # dim 2i + 1
+        p[:, 0::2] = torch.sin(position * div_term)  # dim 2i
+        p[:, 1::2] = torch.cos(position * div_term)  # dim 2i + 1
 
         # Adding to register buffer will prevent it from being added to model.parameters()
         self.register_buffer('p', p)
@@ -126,6 +128,7 @@ class NormalizedEmbeddingsLayer(nn.Module):
     Implements a "normalized" embedding layer, which takes
     an embedding and normalizes by the sqrt(dim_model).
     """
+
     def __init__(self, vocab_size: int, dim_model: int):
         """
 

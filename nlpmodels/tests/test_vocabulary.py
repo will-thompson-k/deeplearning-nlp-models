@@ -17,7 +17,6 @@ def test_vocabulary_expected_tokens():
 
 
 def test_vocabulary_get_unk_token():
-
     vocab = vocabulary.NLPVocabulary()
     unk_index = vocab.lookup_token(vocab.unk_token)
 
@@ -25,7 +24,6 @@ def test_vocabulary_get_unk_token():
 
 
 def test_vocabulary_token_return_unknown_token():
-
     vocab = vocabulary.NLPVocabulary()
     x = vocab.lookup_token("hey")
 

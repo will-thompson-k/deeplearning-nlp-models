@@ -53,7 +53,7 @@ class NoamOptimizer(object):
         """
         self._optimizer.zero_grad()
 
-    def calc_lr(self,step:int) -> float:
+    def calc_lr(self, step: int) -> float:
         """
         Implements the LR schedule described in Attention (2017).
 

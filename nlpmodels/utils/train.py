@@ -12,7 +12,7 @@ class Word2VecTrainer(object):
     Trainer class for the word2vec model.
     '''
 
-    def __init__(self,args: Namespace,model: nn.Module,train_data: DataLoader):
+    def __init__(self, args: Namespace, model: nn.Module, train_data: DataLoader):
         """
          Args:
              args (Namespace): a class containing all the parameters associated with run
@@ -61,7 +61,9 @@ class TransformerTrainer(object):
     '''
     Trainer class for the Transformer model.
     '''
-    def __init__(self, args: Namespace,vocab_target_size: int, pad_index: int, model: nn.Module, train_data: DataLoader):
+
+    def __init__(self, args: Namespace, vocab_target_size: int, pad_index: int, model: nn.Module,
+                 train_data: DataLoader):
         """
         Args:
              args (Namespace): a class containing all the parameters associated with run
@@ -75,10 +77,11 @@ class TransformerTrainer(object):
         self._train_data = train_data
 
         self._loss_function = label_smoother.LabelSmoothingLossFunction(vocab_size=vocab_target_size,
-                                                                        padding_idx=pad_index, smoothing=args.label_smoothing)
+                                                                        padding_idx=pad_index,
+                                                                        smoothing=args.label_smoothing)
 
         # Noam optimizer per the paper (varies LR of Adam optimizer as a function of step)
-        self._optimizer = optims.NoamOptimizer.get_transformer_noam_optimizer(args,model)
+        self._optimizer = optims.NoamOptimizer.get_transformer_noam_optimizer(args, model)
 
     def run(self):
         """
@@ -93,7 +96,6 @@ class TransformerTrainer(object):
 
             # iterate over batches
             for data in pbar:
-
                 # re-format data for Transformer model
                 data = self._reformat_data(data)
 
@@ -135,8 +137,6 @@ class TransformerTrainer(object):
         source_integers, target_integers = data
 
         # return a batch object with src,src_mask,tgt,tgt_mask tensors
-        batch_data = transformer_batch.TransformerBatch(source_integers,target_integers, pad=0)
+        batch_data = transformer_batch.TransformerBatch(source_integers, target_integers, pad=0)
 
         return batch_data
-
-

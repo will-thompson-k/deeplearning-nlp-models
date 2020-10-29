@@ -10,7 +10,7 @@ class BasicEnglishTokenizer(object):
     """
     _patterns = [r'\W',
                  r'\d+',
-                 r'\s+',] # Remove all words < 4 letters? r'\b\w{,3}\b'
+                 r'\s+', ]  # Remove all words < 4 letters? r'\b\w{,3}\b'
 
     _replacements = [' ',
                      ' ',
@@ -35,11 +35,11 @@ class BasicEnglishTokenizer(object):
             line = line.replace('_', '')
         # remove all 1 letters
         line = line.split()
-        line = [x for x in line if len(x)>1]
+        line = [x for x in line if len(x) > 1]
         return line
 
 
-def tokenize_corpus_basic(text: List[str],removal: bool = True) -> List[List[str]]:
+def tokenize_corpus_basic(text: List[str], removal: bool = True) -> List[List[str]]:
     """
     Function to tokenize a list of strings (corpus).
 

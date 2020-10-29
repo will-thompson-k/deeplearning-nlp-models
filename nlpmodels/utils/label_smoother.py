@@ -48,7 +48,6 @@ class LabelSmoothingLossFunction(nn.Module):
         return self._criterion(yhat, Variable(true_dist, requires_grad=False))
 
     def _compute_label_smoothing(self, target, yhat):
-
         assert yhat.size(1) == self._vocab_size
 
         # generate distribution of same distribution as yhat

@@ -8,6 +8,7 @@ class TransformerBatch(object):
 
     Borrowed from the "Annotated Transformer": https://nlp.seas.harvard.edu/2018/04/03/attention.html.
     """
+
     def __init__(self, src: torch.Tensor, tgt: torch.Tensor, pad: int = 0):
         """
 
@@ -16,11 +17,11 @@ class TransformerBatch(object):
             tgt (torch.Tensor): The target input of (batch_size,max_seq_length).
             pad (int): pad index to identify the padding in each sequence.
         """
-        self.src = src # normal source
-        self.src_mask = (src != pad).unsqueeze(1) # 3D tensor necessary for attention
-        self.tgt = tgt[:,:-1] # prev value of y
-        self.tgt_y = tgt[:,1:] # target (y)
-        self.tgt_mask = self.make_std_mask(self.tgt, pad) # make padding conditional on point in sequence
+        self.src = src  # normal source
+        self.src_mask = (src != pad).unsqueeze(1)  # 3D tensor necessary for attention
+        self.tgt = tgt[:, :-1]  # prev value of y
+        self.tgt_y = tgt[:, 1:]  # target (y)
+        self.tgt_mask = self.make_std_mask(self.tgt, pad)  # make padding conditional on point in sequence
 
     @classmethod
     def make_std_mask(cls, tgt: torch.Tensor, pad: int) -> torch.Tensor:
@@ -34,9 +35,9 @@ class TransformerBatch(object):
         Returns:
             output matrix of size (batch_size,max_seq_length,max_seq_length) size with masked values for target sequence [True,False]
         """
-        tgt_mask = (tgt != pad).unsqueeze(1) # 3D tensor necessary for attention, add in the middle.
+        tgt_mask = (tgt != pad).unsqueeze(1)  # 3D tensor necessary for attention, add in the middle.
         seq_size = tgt.size(1)
-        tgt_mask = tgt_mask & cls.subsequent_mask(seq_size) # subsequent mask built off sequence size
+        tgt_mask = tgt_mask & cls.subsequent_mask(seq_size)  # subsequent mask built off sequence size
         return tgt_mask
 
     @staticmethod

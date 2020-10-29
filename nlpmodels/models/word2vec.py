@@ -51,8 +51,8 @@ class SkipGramNSModel(nn.Module):
         # Rather than negative sample in the construction of the dataset,
         # we find negative samples here directly from embedding
         negative_sample_indices = torch.multinomial(self._word_frequency,
-                                                    batch_size * self._negative_sample_size, replacement=True)\
-                                                    .view(batch_size,-1)
+                                                    batch_size * self._negative_sample_size, replacement=True) \
+            .view(batch_size, -1)
         # negative_sample_indices = torch.randint(0, self._vocab_size - 1,
         #                                         size=(batch_size, self._negative_sample_size))
 
@@ -62,7 +62,9 @@ class SkipGramNSModel(nn.Module):
 
         # we are calculating loss on 1 target=1 binary classification + k target=0 binary classifications
         pos_loss = F.logsigmoid(torch.mul(output_vectors, input_vectors).squeeze()).mean(1)
-        neg_loss = F.logsigmoid(torch.bmm(neg_output_vectors, input_vectors).squeeze()).view(-1, 1, self._negative_sample_size).sum(2).mean(1)
+        neg_loss = F.logsigmoid(torch.bmm(neg_output_vectors, input_vectors).squeeze()).view(-1, 1,
+                                                                                             self._negative_sample_size).sum(
+            2).mean(1)
 
         return -torch.mean(pos_loss + neg_loss)
 

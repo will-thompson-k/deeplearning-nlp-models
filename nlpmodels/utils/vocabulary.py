@@ -7,7 +7,8 @@ class NLPVocabulary(object):
     A vocabulary class used to map tokens to indices and calculate word frequencies.
     Design inspired by https://github.com/joosthub/PyTorchNLPBook.
     """
-    def __init__(self,  mask_token: str = "<MASK>", unk_token: str = "<UNK>", eos_token: str = "<EOS>"):
+
+    def __init__(self, mask_token: str = "<MASK>", unk_token: str = "<UNK>", eos_token: str = "<EOS>"):
         """
         Args:
             mask_token (str) : token name used for masking
@@ -28,7 +29,7 @@ class NLPVocabulary(object):
         self.unk_index = self.add_token(self.unk_token)
         self.eos_index = self.add_token(self.eos_token)
 
-    def add_token(self, token : str) -> int:
+    def add_token(self, token: str) -> int:
         """
         Add token to dictionary, return index.
             Args:
@@ -80,7 +81,7 @@ class NLPVocabulary(object):
             raise KeyError(f"the index {index} is not in the Vocabulary")
         return self._idx_to_token[index]
 
-    def lookup_word_count(self,index: int) -> dict:
+    def lookup_word_count(self, index: int) -> dict:
         """
         Lookup word count of index.
             Args:
@@ -92,7 +93,7 @@ class NLPVocabulary(object):
             raise KeyError(f"the index {index} is not in the Word Count")
         return self._word_count[index]
 
-    def set_proba_thresh(self,thresh: float):
+    def set_proba_thresh(self, thresh: float):
         """
         Add thresh for probability of discarding frequent words.
             Args:
@@ -129,7 +130,7 @@ class NLPVocabulary(object):
         return len(self._token_to_idx)
 
     @classmethod
-    def build_vocabulary(cls,data: List[List[str]]):
+    def build_vocabulary(cls, data: List[List[str]]):
         """
         Class method to return vocabulary object
             Args:

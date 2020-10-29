@@ -13,14 +13,15 @@ def test_transformer_batch_dimensions():
     max_seq_length = 20
     src_padded = TransformerDataset.padded_string_to_integer(src_tokens, max_seq_length, dictionary_source)
     tgt_padded = TransformerDataset.padded_string_to_integer(tgt_tokens, max_seq_length + 1, dictionary_target)
-    batched_object_data = TransformerBatch(torch.LongTensor(src_padded),torch.LongTensor(tgt_padded))
+    batched_object_data = TransformerBatch(torch.LongTensor(src_padded), torch.LongTensor(tgt_padded))
 
     # test dimensions
-    assert batched_object_data.src.size() == torch.Size([batch_size,max_seq_length])
-    assert batched_object_data.src_mask.size() == torch.Size([batch_size,1,max_seq_length])
-    assert batched_object_data.tgt.size() == torch.Size([batch_size,max_seq_length])
-    assert batched_object_data.tgt_y.size() == torch.Size([batch_size,max_seq_length])
-    assert batched_object_data.tgt_mask.size() == torch.Size([batch_size,max_seq_length,max_seq_length])
+    assert batched_object_data.src.size() == torch.Size([batch_size, max_seq_length])
+    assert batched_object_data.src_mask.size() == torch.Size([batch_size, 1, max_seq_length])
+    assert batched_object_data.tgt.size() == torch.Size([batch_size, max_seq_length])
+    assert batched_object_data.tgt_y.size() == torch.Size([batch_size, max_seq_length])
+    assert batched_object_data.tgt_mask.size() == torch.Size([batch_size, max_seq_length, max_seq_length])
+
 
 def test_transformer_batch_src_masking():
     src_tokens = [["the", "cow", "jumped", "over", "the", "moon"], ["the", "british", "are", "coming"]]
@@ -35,8 +36,10 @@ def test_transformer_batch_src_masking():
 
     # test masking
     # include EOS token
-    assert torch.equal(batched_object_data.src_mask[0,:],torch.BoolTensor([[True,True,True,True,True,True,True,False,False,False]]))
-    assert torch.equal(batched_object_data.src_mask[1,:], torch.BoolTensor([[True,True,True,True,True,False,False,False,False,False]]))
+    assert torch.equal(batched_object_data.src_mask[0, :],
+                       torch.BoolTensor([[True, True, True, True, True, True, True, False, False, False]]))
+    assert torch.equal(batched_object_data.src_mask[1, :],
+                       torch.BoolTensor([[True, True, True, True, True, False, False, False, False, False]]))
 
 
 def test_transformer_batch_tgt_masking():
@@ -53,6 +56,8 @@ def test_transformer_batch_tgt_masking():
     # test masking of target: blend of padding and auto-regressive masking
 
     # full mask at last part of sequence
-    assert torch.equal(batched_object_data.tgt_mask[0,9,:],torch.BoolTensor([True,True,True,True,True,True,True,True,False,False]))
+    assert torch.equal(batched_object_data.tgt_mask[0, 9, :],
+                       torch.BoolTensor([True, True, True, True, True, True, True, True, False, False]))
     # should be just the very first item
-    assert torch.equal(batched_object_data.tgt_mask[0,0,:],torch.BoolTensor([True,False,False,False,False,False,False,False,False,False]))
+    assert torch.equal(batched_object_data.tgt_mask[0, 0, :],
+                       torch.BoolTensor([True, False, False, False, False, False, False, False, False, False]))

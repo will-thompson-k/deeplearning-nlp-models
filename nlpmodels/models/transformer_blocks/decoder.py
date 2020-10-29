@@ -16,6 +16,7 @@ class DecoderBlock(nn.Module):
 
     Computes  x -> self_attn -> addNorm -> src_attn -> FFN -> addNorm.
     """
+
     def __init__(self, size: int, self_attention: MultiHeadedAttention, source_attention: MultiHeadedAttention,
                  feed_forward: PositionWiseFFNLayer, dropout: float):
         """
@@ -41,7 +42,8 @@ class DecoderBlock(nn.Module):
         # (6) add + norm layer
         self._add_norm_layer_3 = AddAndNormWithDropoutLayer(size, dropout)
 
-    def forward(self, x: torch.Tensor, memory: torch.Tensor, src_mask: torch.Tensor, tgt_mask: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, memory: torch.Tensor, src_mask: torch.Tensor,
+                tgt_mask: torch.Tensor) -> torch.Tensor:
         """
         Main function call for decoder block.
         maps x -> self_attn -> addNorm -> src_attn -> FFN -> addNorm.
@@ -65,6 +67,7 @@ class CompositeDecoder(nn.Module):
     The decoder stack of the Transformer.
     Pass the input through N decoder blocks then Add+Norm layer the output.
     """
+
     def __init__(self, layer: DecoderBlock, num_layers: int):
         """
         Args:
@@ -75,7 +78,8 @@ class CompositeDecoder(nn.Module):
         self._layers = nn.ModuleList([deepcopy(layer)] * num_layers)
         self._add_norm = nn.BatchNorm1d(layer._size, momentum=None, affine=False)
 
-    def forward(self, x: torch.Tensor, memory: torch.Tensor, src_mask: torch.Tensor, tgt_mask: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, memory: torch.Tensor, src_mask: torch.Tensor,
+                tgt_mask: torch.Tensor) -> torch.Tensor:
         """
         Main function call for Decoder block.
         Takes in embedding(target), target_mask, source, source_mask, and encoder output.

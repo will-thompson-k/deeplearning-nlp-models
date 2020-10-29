@@ -13,7 +13,7 @@ def set_seed_everywhere():
     torch.manual_seed(seed)
 
 
-def get_cosine_similar(target_word : str, word_to_idx : dict, embeddings : torch.Tensor) -> List:
+def get_cosine_similar(target_word: str, word_to_idx: dict, embeddings: torch.Tensor) -> List:
     """
     Function for calculating cosine similarities across dictionary versus target word, descending order.
         Args:
@@ -27,9 +27,9 @@ def get_cosine_similar(target_word : str, word_to_idx : dict, embeddings : torch
     word_embedding = embeddings[word_to_idx[target_word.lower()]]
     distances = []
     for word, index in word_to_idx.items():
-        if word == "<MASK>" or word == target_word or word=="<UNK>":
+        if word == "<MASK>" or word == target_word or word == "<UNK>":
             continue
         distances.append((word, cos(word_embedding, embeddings[index])))
 
-    results = sorted(distances, key=lambda x: x[1],reverse=True)
+    results = sorted(distances, key=lambda x: x[1], reverse=True)
     return results
