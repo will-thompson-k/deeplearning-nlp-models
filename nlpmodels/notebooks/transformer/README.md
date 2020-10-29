@@ -115,7 +115,10 @@ I touch upon some of them below.
 
 ### Positional Encoding
 
-tbd. Probs a sinusoidal plot (from test).
+To encode the relative 
+
+![Positional encodings over sequence length](../../../media/transformer_positional_encoding.png)
+
 
 ### Attention (Self and Encoder-Decoder Attention)
 
@@ -125,9 +128,15 @@ tbd. Probs some key,value, query graphs + attention plots (see notebook).
 
 tbd. Probs a plot showing 2 distributions + mention recent Google Research paper.
 
-### Noam Optimization
+### Noam Scheduler
 
-tbd. Probs a LR plot (from test).
+The paper uses the Noam Scheduler to adjust the learning rate on top of the Adam optimizer.
+
+![Learning rate as a function of step](../../../media/transformer_noam_optimizer.png)
+
+The scheduler does the following:
+1. During the warm-up period, the LR increases linearly.
+2. Afterwards, the warm_up steps decreases ~ 1/sqrt(step_number).
 
 ### Overall
 

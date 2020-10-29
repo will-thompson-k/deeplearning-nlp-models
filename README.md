@@ -21,7 +21,7 @@ is by no means a comprehensive library.
 ## Models
 
 ### Embeddings
-- [ ] [Word2Vec::Skip-gram embeddings (Negative Sampling)](nlpmodels/notebooks/word2vec/README.md)
+- [ ] [Word2Vec Embeddings (Skip-gram & Negative Sampling)](nlpmodels/notebooks/word2vec/README.md)
 
 ### Transformers
 
@@ -33,7 +33,7 @@ is by no means a comprehensive library.
 This repository has the following features:
 
 - [ ] <ins>model breakdowns</ins>: A brief explanation of the model and its components are provided in separate README.md files.
-- [ ] <ins>highly annotated code</ins>: Verbose comments and Napoleon-style docstrings through out the code explain the logic.
+- [ ] <ins>annotated code</ins>: Verbose comments and docstrings through out the code.
 - [ ] <ins>tutorials</ins>: Jupyter notebooks showing how to run the models and some simple analyses of the model results.
 - [ ] <ins>model utilities</ins>: Tokenizers, dataset loaders, dictionaries, and all the custom utilities required for each problem.
 - [ ] <ins>multiple dataset APIs</ins>: Both *HuggingFaces* and *torchtext* (i.e. Pytorch) datasets are used in examples.
