@@ -11,7 +11,6 @@ The goal of this project is to get into the weeds of some of the most recent dee
 - [Features](#Features)
 - [Setup](#Setup)
 - [Structure](#Structure)
-- [Install](#Install)
 - [Requirements](#Requirements)
 - [Roadmap](#Roadmap)
 - [Citation](#Citation)
@@ -55,21 +54,6 @@ Here is a breakdown of the repository:
 including datasets, vocabulary, tokenizers and trainer classes.
 - [ ] `nlpmodels/tests`: Light (and by no means comprehensive) coverage.
 - [ ] `nlpmodels/notebooks`: Contains the notebooks and write-ups for each model implementation.
-
-
-## Install
-
-You can via pip install:
-
-```python
-pip install -r requirements.txt 
-```
-
-or simply 
-
-```python
- pip install .
-```
 
 ## Requirements
 
