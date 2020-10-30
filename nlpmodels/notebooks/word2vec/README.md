@@ -28,11 +28,12 @@ Check out the Jupyter notebook [here](word2vec.ipynb) to run the code.
 
 ## Code
 
-You can find the implementation [here](../../models/word2vec.py) with comments.
+You can find the implementation [here](../../models/word2vec.py) with comments. You may also be interested
+in looking at how the input and context vectors are generated [here](../../utils/skipgram_dataset.py).
 
 ## Usage
 
-Transform a corpus and train the model is a few lines of code:
+Transform a corpus and train the model in a few lines of code:
 
 ```python
 args = Namespace(

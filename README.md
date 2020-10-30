@@ -1,7 +1,7 @@
 # deeplearning-nlp-models
 [![Coverage Status](https://coveralls.io/repos/github/will-thompson-k/deeplearning-nlp-models/badge.svg?branch=master)](https://coveralls.io/github/will-thompson-k/deeplearning-nlp-models?branch=master)
 
-This repository contains the re-implementation of a handful of "deep" NLP papers in PyTorch.
+This repository contains the re-implementation of a handful of "deep" NLP papers in ![pytorch_emblem](media/Pytorch_logo.png).
 
 The goal of this project is to get into the weeds of some of the most recent deep learning model architectures. 
 
@@ -19,12 +19,12 @@ The goal of this project is to get into the weeds of some of the most recent dee
 
 ## Models
 
-### Embeddings
-- [ ] [Word2Vec Embeddings (Skip-gram & Negative Sampling)](nlpmodels/notebooks/word2vec/README.md)
-
-### Transformers
-
-- [ ] [The O.G. Transformer ("Attention is All You Need")](nlpmodels/notebooks/transformer/README.md)
+|                   |                           | 
+| :-------------------- | :--------------------  | 
+|  Embeddings |             | 
+|   |  [Word2Vec Embeddings (Skip-gram & Negative Sampling)](nlpmodels/notebooks/word2vec/README.md)   | 
+|  Transformers |                | 
+|   |  [The O.G. Transformer ("Attention is All You Need")](nlpmodels/notebooks/transformer/README.md)  | 
 
 
 ## Features

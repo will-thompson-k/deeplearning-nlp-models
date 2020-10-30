@@ -33,7 +33,7 @@ that I do not cover here that are worth reviewing.
 
 ## Usage
 
-Transform a corpus and train the model is a few lines of code:
+Transform a corpus and train the model in a few lines of code:
 
 ```python
 
