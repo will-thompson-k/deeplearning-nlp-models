@@ -1,5 +1,5 @@
 # deeplearning-nlp-models
-
+[![Coverage Status](https://coveralls.io/repos/github/will-thompson-k/deeplearning-nlp-models/badge.svg?branch=master)](https://coveralls.io/github/will-thompson-k/deeplearning-nlp-models?branch=master)
 
 This repository contains the re-implementation of a handful of "deep" NLP papers in PyTorch.
 
@@ -11,8 +11,9 @@ The goal of this project is to get into the weeds of some of the most recent dee
 - [Features](#Features)
 - [Setup](#Setup)
 - [Structure](#Structure)
-- [Roadmap](#Roadmap)
+- [Install](#Install)
 - [Requirements](#Requirements)
+- [Roadmap](#Roadmap)
 - [Citation](#Citation)
 - [License](#License)
 
@@ -32,7 +33,6 @@ The goal of this project is to get into the weeds of some of the most recent dee
 This repository has the following features:
 
 - [ ] <ins>model breakdowns</ins>: A brief explanation of the model and its components are provided in separate README.md files.
-- [ ] <ins>annotated code</ins>: Verbose comments and docstrings throughout the code base.
 - [ ] <ins>tutorials</ins>: Jupyter notebooks showing how to run the models and some simple analyses of the model results.
 - [ ] <ins>model utilities</ins>: Tokenizers, dataset loaders, dictionaries, and all the custom utilities required for each problem.
 - [ ] <ins>multiple dataset APIs</ins>: Both *HuggingFaces* and *torchtext* (i.e. Pytorch) datasets are used in examples.
@@ -56,6 +56,34 @@ including datasets, vocabulary, tokenizers and trainer classes.
 - [ ] `nlpmodels/tests`: Light (and by no means comprehensive) coverage.
 - [ ] `nlpmodels/notebooks`: Contains the notebooks and write-ups for each model implementation.
 
+
+## Install
+
+You can via pip install:
+
+```python
+pip install -r requirements.txt 
+```
+
+or simply 
+
+```python
+ pip install .
+```
+
+## Requirements
+
+Python 3.6+
+
+Here are the package requirements (found in requirements.txt)
+
+- [ ] numpy==1.19.1
+- [ ] tqdm==4.50.2
+- [ ] torch==1.6.0
+- [ ] datasets==1.0.2
+- [ ] torchtext==0.8.0a0+c851c3e
+
+
 ## Roadmap
 
 Here are some models I want to implement in the near future:
@@ -70,24 +98,6 @@ Here are some models I want to implement in the near future:
 - [ ] T5 and Performer
 
 Also, I eventually am going to re-train those models that can leverage GPUs.
-
-## Requirements
-
-You can install the requirements here:
-
-```python
-pip install -r requirements.txt 
-```
-
-Python 3.6+
-
-Here are the package requirements (found in requirements.txt)
-
-- [ ] numpy==1.19.1
-- [ ] tqdm==4.50.2
-- [ ] torch==1.6.0
-- [ ] datasets==1.0.2
-- [ ] torchtext==0.8.0a0+c851c3e
 
 
 ## Citation
