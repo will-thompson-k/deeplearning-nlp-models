@@ -1,5 +1,6 @@
 # deeplearning-nlp-models
 [![Coverage Status](https://coveralls.io/repos/github/will-thompson-k/deeplearning-nlp-models/badge.svg?branch=master)](https://coveralls.io/github/will-thompson-k/deeplearning-nlp-models?branch=master)
+![Travis (.com)](https://img.shields.io/travis/com/will-thompson-k/deeplearning-nlp-models)
 
 This repository contains the re-implementation of a handful of "deep" NLP papers in ![pytorch_emblem](media/Pytorch_logo.png).
 
@@ -65,7 +66,7 @@ Here are the package requirements (found in requirements.txt)
 - [ ] tqdm==4.50.2
 - [ ] torch==1.6.0
 - [ ] datasets==1.0.2
-- [ ] torchtext==0.8.0a0+c851c3e
+- [ ] torchtext==0.7.0
 
 
 ## Roadmap
