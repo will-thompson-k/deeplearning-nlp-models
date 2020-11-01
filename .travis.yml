@@ -5,10 +5,11 @@ before_install:
   - python --version
   - pip install -U pip
   - pip install -U pytest
-  - pip install codecov
+  - pip install coveralls
+  - pip install coverage
 install:
   - pip install -r requirements.txt
   - pip install ".[test]" . # install package + test dependencies
-script: pytest # run tests
+script: coverage run setup.py test #pytest # run tests
 after_success:
-  - codecov # submit coverage
+  - coveralls

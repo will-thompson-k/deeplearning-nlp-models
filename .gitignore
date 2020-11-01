@@ -13,3 +13,4 @@
 .pyc
 .pytest_cache
 .future
+.coveralls.yml
