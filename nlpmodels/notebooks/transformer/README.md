@@ -7,8 +7,6 @@ Vaswani et al. ["Attention is All You Need"](https://arxiv.org/pdf/1706.03762.pd
 
 Image source: Vaswani et al. (2017)
 
-(*) Note: This implementation draws heavily from the "Annotated Transformer" [here](https://nlp.seas.harvard.edu/2018/04/03/attention.html).
-
 ## Contents
 
 - [Jupyter Notebook](#Notebook)
