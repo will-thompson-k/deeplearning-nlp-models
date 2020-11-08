@@ -39,7 +39,6 @@ class AddAndNormWithDropoutLayer(nn.Module):
         Returns:
             transformed matrix output.
         """
-        # print(x.shape)
         batch_normed = self._norm(values)
         transformed = sublayer(batch_normed)
         return values + self._dropout(transformed)
@@ -53,22 +52,26 @@ class PositionWiseFFNLayer(nn.Module):
 
     """
 
-    def __init__(self, dim_model: int, dim_ffn: int):
+    def __init__(self, dim_model: int, dim_ffn: int,
+                 activ_func: nn.Module = nn.ReLU()):
         """
         Args:
             dim_model (int):
-                size of the input matrix, which also happens to be the size of the embedding.
+                size of the input matrix,
+                which also happens to be the size of the embedding.
             dim_ffn (int):
                 size of the FFN hidden layer.
         """
         super(PositionWiseFFNLayer, self).__init__()
         self._W1 = nn.Linear(dim_model, dim_ffn)
-        self._relu = nn.ReLU()
+        self._activ_func = activ_func
         self._W2 = nn.Linear(dim_ffn, dim_model)
 
     def forward(self, values: torch.Tensor) -> torch.Tensor:
         """
-        Applies max(0,values) (i.e. RelU) + linear layers.
+        Applies activation_function + linear layers.
+        Transformer: max(0,values) (i.e. RelU)
+        GPT: GELU.
 
         Args:
             values (torch.Tensor):
@@ -76,7 +79,7 @@ class PositionWiseFFNLayer(nn.Module):
         Returns:
             output matrix of same size as input.
         """
-        return self._W2(self._relu(self._W1(values)))
+        return self._W2(self._activ_func(self._W1(values)))
 
 
 class PositionalEncodingLayer(nn.Module):
