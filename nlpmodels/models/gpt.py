@@ -36,8 +36,7 @@ class GPT(nn.Module):
         # (1) calculate embeddings
         self._embeddings = sublayers.NormalizedEmbeddingsLayer(vocab_size, dim_model)
         # (2) calculate positional_encoding (learn-able this time) + drop-out
-        self._pos_encoding = nn.Sequential(nn.Parameter(torch.zeros(1, block_size, dim_model)),
-                                            nn.Dropout(dropout))
+        self._pos_encoding = sublayers.GPTPositionalEncodingLayer(dim_model,dropout,block_size)
         # (3) Pass embeddings + pe to GPT decoder block
         self._decoder_block = gpt_decoder.GPTCompositeDecoder(
             gpt_decoder.GPTDecoderBlock(block_size,

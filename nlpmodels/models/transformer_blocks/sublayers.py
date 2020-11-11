@@ -169,3 +169,38 @@ class NormalizedEmbeddingsLayer(nn.Module):
             output embedding matrix of (batch_size, max_seq_length, dim_model) size
         """
         return self._embeddings(values) * math.sqrt(self._dim_model)
+
+
+class GPTPositionalEncodingLayer(nn.Module):
+    """
+    GPT's positional encoding layer. This one is trainable.
+    """
+
+    def __init__(self, dim_model: int, dropout: float, block_size: int):
+        """
+
+        Args:
+            dim_model (int):
+                size of the input matrix, which also happens to be the size of the embedding.
+            dropout (float):
+                Hyper-parameter used in drop-out regularization in training.
+            block_size (int):
+                The size of the sequence (fixed size).
+        """
+        super(GPTPositionalEncodingLayer, self).__init__()
+        self._dropout = nn.Dropout(p=dropout)
+
+        # create the positional_encoding once upon instantiation.
+        self._pos_encoding = nn.Parameter(torch.zeros(block_size, dim_model))
+
+    def forward(self, values: torch.Tensor) -> torch.Tensor:
+        """
+        The main call of the positional encoder.
+
+        Args:
+            values (torch.Tensor): embedding matrix of size (batch_size,dim_model).
+        Returns:
+            output of same size (batch_size, dim_model).
+        """
+        values = values + self._pos_encoding
+        return self._dropout(values)
