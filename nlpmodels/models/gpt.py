@@ -28,16 +28,16 @@ class GPT(nn.Module):
            dim_model (int): size of the embedding space.
            dim_ffn (int): size of the residual/skip-connection hidden layer.
            num_heads (int): number of simultaneous attention heads calculated during attention.
-           block_size (int): the context window of the input/output sequencies.
+           block_size (int): the context window of the input/output sequences.
            dropout (float): Hyper-parameter used in drop-out regularization in training.
         """
         super(GPT, self).__init__()
 
         # (1) calculate embeddings
         self._embeddings = sublayers.NormalizedEmbeddingsLayer(vocab_size, dim_model)
-        # (2) calculate positional_encoding (learn-able this time)
-        # TODO: Add in pos encoding
-        self._pos_encoding = None # Note: this must apply drop-out after
+        # (2) calculate positional_encoding (learn-able this time) + drop-out
+        self._pos_encoding = nn.Sequential(nn.Parameter(torch.zeros(1, block_size, dim_model)),
+                                            nn.Dropout(dropout))
         # (3) Pass embeddings + pe to GPT decoder block
         self._decoder_block = gpt_decoder.GPTCompositeDecoder(
             gpt_decoder.GPTDecoderBlock(block_size,
