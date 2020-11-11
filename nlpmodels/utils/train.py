@@ -6,7 +6,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from nlpmodels.utils import optims, label_smoother, transformer_batch
+from nlpmodels.utils import optims, label_smoother, transformer_batch, gpt_batch, vocabulary
 
 
 class Word2VecTrainer:
@@ -140,5 +140,87 @@ class TransformerTrainer:
 
         # return a batch object with src,src_mask,tgt,tgt_mask tensors
         batch_data = transformer_batch.TransformerBatch(source_integers, target_integers, pad=0)
+
+        return batch_data
+
+
+class GPTTrainer:
+    '''
+    Trainer class for the GPT model.
+    '''
+
+    def __init__(self, args: Namespace, pad_index: int, model: nn.Module,
+                 train_data: DataLoader, vocab: vocabulary.NLPVocabulary):
+        """
+        Args:
+             args (Namespace): a class containing all the parameters associated with run
+             pad_index (int): index of pad token.
+             model (nn.Module): a PyTorch model
+             train_data (DataLoader): a data loader that provides batches for running
+             vocab (NLPVocabulary): vocab of model
+         """
+        self._args = args
+        self._model = model
+        self._train_data = train_data
+        self._vocab = vocab
+
+        # Usual cross entropy loss function
+        self._loss_function = nn.CrossEntropyLoss(ignore_index=pad_index)
+
+        # TODO: Add in cosine decay optimizer
+        self._optimizer = None
+
+    def run(self):
+        """
+        Main running function for training a model.
+        """
+        for epoch in range(self._args.num_epochs):
+
+            self._model.train()
+
+            pbar = tqdm(self._train_data)
+            pbar.set_description("[Epoch {}]".format(epoch))
+
+            # iterate over batches
+            for data in pbar:
+                # re-format data for GPT model
+                data = self._reformat_data(data)
+
+                # step 1. zero the gradients
+                self._optimizer.zero_grad()
+
+                # step 2. forward_prop
+                y_hat = self._model(data)
+
+                # step 3. compute the standard cross entropy loss
+                loss = self._loss_function(y_hat.view(-1, y_hat.size(-1)), data.tgt.view(-1))
+
+                # step 4. back_prop
+                loss.backward()
+
+                # step 5. use optimizer to take gradient step
+                self._optimizer.step()
+
+                # NOTE: Usually makes sense to measure the loss from the val set (and add early stopping).
+                # For this experiment, just running on training set entirely as an example.
+
+                # status bar
+                pbar.set_postfix(loss=loss.item())
+
+        print("Finished Training...")
+
+    def _reformat_data(self,data: Tuple) -> gpt_batch.GPTBatch:
+        """
+
+        Args:
+            data (Tuple): The tuples of LongTensors to be converted into a Batch object.
+        Returns:
+            GPTBatch object containing data for a given batch.
+        """
+        # (batch,seq) shape tensors
+        src, tgt = data
+
+        # return a batch object with src,src_mask,tgt,tgt_mask tensors
+        batch_data = gpt_batch.GPTBatch(src, tgt, self._vocab.mask_index)
 
         return batch_data

@@ -6,9 +6,10 @@
 
 A small, interpretable codebase containing the re-implementation of a few "deep" NLP papers in ![pytorch_emblem](media/Pytorch_logo.png).
 
-Models: word2vec, transformer, gpt.
+<ins>Current models</ins>: word2vec, transformer, gpt.
 
-The goal of this project is to get into the weeds of some of the most recent deep learning model architectures. 
+This is a compact tutorial for those interested in getting into the weeds the latest nlp model architectures.
+Other repos I found too sprawling to follow.
 
 ## Contents
 
@@ -26,11 +27,11 @@ The goal of this project is to get into the weeds of some of the most recent dee
 
 |                   |                           | 
 | :-------------------- | :--------------------  | 
-|  Embeddings |             | 
-|  1. |  [Word2Vec Embeddings (Skip-gram & Negative Sampling)](nlpmodels/notebooks/word2vec/README.md)   | 
-|  Transformers |                | 
-|  2. |  [The O.G. Transformer ("Attention is All You Need")](nlpmodels/notebooks/transformer/README.md)  | 
-|  3. |  [OpenAI's GPT Model (Semi-supervised Transformer)](nlpmodels/notebooks/gpt/README.md)  | 
+|  <ins>Embeddings</ins>|             | 
+|  1. |  [Word2Vec](nlpmodels/notebooks/word2vec/README.md)   | 
+|  <ins>Transformers</ins> |                | 
+|  2. |  [The O.G. Transformer](nlpmodels/notebooks/transformer/README.md)  | 
+|  3. |  [OpenAI's GPT Model](nlpmodels/notebooks/gpt/README.md)  | 
 
 ## Features
 
@@ -51,16 +52,18 @@ Future models:
 - [ ] Char-RNN (Kaparthy)
 - [ ] BERT
 - [ ] ELMo
-- [ ] XLNet
+- [ ] XLNet 
 - [ ] T5
+- [ ] VAE
+
 
 Future model features:
 
-- [ ] Leverage PyTorch gpu training
-- [ ] Early stopping on val set
-- [ ] Formalize trainer
+- [ ] Leverage PyTorch gpu training / Formalize trainer
 - [ ] Gradient clipping
-- [ ] Tensorboard?
+- [ ] Tensorboard plots
+- [ ] saving checkpoints/ loading models
+- [ ] BPE from openai/gpt-2
 
 ## Setup
 

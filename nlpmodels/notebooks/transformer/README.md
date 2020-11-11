@@ -102,8 +102,14 @@ the next word. This breakthrough was shown to extend the prediction power of RNN
 
 ### Sequential computation difficult to parallelize
 
-Second, due to the sequential nature of how RNNs are computed, RNNs can be slow to train at scale (for a different perspective,
-see Andrej Kaparthy's blog post on RNNs [here](http://karpathy.github.io/2015/05/21/rnn-effectiveness/)).
+Second, due to the sequential nature of how RNNs are computed, RNNs can be slow to train at scale.
+
+### RNNs aren't dominantly worse btw
+
+For a positive perspective on RNNs,
+see Andrej Kaparthy's blog post on RNNs [here](http://karpathy.github.io/2015/05/21/rnn-effectiveness/).
+One thing, for example, to realize about the transformer models (in particular, the language model versions such as GPT) 
+is that they have a finite context window while RNNs have theoretically an infinite context window.
 
 ## Transformer
 
