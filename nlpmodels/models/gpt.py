@@ -52,7 +52,17 @@ class GPT(nn.Module):
 
         # init weights
         # TODO: Add init weights
-        # self._init_weights()
+        self._init_weights()
+
+    def _init_weights(self):
+        """
+        Initialize all parameters to be trained using Xavier Uniform.
+        Note: parameters added to buffer will not be affected.
+        """
+        for parameter in self.parameters():
+            if parameter.dim() - 1:
+                if isinstance(parameter, (nn.Linear, nn.Embedding)):
+                    parameter.weight.data.normal_(mean=0.0, std=0.02)
 
     def _decode(self, index) -> torch.Tensor:
 
