@@ -2,8 +2,8 @@ import torch
 import torch.nn as nn
 from nlpmodels.models.transformer_blocks import sublayers, attention, gpt_decoder
 from nlpmodels.utils.transformer_batch import TransformerBatch
+from nlpmodels.utils.gpt_batch import GPTBatch
 from nlpmodels.utils.gpt_dataset import GPTDataset
-from nlpmodels.utils import train
 
 
 class GPT(nn.Module):
@@ -50,31 +50,29 @@ class GPT(nn.Module):
         self._final_linear = nn.Linear(dim_model, vocab_size)
 
         # init weights
-        # TODO: Add init weights
         self._init_weights()
 
     def _init_weights(self):
         """
-        Initialize all parameters to be trained using Xavier Uniform.
-        Note: parameters added to buffer will not be affected.
+        Initialize all parameters to be N(0,0.02) per GPT-1 paper.
         """
         for parameter in self.parameters():
             if parameter.dim() - 1:
                 if isinstance(parameter, (nn.Linear, nn.Embedding)):
                     parameter.weight.data.normal_(mean=0.0, std=0.02)
 
-    def _decode(self, index) -> torch.Tensor:
+    def _decode(self, data: GPTBatch) -> torch.Tensor:
 
-        embeddings = self._embeddings(index)
+        embeddings = self._embeddings(data.src)
         # Add output embeddings to pos_encoding, apply drop out
         pos_encoding = self._pos_encoding(embeddings)
 
-        return self._decoder_block(pos_encoding)
+        return self._decoder_block(pos_encoding, data.src_mask)
 
-    def forward(self, data: TransformerBatch) -> torch.Tensor:
+    def forward(self, data: GPTBatch) -> torch.Tensor:
 
         # pass through decoder blocks
-        decode = self._decode(data.src)
+        decode = self._decode(data)
         # calculate yhat
         yhat = self._final_linear(decode)
 
@@ -82,22 +80,22 @@ class GPT(nn.Module):
 
 
 if __name__ == '__main__':
-    from nlpmodels.utils import train, utils, transformer_dataset
+    from nlpmodels.utils import train, utils
     from argparse import Namespace
 
     utils.set_seed_everywhere()
     args = Namespace(
         # Model hyper-parameters
         num_layers_per_stack=2,  # original value = 12
-        dim_model=768,
-        dim_ffn=3072,
-        num_heads=12,
-        block_size=512, # context window
+        dim_model=12, #original value = 768
+        dim_ffn=48, # original value = 3072
+        num_heads=2, # original value = 12
+        block_size=64, # original value = 512, context window
         dropout=0.1,
         # Training hyper-parameters
         num_epochs=15,
         learning_rate=0.0,
-        batch_size=64,
+        batch_size=128, #original value = 64
     )
 
     train_loader, vocab = GPTDataset.get_training_dataloader(args)

@@ -5,7 +5,6 @@ from torch.utils.data import DataLoader
 from torchtext.experimental.datasets import WikiText2
 
 from nlpmodels.utils.dataset import AbstractNLPDataset
-from nlpmodels.utils.tokenizer import tokenize_corpus_basic
 from nlpmodels.utils.vocabulary import NLPVocabulary
 
 
@@ -34,17 +33,19 @@ class GPTDataset(AbstractNLPDataset):
 
         return len(self.data)
 
-    def __getitem__(self, idx: int) -> Tuple[torch.LongTensor, torch.LongTensor]:
+    def __getitem__(self, idx: int) -> Tuple[torch.Tensor, torch.Tensor]:
         """
         Args:
             idx (int): index of dataset slice to grab.
         Returns:
             Tuple of tensors (source,target) for that index.
         """
+        # only grabbing full length tensors
+        idx = min(len(self.data)-self._block_size-1, idx)
         # grab a chunk of (block_size + 1) from the data
         chunk = self.data[idx:idx + self._block_size + 1]
         # return 2 block_size chunks shifted by 1 index
-        return torch.LongTensor(chunk[:-1]), torch.LongTensor(chunk[1:])
+        return chunk[:-1], chunk[1:]
 
     @classmethod
     def get_training_dataloader(cls, args: Any) -> Tuple[DataLoader, NLPVocabulary]:
@@ -74,8 +75,10 @@ class GPTDataset(AbstractNLPDataset):
         # download the WikiText2 data from torchtext.experimental for language model development
         # this dataset already is already tokenized and converted into integers.
         train_block, _, _ = WikiText2()
-        # gran the actual data and the vocab
+        # grab the actual data and the vocab
         train_dataset, train_vocab = train_block.data, train_block.vocab
+        # hack: i'm going to only grab the first 100k examples. cause this is like > 1MM words
+        train_dataset = train_dataset[:100000]
         # convert the torchtext dictionary into our internal dictionary
         vocab = NLPVocabulary(unk_token=train_vocab.UNK,mask_token=train_vocab.itos[1])
         cls.convert_torchtext_vocab(train_vocab, vocab)

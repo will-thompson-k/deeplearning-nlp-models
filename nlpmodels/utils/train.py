@@ -207,7 +207,7 @@ class GPTTrainer:
 
                     # status bar
                     pbar.set_postfix(loss=loss.item())
-    
+
                 print("Finished Training...")
 
     def _reformat_data(self,data: Tuple) -> gpt_batch.GPTBatch:

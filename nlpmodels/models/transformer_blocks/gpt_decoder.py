@@ -39,19 +39,17 @@ class GPTDecoderBlock(nn.Module):
         # (4) add + norm layer
         self._add_norm_layer_2 = AddAndNormWithDropoutLayer(size, dropout)
 
-    def forward(self, values: torch.Tensor, src_mask: torch.Tensor, tgt_mask: torch.Tensor) -> torch.Tensor:
+    def forward(self, values: torch.Tensor, src_mask: torch.Tensor) -> torch.Tensor:
         """
         Main function call for decoder block.
         maps input -> self_attn -> addNorm -> src_attn -> FFN -> addNorm.
         Args:
             values (torch.Tensor): Either embedding(tgt) or decoder[l-1] output.
             src_mask (torch.Tensor):
-                Masking source so model doesn't see padding.
-            tgt_mask (torch.Tensor):
                 Masking target so model doesn't see padding or next sequential values.
         """
         # first self-attention on the decoder[l-1] layer
-        values = self._add_norm_layer_1(values, lambda x: self._self_attention(x, x, x, tgt_mask))
+        values = self._add_norm_layer_1(values, lambda x: self._self_attention(x, x, x, src_mask))
         values = self._add_norm_layer_2(values, self._feed_forward)
         return values
 
@@ -72,8 +70,7 @@ class GPTCompositeDecoder(nn.Module):
         self._layers = nn.ModuleList([deepcopy(layer)] * num_layers)
         self._add_norm = nn.BatchNorm1d(layer._size, momentum=None, affine=False)
 
-    def forward(self, values: torch.Tensor, src_mask: torch.Tensor,
-                tgt_mask: torch.Tensor) -> torch.Tensor:
+    def forward(self, values: torch.Tensor, src_mask: torch.Tensor) -> torch.Tensor:
         """
         Main function call for Decoder block.
         Takes in embedding(target), target_mask, source, source_mask, and encoder output.
@@ -81,12 +78,10 @@ class GPTCompositeDecoder(nn.Module):
         Args:
             values (torch.Tensor): Either embedding(tgt) or decoder[l-1] output.
             src_mask (torch.Tensor):
-                Masking source so model doesn't see padding.
-            tgt_mask (torch.Tensor):
                 Masking target so model doesn't see padding or next sequential values.
         Returns:
             decoder output to be used as input into final layer.
         """
         for layer in self._layers:
-            values = layer(values, tgt_mask)
+            values = layer(values, src_mask)
         return self._add_norm(values)
