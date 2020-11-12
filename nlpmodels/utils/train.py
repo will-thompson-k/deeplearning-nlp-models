@@ -62,8 +62,9 @@ class Word2VecTrainer:
 class TransformerTrainer:
     '''
     Trainer class for the Transformer model.
-    '''
 
+    Using NoamOptimizer + LabelSmoothing.
+    '''
     def __init__(self, args: Namespace, vocab_target_size: int, pad_index: int, model: nn.Module,
                  train_data: DataLoader):
         """
@@ -129,7 +130,6 @@ class TransformerTrainer:
     @staticmethod
     def _reformat_data(data: Tuple) -> transformer_batch.TransformerBatch:
         """
-
         Args:
             data (Tuple): The tuples of LongTensors to be converted into a Batch object.
         Returns:
@@ -147,8 +147,10 @@ class TransformerTrainer:
 class GPTTrainer:
     '''
     Trainer class for the GPT model.
-    '''
 
+    Instead of Cosine Decay scheduler, will reuse the Noam Optimizer.
+    Also using the usual cross entropy loss.
+    '''
     def __init__(self, args: Namespace, pad_index: int, model: nn.Module,
                  train_data: DataLoader, vocab: vocabulary.NLPVocabulary):
         """
@@ -170,49 +172,47 @@ class GPTTrainer:
         # Note: I am using the original transformer's optimizer rather than the cosine decay function
         self._optimizer = optims.NoamOptimizer.get_transformer_noam_optimizer(args, model)
 
-
     def run(self):
-            """
-            Main running function for training a model.
-            """
-            for epoch in range(self._args.num_epochs):
+        """
+        Main running function for training a model.
+        """
+        for epoch in range(self._args.num_epochs):
 
-                self._model.train()
+            self._model.train()
 
-                pbar = tqdm(self._train_data)
-                pbar.set_description("[Epoch {}]".format(epoch))
+            pbar = tqdm(self._train_data)
+            pbar.set_description("[Epoch {}]".format(epoch))
 
-                # iterate over batches
-                for data in pbar:
-                    # re-format data for GPT model
-                    data = self._reformat_data(data)
+            # iterate over batches
+            for data in pbar:
+                # re-format data for GPT model
+                data = self._reformat_data(data)
 
-                    # step 1. zero the gradients
-                    self._optimizer.zero_grad()
+                # step 1. zero the gradients
+                self._optimizer.zero_grad()
 
-                    # step 2. forward_prop
-                    y_hat = self._model(data)
+                # step 2. forward_prop
+                y_hat = self._model(data)
 
-                    # step 3. compute the standard cross entropy loss
-                    loss = self._loss_function(y_hat.view(-1, y_hat.size(-1)), data.tgt.view(-1))
+                # step 3. compute the standard cross entropy loss
+                loss = self._loss_function(y_hat.view(-1, y_hat.size(-1)), data.tgt.view(-1))
 
-                    # step 4. back_prop
-                    loss.backward()
+                # step 4. back_prop
+                loss.backward()
 
-                    # step 5. use optimizer to take gradient step
-                    self._optimizer.step()
+                # step 5. use optimizer to take gradient step
+                self._optimizer.step()
 
-                    # NOTE: Usually makes sense to measure the loss from the val set (and add early stopping).
-                    # For this experiment, just running on training set entirely as an example.
+                # NOTE: Usually makes sense to measure the loss from the val set (and add early stopping).
+                # For this experiment, just running on training set entirely as an example.
 
-                    # status bar
-                    pbar.set_postfix(loss=loss.item())
+                # status bar
+                pbar.set_postfix(loss=loss.item())
 
-                print("Finished Training...")
+            print("Finished Training...")
 
     def _reformat_data(self,data: Tuple) -> gpt_batch.GPTBatch:
         """
-
         Args:
             data (Tuple): The tuples of LongTensors to be converted into a Batch object.
         Returns:
@@ -224,4 +224,4 @@ class GPTTrainer:
         # return a batch object with src,src_mask,tgt,tgt_mask tensors
         batch_data = gpt_batch.GPTBatch(src, tgt, self._vocab.mask_index)
 
-        return batch_data
+        return batch_data 

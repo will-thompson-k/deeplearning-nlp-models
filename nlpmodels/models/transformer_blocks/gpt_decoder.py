@@ -12,7 +12,7 @@ class GPTDecoderBlock(nn.Module):
     """
     The Decoder block of the GPT Transformer.
 
-    A bit different than the other decoder block.
+    A bit different than the Transformer decoder block. No encoder-decoder attention.
     """
 
     def __init__(self, size: int, self_attention: MultiHeadedAttention,

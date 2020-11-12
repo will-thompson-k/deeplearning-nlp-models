@@ -8,7 +8,9 @@ class GPT(nn.Module):
     """
     The GPT class of the decoder-only Transformer.
 
-    MORE DESCRIPTION.
+    GPT is an auto-regressive language model trying to max p(x[k]|x[k-1],[k-2],...x[k-block_size]).
+    The motivation of this approach is to train the model on a large corpus as a self-supervised
+    problem and then transfer the model to a different problem.
     """
 
     def __init__(self,
@@ -59,7 +61,14 @@ class GPT(nn.Module):
                     parameter.weight.data.normal_(mean=0.0, std=0.02)
 
     def _decode(self, data: GPTBatch) -> torch.Tensor:
+        """
+        Calculate all the layers in the model since this a decoder only model.
 
+        Args:
+            data (GPTBatch): A class containing the src, src_mask data for this batch.
+        Returns:
+            tensor of [batch_size,block_size,vocab_size] of predictions.
+        """
         embeddings = self._embeddings(data.src)
         # Add output embeddings to pos_encoding, apply drop out
         pos_encoding = self._pos_encoding(embeddings)
@@ -67,10 +76,17 @@ class GPT(nn.Module):
         return self._decoder_block(pos_encoding, data.src_mask)
 
     def forward(self, data: GPTBatch) -> torch.Tensor:
+        """
+        The main function call for the gpt model.
 
+        Args:
+            data (GPTBatch): A class containing the src, src_mask data for this batch.
+        Returns:
+            tensor of [batch_size,block_size,vocab_size] of final predictions.
+        """
         # pass through decoder blocks
         decode = self._decode(data)
-        # calculate yhat. Don't apply softmax before passing to cross entropy
+        # calculate yhat. Don't apply softmax before passing to cross entropy.
         yhat = self._final_linear(decode)
 
         return yhat

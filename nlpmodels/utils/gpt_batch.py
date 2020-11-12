@@ -1,10 +1,14 @@
 import numpy as np
 import torch
 
+
 class GPTBatch:
     """
     GPT batch data class encapsulating src, tgt, and related masks.
 
+    Unlike the Transformer, there is no self-attention for the src,tgt
+    data. This is a language model, where the next token is predicted
+    from the previous context_window tokens.
     """
 
     def __init__(self, src: torch.Tensor, tgt: torch.Tensor, pad:int):
@@ -21,14 +25,15 @@ class GPTBatch:
     @classmethod
     def make_std_mask(cls, tgt: torch.Tensor, pad: int) -> torch.Tensor:
         """
-        Create a mask to hide padding and future words for target sequence.
+        Create a mask to hide padding and future words for src sequence.
 
         Args:
-            tgt (torch.Tensor): The target input of (batch_size,max_seq_length) size.
+            tgt (torch.Tensor): The target input of (batch_size,context_window) size.
             pad (int): pad index to identify the padding in each sequence.
 
         Returns:
-            output matrix of size (batch_size,max_seq_length,max_seq_length) size with masked values for target sequence [True,False]
+            output matrix of size (batch_size,max_seq_length,max_seq_length)
+            size with masked values for target sequence [True,False]
         """
         tgt_mask = (tgt != pad).unsqueeze(1)  # 3D tensor necessary for attention, add in the middle.
         seq_size = tgt.size(1)
@@ -42,10 +47,9 @@ class GPTBatch:
 
         Args:
             size (int): max_seq_length of each target sequence.
-
         Returns:
-            output matrix of size (batch_size,max_seq_length,max_seq_length) size with masked values to ignore previous value.
-
+            output matrix of size (batch_size,max_seq_length,max_seq_length)
+            size with masked values to ignore previous value.
         """
         # create lower right triangle of 1s in numpy 3D tensor
         subsequent_mask = np.triu(np.ones((1, size, size)), k=1).astype('uint8')

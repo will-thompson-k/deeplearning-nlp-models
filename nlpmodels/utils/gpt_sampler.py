@@ -2,7 +2,8 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 
-# Make sure we don't update the gradiet.
+
+# Make sure we don't update the gradient.
 @torch.no_grad()
 def greedy_sampler(model: nn.Module,
                    x: torch.Tensor,

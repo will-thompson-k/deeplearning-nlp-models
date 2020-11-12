@@ -11,14 +11,16 @@ from nlpmodels.utils.vocabulary import NLPVocabulary
 class GPTDataset(AbstractNLPDataset):
     """
     GPT class for transforming and storing dataset for use in GPT language model.
+
+    Uses torchtext's WikiText2 dataset.
     """
 
     def __init__(self, data: torch.Tensor, vocab: NLPVocabulary, block_size: int):
         """
         Args:
             data (torch.Tensor): 1D tensor of integers to sample batches from.
-            vocab (NLPVocabulary): Vocabulary.
-            block_size (int):
+            vocab (NLPVocabulary): Vocabulary. Not target/source this time.
+            block_size (int): Size of context window.
         """
 
         self.data = data
@@ -27,8 +29,7 @@ class GPTDataset(AbstractNLPDataset):
 
     def __len__(self) -> int:
         """
-        Returns:
-            size of dataset.
+        Returns: size of dataset.
         """
 
         return len(self.data)
@@ -52,7 +53,6 @@ class GPTDataset(AbstractNLPDataset):
         """
         Args:
             args: Parameters for deriving training data.
-
         Returns:
             Tuple of Dataloader class, source and target dictionaries
         """
@@ -70,7 +70,7 @@ class GPTDataset(AbstractNLPDataset):
         Args:
             block_size (int): The size of the context window.
         Returns:
-            Tuple of the dataset and source and target dictionaries.
+            Tuple of the dataset and dictionary.
         """
         # download the WikiText2 data from torchtext.experimental for language model development
         # this dataset already is already tokenized and converted into integers.
@@ -86,7 +86,14 @@ class GPTDataset(AbstractNLPDataset):
         return cls(train_dataset, vocab, block_size), vocab
 
     @classmethod
-    def convert_torchtext_vocab(cls, train_vocab, vocab):
+    def convert_torchtext_vocab(cls, train_vocab, vocab: NLPVocabulary):
+        """
+        Create an internally derived dictionary instead of using PyTorch's.
+
+        Args:
+            train_vocab (torchtext vocab): PyTorch's dictionary.
+            vocab (NLPVocabulary): Vocab object we need to modify.
+        """
         # got to change the order of some defaults, Pytorch and I don't see eye to eye apparently
         vocab._token_to_idx[vocab.unk_token] = 0
         vocab._idx_to_token[0] = vocab.unk_token
