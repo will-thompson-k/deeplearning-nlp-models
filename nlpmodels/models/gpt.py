@@ -1,9 +1,7 @@
 import torch
 import torch.nn as nn
 from nlpmodels.models.transformer_blocks import sublayers, attention, gpt_decoder
-from nlpmodels.utils.transformer_batch import TransformerBatch
 from nlpmodels.utils.gpt_batch import GPTBatch
-from nlpmodels.utils.gpt_dataset import GPTDataset
 
 
 class GPT(nn.Module):
@@ -40,7 +38,6 @@ class GPT(nn.Module):
         # (3) Pass embeddings + pe to GPT decoder block
         self._decoder_block = gpt_decoder.GPTCompositeDecoder(
             gpt_decoder.GPTDecoderBlock(block_size,
-                                     # use the second drop-out not found in the original Transformer
                                      attention.MultiHeadedAttention(num_heads, dim_model, dropout, dropout),
                                      # replace activation function with GELU
                                      sublayers.PositionWiseFFNLayer(dim_model, dim_ffn, nn.GELU()),
@@ -73,38 +70,7 @@ class GPT(nn.Module):
 
         # pass through decoder blocks
         decode = self._decode(data)
-        # calculate yhat
+        # calculate yhat. Don't apply softmax before passing to cross entropy
         yhat = self._final_linear(decode)
 
         return yhat
-
-
-if __name__ == '__main__':
-    from nlpmodels.utils import train, utils
-    from argparse import Namespace
-
-    utils.set_seed_everywhere()
-    args = Namespace(
-        # Model hyper-parameters
-        num_layers_per_stack=2,  # original value = 12
-        dim_model=12, #original value = 768
-        dim_ffn=48, # original value = 3072
-        num_heads=2, # original value = 12
-        block_size=64, # original value = 512, context window
-        dropout=0.1,
-        # Training hyper-parameters
-        num_epochs=15,
-        learning_rate=0.0,
-        batch_size=128, #original value = 64
-    )
-
-    train_loader, vocab = GPTDataset.get_training_dataloader(args)
-    model = GPT(vocab_size = len(vocab),
-                num_layers_per_stack= args.num_layers_per_stack,
-                dim_model = args.dim_model,
-                dim_ffn = args.dim_ffn,
-                num_heads = args.num_heads,
-                block_size = args.block_size,
-                dropout = args.dropout)
-    trainer = train.GPTTrainer(args,vocab.mask_index,model,train_loader,vocab)
-    trainer.run()
