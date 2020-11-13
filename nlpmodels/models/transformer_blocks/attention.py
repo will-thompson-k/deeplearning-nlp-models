@@ -81,7 +81,8 @@ class MultiHeadedAttention(nn.Module):
         # scores is (batch_size, num_heads, max_seq_length, max_seq_length)
         scores = torch.matmul(query, key.transpose(2, 3)) / math.sqrt(self._dim_head)
         # Wherever mask == False is where padding is, so set scores to -inf for softmax calculation
-        scores = scores.masked_fill(mask == False, float('-inf'))
+        # Note: would use float('-inf'), but softmax issue
+        scores = scores.masked_fill(mask == 0, -1.e9)
         # Calculate soft-max of scores -> attention_probas (probabilities for each value)
         attention_probas = self._dropout(F.softmax(scores, dim=-1))
         # attention is expected values = attention_probas * values

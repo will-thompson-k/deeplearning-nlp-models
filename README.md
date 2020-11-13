@@ -53,16 +53,15 @@ Future models:
 - [ ] BERT
 - [ ] ELMo
 - [ ] XLNet 
-- [ ] T5
 - [ ] VAE
 
 
-Future model features:
+Future repo features:
 
-- [ ] Leverage PyTorch gpu training / Formalize trainer
+- [ ] Leverage PyTorch **gpu** training (use colab to run, link to open in colab).
 - [ ] Gradient clipping
-- [ ] Tensorboard plots
 - [ ] saving checkpoints/ loading models
+- [ ] Tensorboard plots
 - [ ] BPE from openai/gpt-2
 
 ## Setup

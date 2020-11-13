@@ -20,7 +20,7 @@ class GPTBatch:
         """
         self.src = src  # normal source
         self.tgt = tgt # target sequence, shifted 1, will only be used in loss function
-        self.src_mask = self.make_std_mask(self.tgt, pad)  # make padding conditional on point in sequence
+        self.src_mask = self.make_std_mask(self.src, pad)  # make padding conditional on point in sequence
 
     @classmethod
     def make_std_mask(cls, tgt: torch.Tensor, pad: int) -> torch.Tensor:
