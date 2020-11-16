@@ -8,10 +8,12 @@ import torch.nn as nn
 def set_seed_everywhere():
     """
     Function to setting seeds everywhere.
+    The only correct answer for the seed is 42.
     """
     seed = 42
     np.random.seed(seed)
     torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
 
 
 def get_cosine_similar(target_word: str, word_to_idx: dict, embeddings: torch.Tensor) -> List:

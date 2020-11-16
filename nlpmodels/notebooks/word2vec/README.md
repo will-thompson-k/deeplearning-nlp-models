@@ -91,6 +91,11 @@ the word embeddings and find it boosts the transferability).
 Of course, embeddings can also be used as token representations in DL models as well. More often then not, embeddings are used
 to represent tokens in one of the first layers of a DL architecture and serve as inputs to subsequent layers.
 
+Although you will see notice that there is an explicit target below, some consider embedding training to be a form of **un-supervised learning** 
+(some might also call it "self-supervised"). The application of un-supervised learning in training (or, "pre-training") some layers of a model
+is a highly active area of research. For instance, the GPT class of models employs a similar context window technique in pre-training its
+model parameters (you can read about it in the first GPT-1 paper [here](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf)).
+This is considered particularly helpful in situations where the amount of annotated data is limited.
 
 ## Skip-gram
 

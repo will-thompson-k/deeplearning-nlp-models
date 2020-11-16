@@ -22,24 +22,26 @@ class MultiHeadedAttention(nn.Module):
     The particular attention mechanism employed is
     “scaled dot-product attention" (scaled by 1/sqrt(d_k)).
 
-    Derived in part from logic found in "Annotated Transformer":
-    https://nlp.seas.harvard.edu/2018/04/03/attention.html.
     """
 
-    def __init__(self, num_heads: int, dim_model: int, dropout: float):
+    def __init__(self, num_heads: int,
+                 dim_model: int,
+                 dropout: float,
+                 residual_dropout: float = 0.0):
         """
         Args:
            num_heads (int): number of heads/ simultanenous attention layers
            dim_model (int): total concatenated size of attention layer output + embedding input size
-           dropout (float): dropout probability
+           dropout (float): dropout probability for attention mechanism
+           residual_dropout (float): dropout for self-attention (GPT specific)
         """
         super(MultiHeadedAttention, self).__init__()
 
         # parameter dimensions
         # Per paper, "set d_v == d_k == d_model//h==64"
         # d_k in paper, dimensions of queries and keys (apply dot-product together)
-        self._dim_keys = dim_model // num_heads
-        self._dim_values = self._dim_keys  # d_v in paper, dimensions of values
+        # calling d_v, d_k == "dim_head"
+        self._dim_head = dim_model // num_heads
         self._num_heads = num_heads  # h in paper, or number of heads ("h==8")
 
         # linear layers
@@ -50,6 +52,8 @@ class MultiHeadedAttention(nn.Module):
         # Caching results for any potential future visualization/inspection
         self._attention_tensor = None
         self._dropout = nn.Dropout(p=dropout)
+        # GPT specific
+        self._residual_dropout = nn.Dropout(p=residual_dropout)
 
     def compute_attention(self, query: torch.Tensor, key: torch.Tensor,
                           value: torch.Tensor, mask: torch.Tensor):
@@ -71,17 +75,23 @@ class MultiHeadedAttention(nn.Module):
             returns the attention values, attention probabilities (softmax output)
         """
         # confirm that dim 4 is correct
-        assert query.size(-1) == self._dim_keys
+        assert query.size(-1) == self._dim_head
 
         # Scaled dot-product calculation (Q,K) -> scores
-        # NOTE: bmm is only for 3D tensors.
         # matmul considers last 2 dimensions in batch matrix multiplication.
-        scores = torch.matmul(query, key.transpose(2, 3)) / math.sqrt(self._dim_keys)
+        # (batch_size, num_heads,max_seq_length, dim_keys) x
+        # (batch_size, num_heads, dim_keys, max_seq_length)  ->
+        # scores is (batch_size, num_heads, max_seq_length, max_seq_length)
+        scores = torch.matmul(query, key.transpose(2, 3)) / math.sqrt(self._dim_head)
         # Wherever mask == False is where padding is, so set scores to -inf for softmax calculation
-        scores = scores.masked_fill(mask == False, -1e9)
+        # Note: would use float('-inf'), but softmax issue
+        scores = scores.masked_fill(mask == 0, -1.e9)
         # Calculate soft-max of scores -> attention_probas (probabilities for each value)
         attention_probas = self._dropout(F.softmax(scores, dim=-1))
         # attention is expected values = attention_probas * values
+        # (batch_size, num_heads, max_seq_length, max_seq_length) x
+        # (batch_size, num_heads, max_seq_length, dim_keys) ->
+        # attn_values is (batch_size, num_heads, max_seq_length, dim_keys)
         attention_values = torch.matmul(attention_probas, value)
         return attention_values, attention_probas
 
@@ -98,20 +108,21 @@ class MultiHeadedAttention(nn.Module):
             returns final linear layer output of (batch_size, max_seq_length, dim_model) size
         """
 
-        batch_size = query.size(0)
-        max_seq_length = mask.size(-1)
+        batch_size, max_seq_length, dim_model = query.size()
+
+        assert self._num_heads * self._dim_head == dim_model
 
         # 1) Apply linear to query, key, and value matrices
         # and convert 3D tensor -> 4D matrix
         # (batch_size, max_seq_length, dim_model) ->
         # (batch_size, num_heads,max_seq_length, dim_keys)
-        query = self._linear_layer_queries(query)\
-            .view(batch_size, self._num_heads, max_seq_length, self._dim_keys)
+        # Note: we separate batch_size x max_seq_length  and dim_model // head_size then re-order
+        query = self._linear_layer_queries(query) \
+            .view(batch_size, max_seq_length, self._num_heads, self._dim_head).transpose(1, 2)
         key = self._linear_layer_keys(key)\
-            .view(batch_size, self._num_heads, max_seq_length, self._dim_keys)
+            .view(batch_size, max_seq_length, self._num_heads, self._dim_head).transpose(1, 2)
         value = self._linear_layer_values(value)\
-            .view(batch_size, self._num_heads, max_seq_length, self._dim_keys)
-        # print(query.shape,self._num_heads,self._dim_keys,mask.shape)
+            .view(batch_size, max_seq_length, self._num_heads, self._dim_head).transpose(1, 2)
 
         # (batch_size,1,max_seq_length) -> (batch_size,1,1,max_seq_length)
         mask = mask.unsqueeze(1)
@@ -120,12 +131,16 @@ class MultiHeadedAttention(nn.Module):
         attention_values, self._attention_tensor = \
             self.compute_attention(query, key, value, mask)
 
-        # 3) "concatenate"/re-order from (batch_size,1,1,max_seq_length)->
+        # 3) "concatenate" (batch_size,1,1,max_seq_length)->
         # (batch_size, max_seq_length, dim_model)
+        # basically, we are re-assembling all heads side by side
         attention_values = attention_values.transpose(1, 2).contiguous().\
-            view(batch_size, max_seq_length, self._num_heads * self._dim_keys)
+            view(batch_size, max_seq_length, self._num_heads * self._dim_head)
 
         # 4) apply final linear layer
         attention_values = self._linear_layer_final(attention_values)
+
+        # 5) GPT: Add residual attention drop
+        attention_values = self._residual_dropout(attention_values)
 
         return attention_values

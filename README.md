@@ -4,18 +4,22 @@
 ![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/will-thompson-k/deeplearning-nlp-models)
 ![GitHub](https://img.shields.io/github/license/will-thompson-k/deeplearning-nlp-models)
 
-This repository contains the re-implementation of a handful of "deep" NLP papers in ![pytorch_emblem](media/Pytorch_logo.png).
+A small, interpretable codebase containing the re-implementation of a few "deep" NLP papers in ![pytorch_emblem](media/Pytorch_logo.png).
 
-The goal of this project is to get into the weeds of some of the most recent deep learning model architectures. 
+<ins>Current models</ins>: word2vec, transformer, gpt.
+
+This is a compact tutorial for those interested in getting into the weeds the latest nlp model architectures.
+Other repos I found too sprawling to follow.(Note: Most of these models are not trained to completion. 
+This is meant to provide a framework for understanding the mechanics of these models).
 
 ## Contents
 
 - [Models](#Models)
 - [Features](#Features)
+- [Roadmap](#Roadmap)
 - [Setup](#Setup)
 - [Structure](#Structure)
 - [Requirements](#Requirements)
-- [Roadmap](#Roadmap)
 - [Citation](#Citation)
 - [License](#License)
 
@@ -24,21 +28,42 @@ The goal of this project is to get into the weeds of some of the most recent dee
 
 |                   |                           | 
 | :-------------------- | :--------------------  | 
-|  Embeddings |             | 
-|   |  [Word2Vec Embeddings (Skip-gram & Negative Sampling)](nlpmodels/notebooks/word2vec/README.md)   | 
-|  Transformers |                | 
-|   |  [The O.G. Transformer ("Attention is All You Need")](nlpmodels/notebooks/transformer/README.md)  | 
-
+|  <ins>Embeddings</ins>|             | 
+|  1. |  [Word2Vec](nlpmodels/notebooks/word2vec/README.md)   | 
+|  <ins>Transformers</ins> |                | 
+|  2. |  [The O.G. Transformer](nlpmodels/notebooks/transformer/README.md)  | 
+|  3. |  [OpenAI's GPT Model](nlpmodels/notebooks/gpt/README.md)  | 
 
 ## Features
 
 This repository has the following features:
 
-- [ ] <ins>model breakdowns</ins>: A brief explanation of the model and its components are provided in separate README.md files.
-- [ ] <ins>tutorials</ins>: Jupyter notebooks showing how to run the models and some simple analyses of the model results.
+- [ ] <ins>model overviews</ins>: A brief overview of each model's motivation and design are provided in separate README.md files.
+- [ ] <ins>how-to's</ins>: Jupyter notebooks showing how to run the models and some simple analyses of the model results.
 - [ ] <ins>model utilities</ins>: Tokenizers, dataset loaders, dictionaries, and all the custom utilities required for each problem.
 - [ ] <ins>multiple dataset APIs</ins>: Both *HuggingFaces* and *torchtext* (i.e. Pytorch) datasets are used in examples.
 
+
+## Roadmap
+
+Future models:
+
+- [ ] GloVe embeddings
+- [ ] CNN classification
+- [ ] Char-RNN (Kaparthy)
+- [ ] BERT
+- [ ] ELMo
+- [ ] XLNet 
+- [ ] VAE
+
+
+Future repo features:
+
+- [ ] Leverage PyTorch **gpu** training (use colab to run, link to open in colab).
+- [ ] Gradient clipping
+- [ ] saving checkpoints/ loading models
+- [ ] Tensorboard plots
+- [ ] BPE from openai/gpt-2
 
 ## Setup
 
@@ -69,22 +94,6 @@ Here are the package requirements (found in requirements.txt)
 - [ ] torch==1.6.0
 - [ ] datasets==1.0.2
 - [ ] torchtext==0.7.0
-
-
-## Roadmap
-
-Here are some models I want to implement in the near future:
-
-- [ ] GloVe embeddings
-- [ ] TextCNN
-- [ ] Char-RNN
-- [ ] GPT
-- [ ] BERT (maybe all the BERTs)
-- [ ] ELMo
-- [ ] XLNet
-- [ ] T5 and Performer
-
-Also, I eventually am going to re-train those models that can leverage GPUs.
 
 
 ## Citation
