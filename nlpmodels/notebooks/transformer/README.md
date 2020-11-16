@@ -65,17 +65,48 @@ trainer.run()
 
 ## Background
 
+### Sequence models
+
+The Transformer is a part of the realm of "sequence models",
+models that attempt to map an input (source) sequence to an output (target) sequence. 
+Sequence models encompass a wide range of representations, from long-standing, classical probabilistic approaches such as
+Hidden Markov Models (HMMs), Bayesian networks, et.c to more recent "deep learning" models.
+
+Sequence models come in many different varieties of problems as seen below:
+
+![Sequence models](../../../media/seq_models.png)
+
+
+Image source: Kaparthy's article on RNNs [here](http://karpathy.github.io/2015/05/21/rnn-effectiveness/).
+
+### The OG Transformer is posed as a Machine Translation model
+
+In the original Transformer, the task being trained is that of machine translation, i.e., taking one sentence in one 
+language and learning to translate it into another language. This is a "many-to-many" sequence problem.
+
+![Machine translation](../../../media/machine_translation.png)
+
+
+Image source: DeepAi.org [here](https://deepai.org/machine-learning-glossary-and-terms/neural-machine-translation)
+
 ### The predecessor to Transformer: RNN
 
 
-Prior to the Transformer, the dominant architecture found in sequence models was the
+Prior to the Transformer, the dominant architecture found in "deep" sequence models was the
 recurrent network (i.e. RNN). While the convolutional network shares parameters across space,
 the recurrent model shares parameters across the time dimension (left to right in a sequence). At each time step,
 a new hidden state is computed using the previous hidden state and the current sequence value. These hidden states 
 serve the function of "memory" within the model. The model hopes to encode useful enough information into these
 states such that it can derive contextual relationships between a given word and any previous words in a sequence.
 
-These RNN cells form the basis of an "encoder-decoder" architecture. The goal of the encoder-decoder is to take a source sequence
+These RNN cells form the basis of an "encoder-decoder" architecture.
+
+![Encoder decoder](../../../media/encoder-decoder.png)
+
+ 
+Image source: Figure 9.7.1. in this illustrated guide [here](https://d2l.ai/chapter_recurrent-modern/seq2seq.html).
+ 
+ The goal of the encoder-decoder is to take a source sequence
 and predict a target sequence (sequence-to-sequence or seq2seq). A common example of a seq2seq task is machine translation of one language to another. 
 An encoder maps the source sequence into a hidden state that is then passed to a decoder. The decoder then attempts to predict the next word in a target sequence using the encoder's hidden state(s) and
 the prior decoder hidden state(s).
@@ -160,6 +191,14 @@ the attention mentioned in the previous RNN models, are using the attention mech
 sequence based on the encoder output as well as all terms prior in the target sequence. To achieve this auto-regressive
 processing in the decoder, masking is used to mask out the attention values from all position values that follow the target
 index.
+
+There attention patterns that end up being derived (look at the notebook to see our own) are interesting, giving context
+into the mappings that Transformers end up learning.
+
+![Attention patterns](../../../media/attention_patterns.png)
+
+Image source: "A Primer in BERTology: What We Know About How BERT Works", Rogers et al., 
+link [here](https://arxiv.org/pdf/2002.12327.pdf).
 
 ### Label Smoothing
 

@@ -68,7 +68,7 @@ trainer.run()
 ## GPT
 
 GPT, which stands for "Generative Pre-trained Transformer", is a part of the realm of "sequence models" (sequence-to-sequence or "seq2seq"),
-models that attempt to map an input (source) sequence and map it to an output (target) sequence. 
+models that attempt to map an input (source) sequence and to an output (target) sequence. 
 Sequence models encompass a wide range of representations, from long-standing, classical probabilistic approaches such as
 Hidden Markov Models (HMMs), Bayesian networks, et.c to more recent "deep learning" models such as recurrent neural networks (RNNs).
 
