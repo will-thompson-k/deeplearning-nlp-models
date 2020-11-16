@@ -24,7 +24,10 @@ class MultiHeadedAttention(nn.Module):
 
     """
 
-    def __init__(self, num_heads: int, dim_model: int, dropout: float, residual_dropout: float = 0.0):
+    def __init__(self, num_heads: int,
+                 dim_model: int,
+                 dropout: float,
+                 residual_dropout: float = 0.0):
         """
         Args:
            num_heads (int): number of heads/ simultanenous attention layers
@@ -115,11 +118,11 @@ class MultiHeadedAttention(nn.Module):
         # (batch_size, num_heads,max_seq_length, dim_keys)
         # Note: we separate batch_size x max_seq_length  and dim_model // head_size then re-order
         query = self._linear_layer_queries(query) \
-            .view(batch_size, max_seq_length, self._num_heads, self._dim_head).transpose(1,2)
+            .view(batch_size, max_seq_length, self._num_heads, self._dim_head).transpose(1, 2)
         key = self._linear_layer_keys(key)\
-            .view(batch_size, max_seq_length, self._num_heads, self._dim_head).transpose(1,2)
+            .view(batch_size, max_seq_length, self._num_heads, self._dim_head).transpose(1, 2)
         value = self._linear_layer_values(value)\
-            .view(batch_size, max_seq_length, self._num_heads, self._dim_head).transpose(1,2)
+            .view(batch_size, max_seq_length, self._num_heads, self._dim_head).transpose(1, 2)
 
         # (batch_size,1,max_seq_length) -> (batch_size,1,1,max_seq_length)
         mask = mask.unsqueeze(1)

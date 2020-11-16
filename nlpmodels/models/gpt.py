@@ -36,14 +36,14 @@ class GPT(nn.Module):
         # (1) calculate embeddings
         self._embeddings = sublayers.NormalizedEmbeddingsLayer(vocab_size, dim_model)
         # (2) calculate positional_encoding (learn-able this time) + drop-out
-        self._pos_encoding = sublayers.GPTPositionalEncodingLayer(dim_model,dropout,block_size)
+        self._pos_encoding = sublayers.GPTPositionalEncodingLayer(dim_model, dropout, block_size)
         # (3) Pass embeddings + pe to GPT decoder block
         self._decoder_block = gpt_decoder.GPTCompositeDecoder(
             gpt_decoder.GPTDecoderBlock(block_size,
-                                     attention.MultiHeadedAttention(num_heads, dim_model, dropout, dropout),
-                                     # replace activation function with GELU
-                                     sublayers.PositionWiseFFNLayer(dim_model, dim_ffn, nn.GELU()),
-                                     dropout),num_layers_per_stack)
+                                        attention.MultiHeadedAttention(num_heads, dim_model, dropout, dropout),
+                                        # replace activation function with GELU
+                                        sublayers.PositionWiseFFNLayer(dim_model, dim_ffn, nn.GELU()),
+                                        dropout), num_layers_per_stack)
 
         # (4) put through final linear layer
         self._final_linear = nn.Linear(dim_model, vocab_size)

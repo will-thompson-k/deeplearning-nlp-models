@@ -80,7 +80,7 @@ class GPTDataset(AbstractNLPDataset):
         # hack: i'm going to only grab the first 300k examples. cause this is like > 1MM words
         train_dataset = train_dataset[:300000]
         # convert the torchtext dictionary into our internal dictionary
-        vocab = NLPVocabulary(unk_token=train_vocab.UNK,mask_token=train_vocab.itos[1])
+        vocab = NLPVocabulary(unk_token=train_vocab.UNK, mask_token=train_vocab.itos[1])
         cls.convert_torchtext_vocab(train_vocab, vocab)
         # we pass the dataset, vocab... Dataset will do the rest
         return cls(train_dataset, vocab, block_size), vocab

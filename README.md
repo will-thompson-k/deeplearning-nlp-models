@@ -9,7 +9,8 @@ A small, interpretable codebase containing the re-implementation of a few "deep"
 <ins>Current models</ins>: word2vec, transformer, gpt.
 
 This is a compact tutorial for those interested in getting into the weeds the latest nlp model architectures.
-Other repos I found too sprawling to follow.
+Other repos I found too sprawling to follow.(Note: Most of these models are not trained to completion. 
+This is meant to provide a framework for understanding the mechanics of these models).
 
 ## Contents
 
@@ -48,7 +49,7 @@ This repository has the following features:
 Future models:
 
 - [ ] GloVe embeddings
-- [ ] TextCNN
+- [ ] CNN classification
 - [ ] Char-RNN (Kaparthy)
 - [ ] BERT
 - [ ] ELMo

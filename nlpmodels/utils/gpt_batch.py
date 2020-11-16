@@ -11,7 +11,9 @@ class GPTBatch:
     from the previous context_window tokens.
     """
 
-    def __init__(self, src: torch.Tensor, tgt: torch.Tensor, pad:int):
+    def __init__(self, src: torch.Tensor,
+                 tgt: torch.Tensor,
+                 pad: int):
         """
         Args:
             src (torch.Tensor): The source input of (batch_size,block_size).
@@ -20,7 +22,8 @@ class GPTBatch:
         """
         self.src = src  # normal source
         self.tgt = tgt # target sequence, shifted 1, will only be used in loss function
-        self.src_mask = self.make_std_mask(self.src, pad)  # make padding conditional on point in sequence
+        # make padding conditional on point in sequence
+        self.src_mask = self.make_std_mask(self.src, pad)
 
     @classmethod
     def make_std_mask(cls, tgt: torch.Tensor, pad: int) -> torch.Tensor:
@@ -35,9 +38,11 @@ class GPTBatch:
             output matrix of size (batch_size,max_seq_length,max_seq_length)
             size with masked values for target sequence [True,False]
         """
-        tgt_mask = (tgt != pad).unsqueeze(1)  # 3D tensor necessary for attention, add in the middle.
+        # 3D tensor necessary for attention, add in the middle.
+        tgt_mask = (tgt != pad).unsqueeze(1)
         seq_size = tgt.size(1)
-        tgt_mask = tgt_mask & cls.subsequent_mask(seq_size)  # subsequent mask built off sequence size
+        # subsequent mask built off sequence size
+        tgt_mask = tgt_mask & cls.subsequent_mask(seq_size)
         return tgt_mask
 
     @staticmethod

@@ -134,7 +134,8 @@ encoding via a series of `sin(pos,wave_number)` and `cos(pos,wave_number)` funct
 In this plot you can see the different wave functions along the sequence length.
 
 These fixed positional encodings are added to word embeddings of the same dimension such that these tensors capture both
-relative _semantic_ and _positional_ relationships between words. These representations are then passed down stream into the
+relative _semantic_ (note: this is open to interpretation. neural nets do better with dense representations) 
+and _positional_ relationships between words. These representations are then passed down stream into the
 encoder and decoder stacks.
 
 ### Attention (Self and Encoder-Decoder Attention)

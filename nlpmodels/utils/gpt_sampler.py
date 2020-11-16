@@ -26,17 +26,16 @@ def greedy_sampler(model: nn.Module,
         steps (int): Number of time steps to do our calculation.
         block_size (int): Size of the context window.
         do_sample (bool): Sampling
-
     Returns:
         new decoded sequence x [batch_size,context]->[batch_size,context+steps]
     """
 
     # freeze the model from updating
     model.eval()
-    for k in range(steps):
+    while steps:
         # data should be [batch_size,context,vocab]. Let's check dim 1
         data_src = data.src if data.src.size(1) <= block_size else data.src[:, -block_size:]
-        data = GPTBatch(data_src,None,0)
+        data = GPTBatch(data_src, None, 0)
         # grab the predictions
         yhat = model(data)
         # pluck the yhat at the final step after reading in the whole context window
@@ -45,10 +44,12 @@ def greedy_sampler(model: nn.Module,
         probas = F.softmax(yhat, dim=-1)
         # sample from the distribution or take the most likely
         if do_sample:
-            ix = torch.multinomial(probas, num_samples=1)
+            index = torch.multinomial(probas, num_samples=1)
         else:
-            _, ix = torch.topk(probas, k=1, dim=-1)
+            _, index = torch.topk(probas, k=1, dim=-1)
         # append to the sequence and continue
-        data.src = torch.cat((data.src, ix), dim=1)
+        data.src = torch.cat((data.src, index), dim=1)
+
+        steps -= 1
 
     return data
