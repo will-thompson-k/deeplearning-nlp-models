@@ -78,11 +78,12 @@ class MultiHeadedAttention(nn.Module):
         assert query.size(-1) == self._dim_head
 
         # Scaled dot-product calculation (Q,K) -> scores
-        # matmul considers last 2 dimensions in batch matrix multiplication.
+        # NOTE: matmul considers last 2 dimensions in batch matrix multiplication.
         # (batch_size, num_heads,max_seq_length, dim_keys) x
         # (batch_size, num_heads, dim_keys, max_seq_length)  ->
         # scores is (batch_size, num_heads, max_seq_length, max_seq_length)
-        scores = torch.matmul(query, key.transpose(2, 3)) / math.sqrt(self._dim_head)
+        # NOTE: matmul, @ symbol do same operation
+        scores = (query @ key.transpose(2, 3)) / math.sqrt(self._dim_head)
         # Wherever mask == False is where padding is, so set scores to -inf for softmax calculation
         # Note: would use float('-inf'), but softmax issue
         scores = scores.masked_fill(mask == 0, -1.e9)
@@ -92,7 +93,7 @@ class MultiHeadedAttention(nn.Module):
         # (batch_size, num_heads, max_seq_length, max_seq_length) x
         # (batch_size, num_heads, max_seq_length, dim_keys) ->
         # attn_values is (batch_size, num_heads, max_seq_length, dim_keys)
-        attention_values = torch.matmul(attention_probas, value)
+        attention_values = attention_probas @ value
         return attention_values, attention_probas
 
     def forward(self, query, key, value, mask):

@@ -4,13 +4,17 @@
 ![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/will-thompson-k/deeplearning-nlp-models)
 ![GitHub](https://img.shields.io/github/license/will-thompson-k/deeplearning-nlp-models)
 
-A small, interpretable codebase containing the re-implementation of a few "deep" NLP papers in ![pytorch_emblem](media/Pytorch_logo.png).
+A small, interpretable codebase containing the re-implementation of a few "deep" NLP papers in PyTorch.
 
-<ins>Current models</ins>: word2vec, transformer, gpt.
+<ins>Current models</ins>: word2vec, cnn, transformer, gpt.
 
-This is a compact tutorial for those interested in getting into the weeds the latest nlp model architectures.
-Other repos I found too sprawling to follow.(Note: Most of these models are not trained to completion. 
-This is meant to provide a framework for understanding the mechanics of these models).
+![Meta](media/bert.jpg)
+
+BERT.Reading.
+
+This is a compact *tutorial* for those interested in getting into the weeds the latest nlp model architectures.
+Other repos I found too sprawling to follow. ( <ins>Note</ins>: Most of these models are not adequately trained to be used in production. 
+).
 
 ## Contents
 
@@ -26,13 +30,17 @@ This is meant to provide a framework for understanding the mechanics of these mo
 
 ## Models
 
-|                   |                           | 
+These NLP models are presented chronologically and, as you might expect, build off each other.
+
+|    Model Directory               |                           | 
 | :-------------------- | :--------------------  | 
 |  <ins>Embeddings</ins>|             | 
 |  1. |  [Word2Vec](nlpmodels/notebooks/word2vec/README.md)   | 
+|  <ins>CNNs</ins>|             | 
+|  2. |  [CNN-based Sentence-level Text Classification](nlpmodels/notebooks/cnn/README.md)   | 
 |  <ins>Transformers</ins> |                | 
-|  2. |  [The O.G. Transformer](nlpmodels/notebooks/transformer/README.md)  | 
-|  3. |  [OpenAI's GPT Model](nlpmodels/notebooks/gpt/README.md)  | 
+|  3. |  [The O.G. Transformer](nlpmodels/notebooks/transformer/README.md)  | 
+|  4. |  [OpenAI's GPT Model](nlpmodels/notebooks/gpt/README.md)  | 
 
 ## Features
 
@@ -49,9 +57,8 @@ This repository has the following features:
 Future models:
 
 - [ ] GloVe embeddings
-- [ ] CNN classification
 - [ ] Char-RNN (Kaparthy)
-- [ ] BERT
+- [ ] BERT(s)
 - [ ] ELMo
 - [ ] XLNet 
 - [ ] VAE

@@ -131,7 +131,7 @@ in the vocabulary.
 This paper made a pretty incredible insight into how to get around this computational hurdle. Instead of
 framing the problem as a multi-class classification problem, it treats the problem as a binary classification
 problem where `y:=1` means the 2 words are in the same context window and `y:=0` means they are not. This type of target
-is similar to that found in the metric learning and "few shot learner" (FSL) family of problems where the model is learning
+is similar to that found in the metric learning family of problems where the model is learning
 a representation such that the words within the same context are within a close distance. To accomplish this distance learning,
 there are k random negative samples drawn for every positive (input,context) example to train the model how to differentiate the 2 cases.
 Thus, instead of a large multi-class problem we've reduced it into a **k+1** set of **binary classification** problems.

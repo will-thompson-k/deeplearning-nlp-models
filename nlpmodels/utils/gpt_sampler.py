@@ -6,13 +6,13 @@ from nlpmodels.utils.gpt_batch import GPTBatch
 
 # Make sure we don't update the gradient.
 @torch.no_grad()
-def greedy_sampler(model: nn.Module,
-                   data: GPTBatch,
-                   steps: int,
-                   block_size: int,
-                   do_sample: bool = False) -> torch.Tensor:
+def sampler(model: nn.Module,
+            data: GPTBatch,
+            steps: int,
+            block_size: int,
+            do_sample: bool = False) -> torch.Tensor:
     """
-    This is a greedy decoder/sampler for examining the performance of our model.
+    This is a sampler for examining the performance of our model.
 
 
     Takes a sequence of tokens, predicts the next one in the sequence using our model,
