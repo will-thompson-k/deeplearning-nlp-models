@@ -1,3 +1,6 @@
+"""
+This module contains the composite Transformer model.
+"""
 import torch
 import torch.nn as nn
 

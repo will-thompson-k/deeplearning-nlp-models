@@ -1,3 +1,6 @@
+"""
+This module contains the Transformer batch object used in the transformer model.
+"""
 import numpy as np
 import torch
 

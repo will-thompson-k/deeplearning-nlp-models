@@ -1,3 +1,9 @@
+"""
+This module contains the abstract base class for our datasets.
+"""
+
+# pylint: disable=missing-docstring
+
 from abc import abstractmethod, ABC
 
 from torch.utils.data import Dataset

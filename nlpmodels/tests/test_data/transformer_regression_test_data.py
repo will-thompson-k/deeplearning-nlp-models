@@ -1,5 +1,7 @@
 import torch
 
+# pylint: disable=C0330
+
 TRANSFORMER_REGRESSION_TEST_DATA = torch.Tensor(
     [
         [

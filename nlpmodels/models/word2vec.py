@@ -1,3 +1,7 @@
+"""
+This module contains the composite word2vec model.
+"""
+
 import numpy as np
 import torch
 import torch.nn as nn

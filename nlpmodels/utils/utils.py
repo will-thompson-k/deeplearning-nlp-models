@@ -1,3 +1,6 @@
+"""
+This module contains a handful of helper functions used throughout the repo.
+"""
 from typing import List
 
 import numpy as np
@@ -30,7 +33,7 @@ def get_cosine_similar(target_word: str, word_to_idx: dict, embeddings: torch.Te
     word_embedding = embeddings[word_to_idx[target_word.lower()]]
     distances = []
     for word, index in word_to_idx.items():
-        if word == "<MASK>" or word == target_word or word == "<UNK>":
+        if word in ('<MASK>', target_word, '<UNK>'):
             continue
         distances.append((word, cos(word_embedding, embeddings[index])))
 

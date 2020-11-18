@@ -1,3 +1,13 @@
+"""
+This module contains the sublayers commonly used in the Transformer model class.
+Includes:
++ AddAndNormWithDropoutLayer (residual skip-connection)
++ PositionWiseFFNLayer
++ PositionalEncodingLayer (Transformer, non-trainable)
++ NormalizedEmbeddingsLayer
++ GPTPositionalEncodingLayer (GPT specific)
+"""
+
 import math
 
 import torch
@@ -63,9 +73,9 @@ class PositionWiseFFNLayer(nn.Module):
                 size of the FFN hidden layer.
         """
         super(PositionWiseFFNLayer, self).__init__()
-        self._W1 = nn.Linear(dim_model, dim_ffn)
+        self._dense_layer_1 = nn.Linear(dim_model, dim_ffn)
         self._activ_func = activ_func
-        self._W2 = nn.Linear(dim_ffn, dim_model)
+        self._dense_layer_2 = nn.Linear(dim_ffn, dim_model)
 
     def forward(self, values: torch.Tensor) -> torch.Tensor:
         """
@@ -79,7 +89,7 @@ class PositionWiseFFNLayer(nn.Module):
         Returns:
             output matrix of same size as input.
         """
-        return self._W2(self._activ_func(self._W1(values)))
+        return self._dense_layer_2(self._activ_func(self._dense_layer_1(values)))
 
 
 class PositionalEncodingLayer(nn.Module):

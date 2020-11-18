@@ -6,15 +6,15 @@
 
 A small, interpretable codebase containing the re-implementation of a few "deep" NLP papers in PyTorch.
 
-<ins>Current models</ins>: word2vec, cnn, transformer, gpt.
+<ins>Current models</ins>: word2vec, text-based CNN, transformer, gpt.
 
 ![Meta](media/bert.jpg)
 
-BERT.Reading.
+BERT: Reading. Comprehending. 
 
-This is a compact *tutorial* for those interested in getting into the weeds the latest nlp model architectures.
-Other repos I found too sprawling to follow. ( <ins>Note</ins>: Most of these models are not adequately trained to be used in production. 
-).
+This is a compact review for those interested in getting into the weeds of dl-nlp model architectures.
+Other repos I found too sprawling to follow. This project sprung out of my own self-study. ( <ins>Note</ins>: These models are not adequately trained to be used in production. 
+)
 
 ## Contents
 
@@ -58,7 +58,7 @@ Future models:
 
 - [ ] GloVe embeddings
 - [ ] Char-RNN (Kaparthy)
-- [ ] BERT(s)
+- [ ] BERT
 - [ ] ELMo
 - [ ] XLNet 
 - [ ] VAE
@@ -86,9 +86,11 @@ Here is a breakdown of the repository:
 
 - [ ] `nlpmodels/models`: The model code for each paper.
 - [ ] `nlpmodels/utils`: Contains all the auxiliary classes related to building a model, 
-including datasets, vocabulary, tokenizers and trainer classes.
+including datasets, vocabulary, tokenizers, samplers and trainer classes.
 - [ ] `nlpmodels/tests`: Light (and by no means comprehensive) coverage.
 - [ ] `nlpmodels/notebooks`: Contains the notebooks and write-ups for each model implementation.
+- [ ] `run_tests.sh`: If you want to run the tests yourself (you can also use `setup.py test`).
+- [ ] `run_pylint.sh`: If you really like linting code.
 
 ## Requirements
 

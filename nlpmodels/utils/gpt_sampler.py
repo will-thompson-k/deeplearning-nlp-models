@@ -1,3 +1,7 @@
+"""
+This module contains a sampler for sampling a model output. Useful for language models.
+"""
+
 import torch
 import torch.nn as nn
 from torch.nn import functional as F

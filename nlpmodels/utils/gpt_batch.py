@@ -1,3 +1,7 @@
+"""
+This module contains the batch object for the GPT model.
+"""
+
 import numpy as np
 import torch
 

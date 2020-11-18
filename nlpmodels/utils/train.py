@@ -1,3 +1,11 @@
+"""
+This module contains all the trainers used for the different models in this repo.
+Including:
++ Word2vectrainer
++ Transformertrainer
++ GPTtrainer
+"""
+
 from argparse import Namespace
 from typing import Tuple
 
@@ -211,7 +219,7 @@ class GPTTrainer:
 
             print("Finished Training...")
 
-    def _reformat_data(self,data: Tuple) -> gpt_batch.GPTBatch:
+    def _reformat_data(self, data: Tuple) -> gpt_batch.GPTBatch:
         """
         Args:
             data (Tuple): The tuples of LongTensors to be converted into a Batch object.
@@ -224,4 +232,5 @@ class GPTTrainer:
         # return a batch object with src,src_mask,tgt,tgt_mask tensors
         batch_data = gpt_batch.GPTBatch(src, tgt, self._vocab.mask_index)
 
-        return batch_data 
+        return batch_data
+

@@ -1,3 +1,7 @@
+"""
+This module contains the basic English tokenizer.
+"""
+
 import re
 import string
 from typing import List

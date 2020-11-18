@@ -28,8 +28,8 @@ def test_input_output_dims():
     data = (mock_input_1, mock_input_2)
     model = word2vec.SkipGramNSModel(test_1_args.vocab_size, test_1_args.embedding_size,
                                      test_1_args.negative_sample_size, word_frequencies)
-    y = model(data)
-    assert y.nelement() == 1
+    yhat = model(data)
+    assert yhat.nelement() == 1
 
 
 def test_embedding_size():

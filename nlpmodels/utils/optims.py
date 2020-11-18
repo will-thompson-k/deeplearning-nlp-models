@@ -1,3 +1,8 @@
+"""
+This module contains the schedulers + optimizers used for training models.
+Currently only contains NoamOptimizer.
+"""
+
 from argparse import Namespace
 
 import torch

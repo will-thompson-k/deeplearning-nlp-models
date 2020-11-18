@@ -1,0 +1,16 @@
+[MESSAGES CONTROL]
+
+disable=
+    too-many-instance-attributes,
+    too-many-arguments,
+    no-member,
+    duplicate-code,
+    redefined-outer-name,
+    too-few-public-methods,
+    no-name-in-module,
+    arguments-differ,
+    abstract-method
+
+[MASTER]
+
+ignore= tests

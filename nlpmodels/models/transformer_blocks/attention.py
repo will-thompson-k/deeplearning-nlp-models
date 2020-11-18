@@ -1,3 +1,7 @@
+"""
+This module contains the all-important Multi-headed attention layer used in the Transformer class of models.
+"""
+
 import math
 
 import torch

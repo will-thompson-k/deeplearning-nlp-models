@@ -1,3 +1,6 @@
+"""
+This module contains the composite GPT model.
+"""
 import torch
 import torch.nn as nn
 from nlpmodels.models.transformer_blocks import sublayers, attention, gpt_decoder
@@ -6,7 +9,7 @@ from nlpmodels.utils.gpt_batch import GPTBatch
 
 class GPT(nn.Module):
     """
-    The GPT class of the decoder-only Transformer.
+    The GPT class of the decoder-only Transformer developed by OpenAI.
 
     GPT is an auto-regressive language model trying to max p(x[k]|x[k-1],[k-2],...x[k-block_size]).
     The motivation of this approach is to train the model on a large corpus as a self-supervised

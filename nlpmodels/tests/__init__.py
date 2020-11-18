@@ -1,3 +1,5 @@
+# pylint: disable=C0111
+
 __all__ = ["test_dataset",
            "test_label_smoother",
            "test_noam_optimizer",

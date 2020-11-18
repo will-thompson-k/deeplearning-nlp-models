@@ -1,3 +1,8 @@
+"""
+This module contains LabelSmoothingLossFunction, which a target-smoother + KLDivergence
+loss function used in the original Transformer model.
+"""
+
 import torch
 import torch.nn as nn
 from torch.autograd import Variable

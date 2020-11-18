@@ -1,3 +1,8 @@
+"""
+This module contains the Decoder layer and composite decoder stack (made of many decoder layers) for the
+Transformer model class.
+"""
+
 from copy import deepcopy
 
 import torch
