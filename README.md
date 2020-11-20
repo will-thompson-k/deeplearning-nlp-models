@@ -14,7 +14,8 @@ BERT: Reading. Comprehending.
 
 This is a compact review for those interested in getting into the weeds of dl-nlp model architectures.
 Other repos I found too sprawling to follow. This project sprung out of my own self-study. 
-( <ins>Note</ins>: These models are not adequately trained to be used in production. 
+( <ins>Note</ins>: These models are not adequately trained to be used in production, nor are they being
+benchmarked against a val/test set. 
 )
 
 ## Contents
@@ -71,9 +72,10 @@ Future repo features:
 
 - [ ] Leverage PyTorch **gpu** training (use colab to run, link to open in colab).
 - [ ] Gradient clipping
-- [ ] saving checkpoints/ loading models
+- [ ] Val set early stopping
+- [ ] Saving checkpoints/ loading models
 - [ ] Tensorboard plots
-- [ ] BPE from openai/gpt-2
+- [ ] BPE (from either openai/gpt-2 or facebook's fairseq library)
 
 ## Setup
 
