@@ -113,10 +113,3 @@ class GPTDataset(AbstractNLPDataset):
         vocab.idx_to_token = dict([(i, x) for i, x in enumerate(train_vocab.itos)])
         vocab.token_to_idx = train_vocab.stoi
 
-    @classmethod
-    def get_testing_data(cls, *args):
-        pass
-
-    @classmethod
-    def get_testing_dataloader(cls, *args):
-        pass

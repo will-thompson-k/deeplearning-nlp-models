@@ -15,6 +15,8 @@ from nlpmodels.utils.vocabulary import NLPVocabulary
 class TransformerDataset(AbstractNLPDataset):
     """
     Transformer class for transforming and storing dataset for use in Transformer model.
+
+    Uses torchtext's Multi30k dataset.
     """
 
     def __init__(self, data: List, target_vocab: NLPVocabulary):
@@ -53,6 +55,7 @@ class TransformerDataset(AbstractNLPDataset):
     @classmethod
     def get_training_dataloader(cls, args: Any) -> Tuple[DataLoader, NLPVocabulary, NLPVocabulary]:
         """
+        Take in a set of parameters, return a pytorch::dataloader ready for training.
 
         Args:
             args: Parameters for deriving training data.
@@ -68,35 +71,10 @@ class TransformerDataset(AbstractNLPDataset):
 
         return train_loader, vocab_source, vocab_target
 
-    @staticmethod
-    def padded_string_to_integer(token_list: List[List[str]],
-                                 max_sequence_length: int, vocab: NLPVocabulary) -> List[List[int]]:
-        """
-        Args:
-            token_list (List[List[str]]):
-                List of tokens to be converted to indices.
-            max_sequence_length (int):
-                Maximimum length of sequence for each target, source sequence.
-            vocab (NLPVocabulary):
-                Dictionary to look up indices for each token.
-
-        Returns:
-            Sequence of indicies with EOS and PAD indices.
-        """
-
-        integer_list = []
-
-        for tokens in token_list:
-            integers = [vocab.mask_index] * max_sequence_length
-            integers[:len(tokens)] = [vocab.lookup_token(x) for x in tokens]
-            integers[len(tokens)] = vocab.eos_index
-            integer_list.append(integers)
-
-        return integer_list
-
     @classmethod
     def get_training_data(cls, max_sequence_length: int) -> Tuple[AbstractNLPDataset, NLPVocabulary, NLPVocabulary]:
         """
+        Take in a set of parameters, return a pytorch::dataloader ready for training.
 
         Args:
             max_sequence_length (int): The max sequence length.
@@ -125,11 +103,3 @@ class TransformerDataset(AbstractNLPDataset):
 
         return cls(list(zip(train_text_source, train_text_target)),
                    dictionary_target), dictionary_source, dictionary_target
-
-    @classmethod
-    def get_testing_data(cls, *args):
-        pass
-
-    @classmethod
-    def get_testing_dataloader(cls, *args):
-        pass

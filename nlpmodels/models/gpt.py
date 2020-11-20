@@ -26,7 +26,7 @@ class GPT(nn.Module):
                  dropout: float = 0.1):
         """
         Args:
-           vocab_size (int): size of the target vocabulary.
+           vocab_size (int): size of the vocabulary.
            num_layers_per_stack (int): number of sequential encoder/decoder layers.
            dim_model (int): size of the embedding space.
            dim_ffn (int): size of the residual/skip-connection hidden layer.

@@ -4,22 +4,24 @@
 ![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/will-thompson-k/deeplearning-nlp-models)
 ![GitHub](https://img.shields.io/github/license/will-thompson-k/deeplearning-nlp-models)
 
-A small, interpretable codebase containing the re-implementation of a few "deep" NLP papers in PyTorch.
+A small, interpretable codebase containing the re-implementation of a few "deep" NLP models in PyTorch.
 
-<ins>Current models</ins>: word2vec, text-based CNN, transformer, gpt.
+<ins>Current models</ins>: word2vec, CNNs, transformer, gpt.
 
 ![Meta](media/bert.jpg)
 
 BERT: Reading. Comprehending. 
 
 This is a compact review for those interested in getting into the weeds of dl-nlp model architectures.
-Other repos I found too sprawling to follow. This project sprung out of my own self-study. ( <ins>Note</ins>: These models are not adequately trained to be used in production. 
+Other repos I found too sprawling to follow. This project sprung out of my own self-study. 
+( <ins>Note</ins>: These models are not adequately trained to be used in production. 
 )
 
 ## Contents
 
 - [Models](#Models)
 - [Features](#Features)
+- [Endgame](#Endgame)
 - [Roadmap](#Roadmap)
 - [Setup](#Setup)
 - [Structure](#Structure)
@@ -35,12 +37,12 @@ These NLP models are presented chronologically and, as you might expect, build o
 |    Model Directory               |                           | 
 | :-------------------- | :--------------------  | 
 |  <ins>Embeddings</ins>|             | 
-|  1. |  [Word2Vec](nlpmodels/notebooks/word2vec/README.md)   | 
+|  1. |  [Word2Vec Embeddings (Self-Supervised Learning)](nlpmodels/notebooks/word2vec/README.md)   | 
 |  <ins>CNNs</ins>|             | 
-|  2. |  [CNN-based Sentence-level Text Classification](nlpmodels/notebooks/cnn/README.md)   | 
+|  2. |  [CNN-based Text Classification (Binary Classification)](nlpmodels/notebooks/cnn/README.md)   | 
 |  <ins>Transformers</ins> |                | 
-|  3. |  [The O.G. Transformer](nlpmodels/notebooks/transformer/README.md)  | 
-|  4. |  [OpenAI's GPT Model](nlpmodels/notebooks/gpt/README.md)  | 
+|  3. |  [The O.G. Transformer (Machine Translation)](nlpmodels/notebooks/transformer/README.md)  | 
+|  4. |  [OpenAI's GPT Model (Language Model)](nlpmodels/notebooks/gpt/README.md)  | 
 
 ## Features
 
@@ -51,18 +53,19 @@ This repository has the following features:
 - [ ] <ins>model utilities</ins>: Tokenizers, dataset loaders, dictionaries, and all the custom utilities required for each problem.
 - [ ] <ins>multiple dataset APIs</ins>: Both *HuggingFaces* and *torchtext* (i.e. Pytorch) datasets are used in examples.
 
+## Endgame
+
+After reviewing these models, the world's your oyster in terms of other models to explore:
+
+ELMO, XLNET, all the other BERTs, BART, Performer, T5, etc....
 
 ## Roadmap
 
 Future models:
 
-- [ ] GloVe embeddings
 - [ ] Char-RNN (Kaparthy)
 - [ ] BERT
-- [ ] ELMo
-- [ ] XLNet 
 - [ ] VAE
-
 
 Future repo features:
 
