@@ -15,7 +15,7 @@ from nlpmodels.utils.vocabulary import NLPVocabulary
 
 class AbstractNLPDataset(Dataset, ABC):
     """
-        Abstract base class for dataset class.
+    Abstract base class for dataset class.
     """
 
     @abstractmethod

@@ -10,7 +10,10 @@ import torch.nn.functional as F
 
 class TextCNN(nn.Module):
     """
+    A CNN-based text classification architecture that uses convolutional layers on top of
+    embeddings in order to make predictions.
 
+    Derived (mainly) from Kim (2014) "Convolutional Neural Networks for Sentence Classification".
     """
     def __init__(self,
                  vocab_size: int,
@@ -18,8 +21,7 @@ class TextCNN(nn.Module):
                  num_filters: int,
                  window_sizes: List,
                  num_classes: int,
-                 dropout: float,
-                 pre_trained: bool):
+                 dropout: float):
         """
         Args:
             vocab_size (int): size of the vocabulary.
@@ -27,11 +29,10 @@ class TextCNN(nn.Module):
             num_filters (int):
             window_sizes (List):
             dropout (float): hyper-parameter used in drop-out regularization in training.
-            pre_trained (bool): Load pre-trained embeddings.
         """
         super(TextCNN, self).__init__()
 
-        # (1) input embeddings (will overload with pre-trained)
+        # (1) input embeddings
         self._embeddings = nn.Embedding(vocab_size, dim_model)
         # (2) calculate CNN layers
         self._convs = nn.ModuleList([
@@ -43,23 +44,20 @@ class TextCNN(nn.Module):
         self._dropout = nn.Dropout(dropout)
         # (4) put through final linear layer
         self._final_linear = nn.Linear(num_filters * len(window_sizes), num_classes)
-        # init weights, bring in pre-trained embeddings
-        self._init_weights(pre_trained)
-        # keep the weights static for the embeddings since they are pre-trained.
-        self._embeddings.weight.requires_grad = False
+        # init weights
+        self._init_weights()
 
-    def _init_weights(self, pre_trained: bool):
+    def _init_weights(self):
         """
         Initializes the weights of the embeddings vectors.
 
-        Here we set the embeddings to be U(a,b) distribution if not pre-loaded.
+        Here we set the embeddings to be U(a,b) distribution.
         """
 
         self._embeddings.weight.data.uniform_(-0.5 / self._embedding_size,
                                               0.5 / self._embedding_size)
 
-        if pre_trained:
-            pass
+        # TODO: Add pre-loaded embeddings option.
 
     def forward(self, data: torch.Tensor) -> torch.Tensor:
         """
