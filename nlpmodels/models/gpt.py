@@ -89,7 +89,7 @@ class GPT(nn.Module):
         """
         # pass through decoder blocks
         decode = self._decode(data)
-        # calculate yhat. Don't apply softmax before passing to cross entropy.
-        yhat = self._final_linear(decode)
+        # calculate y_hat. Don't apply softmax before passing to cross entropy.
+        y_hat = self._final_linear(decode)
 
-        return yhat
+        return y_hat

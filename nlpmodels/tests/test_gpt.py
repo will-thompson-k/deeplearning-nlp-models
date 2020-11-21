@@ -35,10 +35,10 @@ def test_input_output_dims_gpt():
                     test_1_args.dim_ffn, test_1_args.num_heads, test_1_args.block_size,
                     test_1_args.dropout)
     # push through model
-    yhat = model(data)
+    y_hat = model(data)
 
     # assert all dimensions are correct
-    assert yhat.size() == torch.Size([batch_size, test_1_args.block_size, len(vocab)])
+    assert y_hat.size() == torch.Size([batch_size, test_1_args.block_size, len(vocab)])
 
 
 def test_regression_test_gpt():
@@ -66,11 +66,11 @@ def test_regression_test_gpt():
                     test_2_args.dim_ffn, test_2_args.num_heads, test_2_args.block_size,
                     test_2_args.dropout)
     # push through model
-    yhat = model(data)
+    y_hat = model(data)
 
     #expected output
     expected_output = gpt_regression_test_data.GPT_REGRESSION_TEST_DATA
 
-    # assert yhat is within eps
+    # assert y_hat is within eps
     eps = 1.e-4
-    assert np.allclose(yhat.data.numpy(), expected_output.data.numpy(), atol=eps)
+    assert np.allclose(y_hat.data.numpy(), expected_output.data.numpy(), atol=eps)

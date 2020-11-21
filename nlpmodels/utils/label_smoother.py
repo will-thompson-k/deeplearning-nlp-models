@@ -39,11 +39,11 @@ class LabelSmoothingLossFunction(nn.Module):
         self._smoothing = smoothing
         self._vocab_size = vocab_size
 
-    def forward(self, yhat: torch.Tensor, target: torch.Tensor) -> Variable:
+    def forward(self, y_hat: torch.Tensor, target: torch.Tensor) -> Variable:
         """
         Main function call of label smoother.
         Args:
-            yhat (torch.Tensor):
+            y_hat (torch.Tensor):
                 A sequence of (batch_size*max_seq_length,target_vocab_size) probability values.
             target (torch.Tensor):
                 A 1D sequence of (batch_size) indicating the token values of the target (one-hot-encoding).
@@ -53,16 +53,16 @@ class LabelSmoothingLossFunction(nn.Module):
         """
 
         # produces a target_smooth distribution that is (batch_size*max_seq_length,target_vocab_size)
-        true_dist = self._compute_label_smoothing(target, yhat)
+        true_dist = self._compute_label_smoothing(target, y_hat)
 
         # return KL divergence
-        return self._criterion(yhat, Variable(true_dist, requires_grad=False))
+        return self._criterion(y_hat, Variable(true_dist, requires_grad=False))
 
-    def _compute_label_smoothing(self, target: torch.Tensor, yhat: torch.Tensor) -> torch.Tensor:
+    def _compute_label_smoothing(self, target: torch.Tensor, y_hat: torch.Tensor) -> torch.Tensor:
         """
 
         Args:
-            yhat (torch.Tensor):
+            y_hat (torch.Tensor):
                 A sequence of (batch_size*max_seq_length,target_vocab_size) probability values.
             target (torch.Tensor):
                 A 1D sequence of (batch_size) indicating the token values of the target (one-hot-encoding).
@@ -71,10 +71,10 @@ class LabelSmoothingLossFunction(nn.Module):
             a target_smooth distribution that is (batch_size*max_seq_length,target_vocab_size)
 
         """
-        assert yhat.size(1) == self._vocab_size
+        assert y_hat.size(1) == self._vocab_size
 
-        # generate matrix of the same distribution as yhat (copy)
-        true_dist = yhat.data.clone()
+        # generate matrix of the same distribution as y_hat (copy)
+        true_dist = y_hat.data.clone()
         # fill with the smoothing values / vocab_size so that probabilities add to 1.0
         true_dist.fill_(self._smoothing / (self._vocab_size - 2))
         # along dimension 1, for the target indices (one-hot encoding indices), set to peak

@@ -38,10 +38,10 @@ def test_input_output_dims_transformer():
                                     test_1_args.dim_ffn, test_1_args.num_heads, test_1_args.max_sequence_length,
                                     test_1_args.dropout)
     # push through model
-    yhat = model(data)
+    y_hat = model(data)
 
     # assert all dimensions are correct
-    assert yhat.size() == torch.Size([batch_size, max_seq_length, len(dictionary_target)])
+    assert y_hat.size() == torch.Size([batch_size, max_seq_length, len(dictionary_target)])
 
 
 def test_transformer_regression_test():
@@ -72,11 +72,11 @@ def test_transformer_regression_test():
                                     test_2_args.dim_ffn, test_2_args.num_heads, test_2_args.max_sequence_length,
                                     test_2_args.dropout)
     # push through model
-    yhat = model(data)
+    y_hat = model(data)
 
     # expected output
     expected_output = transformer_regression_test_data.TRANSFORMER_REGRESSION_TEST_DATA
 
-    # assert yhat is within eps
+    # assert y_hat is within eps
     eps = 1.e-4
-    assert np.allclose(yhat.data.numpy(),expected_output.data.numpy(),atol=eps)
+    assert np.allclose(y_hat.data.numpy(),expected_output.data.numpy(),atol=eps)

@@ -28,8 +28,8 @@ def test_input_output_dims():
     data = (mock_input_1, mock_input_2)
     model = word2vec.SkipGramNSModel(test_1_args.vocab_size, test_1_args.embedding_size,
                                      test_1_args.negative_sample_size, word_frequencies)
-    yhat = model(data)
-    assert yhat.nelement() == 1
+    y_hat = model(data)
+    assert y_hat.nelement() == 1
 
 
 def test_embedding_size():
@@ -76,6 +76,6 @@ def test_word2vec_regression_test():
     # expected output
     expected_output = word2vec_regression_test_data.WORD2VEC_REGRESSION_TEST_DATA
 
-    # assert yhat is within eps
+    # assert y_hat is within eps
     eps = 1.e-4
     assert np.allclose(loss.data.numpy(), expected_output.data.numpy(), atol=eps)

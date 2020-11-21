@@ -47,7 +47,7 @@ class TextCNNDataset(AbstractNLPDataset):
         """
         target, text = self.data[idx]
 
-        return torch.LongTensor(text), torch.LongTensor(target)
+        return torch.LongTensor([target]), torch.LongTensor(text)
 
     @classmethod
     def get_training_dataloader(cls, args: Any) -> Tuple[DataLoader, NLPVocabulary]:
@@ -91,3 +91,5 @@ class TextCNNDataset(AbstractNLPDataset):
         train_text = cls.padded_string_to_integer(train_text, max_sequence_length, vocab)
 
         return cls(list(zip(train_target, train_text)), vocab), vocab
+
+

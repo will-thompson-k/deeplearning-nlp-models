@@ -41,11 +41,11 @@ def sampler(model: nn.Module,
         data_src = data.src if data.src.size(1) <= block_size else data.src[:, -block_size:]
         data = GPTBatch(data_src, None, 0)
         # grab the predictions
-        yhat = model(data)
-        # pluck the yhat at the final step after reading in the whole context window
-        yhat = yhat[:, -1]
+        y_hat = model(data)
+        # pluck the y_hat at the final step after reading in the whole context window
+        y_hat = y_hat[:, -1]
         # apply softmax to convert to probabilities
-        probas = F.softmax(yhat, dim=-1)
+        probas = F.softmax(y_hat, dim=-1)
         # sample from the distribution or take the most likely
         if do_sample:
             index = torch.multinomial(probas, num_samples=1)

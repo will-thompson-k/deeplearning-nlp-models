@@ -26,8 +26,8 @@ class TextCNN(nn.Module):
         Args:
             vocab_size (int): size of the vocabulary.
             dim_model (int): size of the embedding space.
-            num_filters (int):
-            window_sizes (List):
+            num_filters (int): the number of convolution filters to use.
+            window_sizes (List): the kernel size.
             dropout (float): hyper-parameter used in drop-out regularization in training.
         """
         super(TextCNN, self).__init__()
@@ -38,24 +38,28 @@ class TextCNN(nn.Module):
         self._convs = nn.ModuleList([
             nn.Conv2d(in_channels=1,
                       out_channels=num_filters,
-                      kernel_size=(window_size, dim_model))
+                      kernel_size=(window_size, dim_model),
+                      padding=(window_size - 1, 0))
             for window_size in window_sizes])
         # (3) apply drop out
         self._dropout = nn.Dropout(dropout)
         # (4) put through final linear layer
         self._final_linear = nn.Linear(num_filters * len(window_sizes), num_classes)
         # init weights
-        self._init_weights()
+        self._init_weights(dim_model)
 
-    def _init_weights(self):
+    def _init_weights(self, dim_model: int):
         """
         Initializes the weights of the embeddings vectors.
 
         Here we set the embeddings to be U(a,b) distribution.
+
+        Args:
+            dim_model (int): embedding space size.
         """
 
-        self._embeddings.weight.data.uniform_(-0.5 / self._embedding_size,
-                                              0.5 / self._embedding_size)
+        self._embeddings.weight.data.uniform_(-0.5 / dim_model,
+                                              0.5 / dim_model)
 
         # TODO: Add pre-loaded embeddings option.
 
@@ -82,7 +86,7 @@ class TextCNN(nn.Module):
         # (batch_size, 1, max_sequence_length, dim_model) ->
         # conv_stack ->
         # [(batch_size, channel_out=num_filters, max_sequence_length)]*len(window_sizes)
-        conv_stack = [F.relu(conv_layer(conv_input)).squeeze(3) for conv_layer in self.convs]
+        conv_stack = [F.relu(conv_layer(conv_input)).squeeze(3) for conv_layer in self._convs]
 
         # (3) Apply max_pool on RELU outputs
         # [(batch_size, num_filters, max_sequence_length)]*len(window_sizes)
@@ -97,11 +101,12 @@ class TextCNN(nn.Module):
         pooled_values = torch.cat(pooled_values, 1)
 
         # (4) apply usual drop-out
-        pooled_values = self.dropout(pooled_values)
+        pooled_values = self._dropout(pooled_values)
 
         # (5) final linear layer, get into terms we care about
         # (batch_size, num_filters*len(window_sizes)) ->
         # (batch_size, class_num)
-        yhat = self._final_linear(pooled_values)
+        y_hat = self._final_linear(pooled_values)
 
-        return yhat
+        # note: don't need to apply softmax, that is handled in CE function
+        return y_hat
