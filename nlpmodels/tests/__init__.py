@@ -11,5 +11,4 @@ __all__ = ["test_dataset",
            "test_vocabulary",
            "test_word2vec",
            "test_data",
-           "test_cnn",
-           "test_cnn_dataset"]
+           "test_cnn"]

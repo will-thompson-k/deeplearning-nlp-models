@@ -80,4 +80,3 @@ def test_regression_test_cnn():
     # assert y_hat is within eps
     eps = 1.e-4
     assert np.allclose(y_hat.data.numpy(), expected_output.data.numpy(), atol=eps)
-    
