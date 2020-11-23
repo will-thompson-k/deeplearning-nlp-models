@@ -302,7 +302,7 @@ class TextCNNTrainer:
                 # NOTE: Usually makes sense to measure the loss from the val set (and add early stopping).
                 # For this experiment, just running on training set entirely as an example.
 
-                correct += (np.round(F.softmax(y_hat)[:,1].detach().numpy()).reshape(y_hat.shape[0],1) == target.data.numpy()).sum()
+                correct += (np.round(F.softmax(y_hat)[:, 1].detach().numpy()).reshape(y_hat.shape[0], 1) == target.data.numpy()).sum()
 
                 # status bar
                 pbar.set_postfix(loss=loss.item(), accuracy=100.0 * int(correct)/len(self._train_data.dataset))
