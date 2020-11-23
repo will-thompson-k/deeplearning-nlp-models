@@ -38,8 +38,13 @@ class TextCNN(nn.Module):
         self._convs = nn.ModuleList([
             nn.Conv2d(in_channels=1,
                       out_channels=num_filters,
+                      # each kernel will look at window_size
+                      # along max_sequence_length across full dim_model
                       kernel_size=(window_size, dim_model),
-                      padding=(window_size - 1, 0))
+                      # want h_in==h_out in convolution
+                      # (works for odd sized kernels)
+                      padding=((window_size-1)//2, 0)
+                      )
             for window_size in window_sizes])
         # (3) apply drop out
         self._dropout = nn.Dropout(dropout)
@@ -79,26 +84,33 @@ class TextCNN(nn.Module):
         embeddings = self._embeddings(data)
 
         # (batch_size, max_sequence_length, dim_model) ->
-        # (batch_size, channels=1, max_sequence_length, dim_model)
+        # (batch_size, channels_in=1, max_sequence_length, dim_model)
         conv_input = embeddings.unsqueeze(1)
 
-        # (2) Apply RELU between each conv layer, add to stack
-        # (batch_size, 1, max_sequence_length, dim_model) ->
-        # conv_stack ->
-        # [(batch_size, channel_out=num_filters, max_sequence_length)]*len(window_sizes)
-        conv_stack = [F.relu(conv_layer(conv_input)).squeeze(3) for conv_layer in self._convs]
+        conv_stack = []
+        for conv_layer in self._convs:
+            # (2) apply convolution layer + RELU
+            # (batch_size, channels_in=1, h_in=max_sequence_length, w_in=dim_model) ->
+            # (batch_size, channel_out=num_filters, h_out=max_sequence_length, w_out=1)
+            conv_output = F.relu(conv_layer(conv_input)).squeeze(3)
 
-        # (3) Apply max_pool on RELU outputs
-        # [(batch_size, num_filters, max_sequence_length)]*len(window_sizes)
-        # max_pool -> (batch_size, num_filters, 1)
-        # [(batch_size, num_filters)]*len(window_sizes)
-        pooled_values = [F.max_pool1d(conv_output, conv_output.size(2)).squeeze(2)
-                         for conv_output in conv_stack]
+            # This isn't super important since we are pooling across dim2,
+            # but I wanted to make sure I got the same padding working.
+            assert conv_output.size(0) == data.size(0) and \
+                   conv_output.size(2) == data.size(1)
+
+            # (3) Apply max pool along h_out dimension
+            # (batch_size, channel_out=num_filters, h_out=max_sequence_length) ->
+            # (batch_size, num_filters)
+            pooled_output = F.max_pool1d(conv_output,
+                                         conv_output.size(2)).squeeze(2)
+            # (batch_size, num_filters), add to stack
+            conv_stack.append(pooled_output)
 
         # flatten along dim=1
         # [(batch_size, num_filters)]*len(window_sizes) ->
         # (batch_size, num_filters)*len(window_sizes))
-        pooled_values = torch.cat(pooled_values, 1)
+        pooled_values = torch.cat(conv_stack, 1)
 
         # (4) apply usual drop-out
         pooled_values = self._dropout(pooled_values)
