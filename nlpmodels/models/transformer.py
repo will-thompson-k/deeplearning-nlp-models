@@ -1,3 +1,6 @@
+"""
+This module contains the composite Transformer model.
+"""
 import torch
 import torch.nn as nn
 
@@ -138,6 +141,6 @@ class Transformer(nn.Module):
         encode = self._encode(data.src, data.src_mask)
         decode = self._decode(encode, data.src_mask, data.tgt, data.tgt_mask)
 
-        yhat = self._final_softmax(self._final_linear(decode))
+        y_hat = self._final_softmax(self._final_linear(decode))
 
-        return yhat
+        return y_hat

@@ -1,3 +1,7 @@
+"""
+This module contains a sampler for sampling a model output. Useful for language models.
+"""
+
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
@@ -6,13 +10,13 @@ from nlpmodels.utils.gpt_batch import GPTBatch
 
 # Make sure we don't update the gradient.
 @torch.no_grad()
-def greedy_sampler(model: nn.Module,
-                   data: GPTBatch,
-                   steps: int,
-                   block_size: int,
-                   do_sample: bool = False) -> torch.Tensor:
+def sampler(model: nn.Module,
+            data: GPTBatch,
+            steps: int,
+            block_size: int,
+            do_sample: bool = False) -> torch.Tensor:
     """
-    This is a greedy decoder/sampler for examining the performance of our model.
+    This is a sampler for examining the performance of our model.
 
 
     Takes a sequence of tokens, predicts the next one in the sequence using our model,
@@ -37,11 +41,11 @@ def greedy_sampler(model: nn.Module,
         data_src = data.src if data.src.size(1) <= block_size else data.src[:, -block_size:]
         data = GPTBatch(data_src, None, 0)
         # grab the predictions
-        yhat = model(data)
-        # pluck the yhat at the final step after reading in the whole context window
-        yhat = yhat[:, -1]
+        y_hat = model(data)
+        # pluck the y_hat at the final step after reading in the whole context window
+        y_hat = y_hat[:, -1]
         # apply softmax to convert to probabilities
-        probas = F.softmax(yhat, dim=-1)
+        probas = F.softmax(y_hat, dim=-1)
         # sample from the distribution or take the most likely
         if do_sample:
             index = torch.multinomial(probas, num_samples=1)

@@ -1,3 +1,8 @@
+"""
+This module contains the schedulers + optimizers used for training models.
+Currently only contains NoamOptimizer.
+"""
+
 from argparse import Namespace
 
 import torch
@@ -78,4 +83,4 @@ class NoamOptimizer:
             The NoamOptimizer optimizer.
         """
         return cls(args.dim_model, 2, 4000,
-                   torch.optim.Adam(model.parameters(), lr=0, betas=(0.9, 0.98), eps=1e-9))
+                   torch.optim.Adam(model.parameters(), lr=args.learning_rate, betas=(0.9, 0.98), eps=1e-9))

@@ -1,3 +1,5 @@
+# pylint: disable=C0111
+
 __all__ = ["test_dataset",
            "test_label_smoother",
            "test_noam_optimizer",
@@ -7,4 +9,6 @@ __all__ = ["test_dataset",
            "test_transformer_dataset",
            "test_transformer_positional_encoder",
            "test_vocabulary",
-           "test_word2vec"]
+           "test_word2vec",
+           "test_data",
+           "test_cnn"]

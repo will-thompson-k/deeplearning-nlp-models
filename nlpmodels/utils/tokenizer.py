@@ -1,3 +1,8 @@
+"""
+This module contains the basic English tokenizer.
+This, IMO, does a more rigorous job than that found in torchtext.
+"""
+
 import re
 import string
 from typing import List

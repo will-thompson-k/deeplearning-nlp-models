@@ -1,3 +1,8 @@
+"""
+This module contains the Encoder layer and composite encoder stack (made of many encoder layers) for the
+Transformer model class.
+"""
+
 from copy import deepcopy
 
 import torch
@@ -72,17 +77,17 @@ class CompositeEncoder(nn.Module):
         self._layers = nn.ModuleList([deepcopy(layer)] * num_layers)
         self._add_norm = nn.BatchNorm1d(layer._size, momentum=None, affine=False)
 
-    def forward(self, x: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
+    def forward(self, values: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
         """
         Main function call for Encoder block.
         Takes in embedding(src), target_mask, source, source_mask, and encoder output.
 
         Args:
-            x (torch.Tensor): Either embedding(src) or encoder[l-1] output.
+            values (torch.Tensor): Either embedding(src) or encoder[l-1] output.
             mask (torch.Tensor): Masking source so model doesn't see padding.
         Returns:
             encoder output to be used as input into decoder block.
         """
         for layer in self._layers:
-            x = layer(x, mask)
-        return self._add_norm(x)
+            values = layer(values, mask)
+        return self._add_norm(values)

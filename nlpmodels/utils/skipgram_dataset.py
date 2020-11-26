@@ -1,3 +1,6 @@
+"""
+This module contains the skipgram/word2vec Dataset and Dataloader.
+"""
 from typing import Tuple, Any, List
 
 import numpy as np

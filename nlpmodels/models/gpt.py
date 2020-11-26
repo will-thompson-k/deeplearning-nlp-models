@@ -1,3 +1,6 @@
+"""
+This module contains the composite GPT model.
+"""
 import torch
 import torch.nn as nn
 from nlpmodels.models.transformer_blocks import sublayers, attention, gpt_decoder
@@ -6,7 +9,7 @@ from nlpmodels.utils.gpt_batch import GPTBatch
 
 class GPT(nn.Module):
     """
-    The GPT class of the decoder-only Transformer.
+    The GPT class of the decoder-only Transformer developed by OpenAI (GPT-1,-2,-3 models found in README).
 
     GPT is an auto-regressive language model trying to max p(x[k]|x[k-1],[k-2],...x[k-block_size]).
     The motivation of this approach is to train the model on a large corpus as a self-supervised
@@ -23,7 +26,7 @@ class GPT(nn.Module):
                  dropout: float = 0.1):
         """
         Args:
-           vocab_size (int): size of the target vocabulary.
+           vocab_size (int): size of the vocabulary.
            num_layers_per_stack (int): number of sequential encoder/decoder layers.
            dim_model (int): size of the embedding space.
            dim_ffn (int): size of the residual/skip-connection hidden layer.
@@ -86,7 +89,7 @@ class GPT(nn.Module):
         """
         # pass through decoder blocks
         decode = self._decode(data)
-        # calculate yhat. Don't apply softmax before passing to cross entropy.
-        yhat = self._final_linear(decode)
+        # calculate y_hat. Don't apply softmax before passing to cross entropy.
+        y_hat = self._final_linear(decode)
 
-        return yhat
+        return y_hat

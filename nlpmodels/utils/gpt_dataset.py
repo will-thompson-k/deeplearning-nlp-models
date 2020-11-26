@@ -1,4 +1,8 @@
-from typing import Tuple, Any, List
+"""
+This module contains the GPT Dataset and GPT Dataloaders for the GPT problem.
+"""
+
+from typing import Tuple, Any
 
 import torch
 from torch.utils.data import DataLoader
@@ -95,24 +99,17 @@ class GPTDataset(AbstractNLPDataset):
             vocab (NLPVocabulary): Vocab object we need to modify.
         """
         # got to change the order of some defaults, Pytorch and I don't see eye to eye apparently
-        vocab._token_to_idx[vocab.unk_token] = 0
-        vocab._idx_to_token[0] = vocab.unk_token
+        vocab.token_to_idx[vocab.unk_token] = 0
+        vocab.idx_to_token[0] = vocab.unk_token
         vocab.unk_index = 0
-        vocab._token_to_idx[vocab.mask_token] = 1
-        vocab._idx_to_token[1] = vocab.mask_token
+        vocab.token_to_idx[vocab.mask_token] = 1
+        vocab.idx_to_token[1] = vocab.mask_token
         vocab.mask_index = 1
         # got to handle this <eos> token that is not found here.
-        del vocab._token_to_idx[vocab.eos_token], vocab._idx_to_token[vocab.eos_index]
+        del vocab.token_to_idx[vocab.eos_token], vocab.idx_to_token[vocab.eos_index]
         del vocab._word_count
         vocab.eos_index = -1
         # add in the other tokens
-        vocab._idx_to_token = dict([(i, x) for i, x in enumerate(train_vocab.itos)])
-        vocab._token_to_idx = train_vocab.stoi
+        vocab.idx_to_token = dict([(i, x) for i, x in enumerate(train_vocab.itos)])
+        vocab.token_to_idx = train_vocab.stoi
 
-    @classmethod
-    def get_testing_data(cls, *args):
-        pass
-
-    @classmethod
-    def get_testing_dataloader(cls, *args):
-        pass

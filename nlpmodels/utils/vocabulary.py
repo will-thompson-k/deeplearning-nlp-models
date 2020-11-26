@@ -1,15 +1,20 @@
-from typing import List
+"""
+This module contains our own internal vocabulary object.
+"""
+from typing import List, Dict
 
 import numpy as np
 
 
-class NLPVocabulary(object):
+class NLPVocabulary:
     """
     A vocabulary class used to map tokens to indices and calculate word frequencies.
     Design inspired by https://github.com/joosthub/PyTorchNLPBook.
     """
 
-    def __init__(self, mask_token: str = "<MASK>", unk_token: str = "<UNK>", eos_token: str = "<EOS>"):
+    def __init__(self, mask_token: str = "<MASK>",
+                 unk_token: str = "<UNK>",
+                 eos_token: str = "<EOS>"):
         """
         Args:
             mask_token (str) : token name used for masking
@@ -29,6 +34,55 @@ class NLPVocabulary(object):
         self.mask_index = self.add_token(self.mask_token)
         self.unk_index = self.add_token(self.unk_token)
         self.eos_index = self.add_token(self.eos_token)
+
+    @property
+    def token_to_idx(self) -> Dict:
+        """
+        Returns:
+            Map of token->index
+        """
+        return self._token_to_idx
+
+    @token_to_idx.setter
+    def token_to_idx(self, value: Dict):
+        """
+        sets the value of our dictionary
+        Args:
+            value (Dict): new dict to set our map.
+        """
+        self._token_to_idx = value
+
+    @property
+    def word_count(self) -> Dict:
+        """
+        Returns:
+            _word_count map
+        """
+        return self._word_count
+
+    @word_count.deleter
+    def word_count(self):
+        """
+        deletes _word_count map
+        """
+        del self._word_count
+
+    @property
+    def idx_to_token(self) -> Dict:
+        """
+        Returns:
+            Map of index->token
+        """
+        return self._idx_to_token
+
+    @idx_to_token.setter
+    def idx_to_token(self, value: Dict):
+        """
+        sets the value of our dictionary
+        Args:
+            value (Dict): new dict to set our map.
+        """
+        self._idx_to_token = value
 
     def add_token(self, token: str) -> int:
         """
