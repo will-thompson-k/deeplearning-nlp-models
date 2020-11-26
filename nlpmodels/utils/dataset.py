@@ -58,8 +58,13 @@ class AbstractNLPDataset(Dataset, ABC):
 
         for tokens in token_list:
             integers = [vocab.mask_index] * max_sequence_length
-            integers[:len(tokens)] = [vocab.lookup_token(x) for x in tokens]
-            integers[len(tokens)] = vocab.eos_index
+            # this allows for truncated sequences.
+            # In some problems, we will explicitly through out
+            # datapoints < max_sequence_length prior to this step.
+            integers[:len(tokens)] = [vocab.lookup_token(x) for x in tokens][:len(integers)]
+            # Adding in the EOS token if the sequence is not truncated.
+            if len(tokens) < max_sequence_length:
+                integers[len(tokens)] = vocab.eos_index
             integer_list.append(integers)
 
         return integer_list

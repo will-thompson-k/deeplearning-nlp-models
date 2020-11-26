@@ -12,10 +12,9 @@ A small, interpretable codebase containing the re-implementation of a few "deep"
 
 BERT: Reading. Comprehending. 
 
-This is a compact review for those interested in getting into the weeds of dl-nlp model architectures.
+This is a compact review for those interested in getting into the weeds of modern DL-NLP model architectures.
 Other repos I found too sprawling to follow. This project sprung out of my own self-study. 
-( <ins>Note</ins>: These models are not adequately trained to be used in production, nor are they being
-benchmarked against a val/test set. 
+( <ins>Note</ins>: These models are toy versions of each model. They are not adequately trained to be used in production. 
 )
 
 ## Contents
@@ -35,15 +34,15 @@ benchmarked against a val/test set.
 
 These NLP models are presented chronologically and, as you might expect, build off each other.
 
-|    Model Directory               |                           | 
-| :-------------------- | :--------------------  | 
-|  <ins>Embeddings</ins>|             | 
-|  1. |  [Word2Vec Embeddings (Self-Supervised Learning)](nlpmodels/notebooks/word2vec/README.md)   | 
-|  <ins>CNNs</ins>|             | 
-|  2. |  [CNN-based Text Classification (Binary Classification)](nlpmodels/notebooks/cnn/README.md)   | 
-|  <ins>Transformers</ins> |                | 
-|  3. |  [The O.G. Transformer (Machine Translation)](nlpmodels/notebooks/transformer/README.md)  | 
-|  4. |  [OpenAI's GPT Model (Language Model)](nlpmodels/notebooks/gpt/README.md)  | 
+|    Model Class               |           Model               |   Year                        | 
+| :-------------------- | :--------------------  | :--------------------  | 
+|  <ins>Embeddings</ins>|             |              | 
+|  1. |  [Word2Vec Embeddings (Self-Supervised Learning)](nlpmodels/notebooks/word2vec/README.md)   |       2014       | 
+|  <ins>CNNs</ins>|             |              | 
+|  2. |  [CNN-based Text Classification (Binary Classification)](nlpmodels/notebooks/cnn/README.md)   |    2014          | 
+|  <ins>Transformers</ins> |                |              | 
+|  3. |  [The O.G. Transformer (Machine Translation)](nlpmodels/notebooks/transformer/README.md)  |      2017        | 
+|  4. |  [OpenAI's GPT Model (Language Model)](nlpmodels/notebooks/gpt/README.md)  |   2018, 2019, 2020           | 
 
 ## Features
 
@@ -66,15 +65,14 @@ Future models:
 
 - [ ] Char-RNN (Kaparthy)
 - [ ] BERT
-- [ ] VAE
 
 Future repo features:
 
 - [ ] Leverage PyTorch **gpu** training (use colab to run, link to open in colab).
 - [ ] Gradient clipping
-- [ ] Val set early stopping
-- [ ] Saving checkpoints/ loading models
 - [ ] Tensorboard plots
+- [ ] Val set demonstrations
+- [ ] Saving checkpoints/ loading models
 - [ ] BPE (from either openai/gpt-2 or facebook's fairseq library)
 
 ## Setup

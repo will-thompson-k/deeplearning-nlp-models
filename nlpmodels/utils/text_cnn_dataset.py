@@ -2,6 +2,7 @@
 This module contains the cnn-text Dataset and Dataloader.
 """
 from typing import Tuple, Any, List
+import numpy as np
 
 import torch
 from torch.utils.data import DataLoader
@@ -84,12 +85,37 @@ class TextCNNDataset(AbstractNLPDataset):
         # tokenize the data using our tokenizer
         train_text = tokenize_corpus_basic(train_text, False)
         # throw out any data points that are > max_length
-        train_text = [x for x in train_text if len(x) <= max_sequence_length - 1]
+        # train_text = [x for x in train_text if len(x) <= max_sequence_length - 1]
         # build our vocab on the stripped text
         vocab = NLPVocabulary.build_vocabulary(train_text)
+        # remove some of the words so dictionary <<75k
+        vocab = cls.prune_vocab(vocab)
         # convert to into padded sequences of integers
         train_text = cls.padded_string_to_integer(train_text, max_sequence_length, vocab)
 
         return cls(list(zip(train_target, train_text)), vocab), vocab
+
+    @classmethod
+    def prune_vocab(cls, vocab: NLPVocabulary) -> NLPVocabulary:
+        """
+        A simple method that reduces the dictionary of a corpus to be more manageable.
+
+        Args:
+            vocab (NLPVocabulary): The original dictionary.
+        Returns:
+            Pruned dictionary.
+        """
+        word_probas = vocab.get_word_frequencies()
+        # special tokens have 0 word_counts
+        # this is a hard-coded hyper-parameter
+        keep_words = word_probas > 1.e-4
+        idx_to_token = vocab.idx_to_token
+        keep_tokens = []
+        for idx, keep in enumerate(keep_words):
+            if keep:
+                keep_tokens.append(idx_to_token[idx])
+        # re-build the dictionary
+        vocab = NLPVocabulary.build_vocabulary(keep_tokens)
+        return vocab
 
 
