@@ -261,7 +261,7 @@ class TextCNNTrainer:
         self._vocab = vocab
 
         # Usual cross entropy loss function
-        self._loss_function = nn.CrossEntropyLoss(ignore_index=pad_index)
+        self._loss_function = nn.CrossEntropyLoss(ignore_index=pad_index, size_average=False)
 
         # Note: I am just using Adam, no LR scheduler.
         self._optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
@@ -291,7 +291,7 @@ class TextCNNTrainer:
                 y_hat = self._model(text)
 
                 # step 3. compute the standard cross entropy loss
-                loss = self._loss_function(y_hat.view(-1, y_hat.size(-1)), target.view(-1))
+                loss = self._loss_function(y_hat, target.view(-1))
 
                 # step 4. back_prop
                 loss.backward()
@@ -302,7 +302,7 @@ class TextCNNTrainer:
                 # NOTE: Usually makes sense to measure the loss from the val set (and add early stopping).
                 # For this experiment, just running on training set entirely as an example.
 
-                correct += (np.round(F.softmax(y_hat)[:, 1].detach().numpy()).reshape(y_hat.shape[0], 1) == target.data.numpy()).sum()
+                correct += int((torch.max(y_hat, 1)[1].view(-1) == target.view(-1)).sum())
 
                 # status bar
                 pbar.set_postfix(loss=loss.item(), accuracy=100.0 * int(correct)/len(self._train_data.dataset))

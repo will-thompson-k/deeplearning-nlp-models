@@ -122,3 +122,4 @@ class TextCNN(nn.Module):
 
         # note: don't need to apply softmax, that is handled in CE function
         return y_hat
+
