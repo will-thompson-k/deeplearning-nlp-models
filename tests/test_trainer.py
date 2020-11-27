@@ -136,5 +136,3 @@ def test_transformer_trainer_regression_test():
     losses = trainer.loss_cache
     # last loss across initial epochs should be converging
     assert losses[0].data >= losses[-1].data
-
-test_transformer_trainer_regression_test()
