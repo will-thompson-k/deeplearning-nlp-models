@@ -68,3 +68,27 @@ class AbstractNLPDataset(Dataset, ABC):
             integer_list.append(integers)
 
         return integer_list
+
+    @classmethod
+    def prune_vocab(cls, vocab: NLPVocabulary, prob_thresh: float) -> NLPVocabulary:
+        """
+        A simple method that reduces the dictionary of a corpus to be more manageable.
+
+        Args:
+            vocab (NLPVocabulary): The original dictionary.
+            prob_thresh (float): threshold of word frequency over which to keep tokens.
+        Returns:
+            Pruned dictionary.
+        """
+        word_probas = vocab.get_word_frequencies()
+        # special tokens have 0 word_counts
+        # this is a hard-coded hyper-parameter
+        keep_words = word_probas > prob_thresh
+        idx_to_token = vocab.idx_to_token
+        keep_tokens = []
+        for idx, keep in enumerate(keep_words):
+            if keep:
+                keep_tokens.append(idx_to_token[idx])
+        # re-build the dictionary
+        vocab = NLPVocabulary.build_vocabulary([keep_tokens])
+        return vocab
