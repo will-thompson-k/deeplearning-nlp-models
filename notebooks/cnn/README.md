@@ -2,7 +2,7 @@
 
 This is an implementation of Yoon Kim's ["Convolutional Neural Networks for Sentence Classification"](https://arxiv.org/pdf/1408.5882.pdf) (2014).
 
-![CNNs on Text](../../../media/text_cnn.png)
+![CNNs on Text](/media/text_cnn.png)
 
 Image source: Kim (2014).
 
@@ -26,7 +26,7 @@ Check out the Jupyter notebook [here](text_cnn.ipynb) to run the code.
 
 ## Code
 
-You can find the implementation [here](../../models/text_cnn.py) with detailed comments. 
+You can find the implementation [here](nlpmodels/models/text_cnn.py) with detailed comments. 
 This model is fairly simple, but requires thinking about CNN filter dimensions.
 I attempted to explain what to expect at each step.
 
@@ -96,11 +96,11 @@ This is where deep learning, and in particular, convolutional neural networks (C
 ### The Convolution Operation
 
 
-![convolution 1](../../../media/colah_conv_1.png)
+![convolution 1](/media/colah_conv_1.png)
 
 "Blurry convolution"
 
-![convolution 2](../../../media/colah_conv_2.png)
+![convolution 2](/media/colah_conv_2.png)
 
 "Dark-mode convolution"
 

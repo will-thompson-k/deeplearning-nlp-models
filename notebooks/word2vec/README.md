@@ -4,7 +4,7 @@ This is the implementation of the Skip-gram model in the paper:  <br> &nbsp;&nbs
 Mikolov et al. ["Distributed Representations of Words and Phrases
     and their Compositionality"](https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf) 2013. 
 
-![t-SNE visualization of embeddings from original paper.](../../../media/word2vec_embeddings.png)
+![t-SNE visualization of embeddings from original paper.](/media/word2vec_embeddings.png)
 
 Image source: Mikolov et al. (2013)
 
@@ -28,8 +28,8 @@ Check out the Jupyter notebook [here](word2vec.ipynb) to run the code.
 
 ## Code
 
-You can find the implementation [here](../../models/word2vec.py) with comments. You may also be interested
-in looking at how the input and context vectors are generated [here](../../utils/skipgram_dataset.py).
+You can find the implementation [here](nlpmodels/models/word2vec.py) with comments. You may also be interested
+in looking at how the input and context vectors are generated [here](../../nlpmodels/utils/skipgram_dataset.py).
 
 ## Usage
 
@@ -106,7 +106,7 @@ One style of word2vec tries to map multiple the context to a given target. This 
 The other style, **"skip-gram"** attempts to take an input word and map it to a context. This implementation is
 concerned with the latter.
 
-![Skipgram diagram](../../../media/skipgram_diagram.png)
+![Skipgram diagram](/media/skipgram_diagram.png)
 
 Image source: Mikolov et al. (2013)
 
@@ -115,7 +115,7 @@ Image source: Mikolov et al. (2013)
 
 The canonical skip-gram problem is here:
 
-![Skipgram canonical](../../../media/skipgram_canonical.png)  
+![Skipgram canonical](/media/skipgram_canonical.png)  
 Image source: Mikolov et al. (2013)
 
 
@@ -136,7 +136,7 @@ a representation such that the words within the same context are within a close 
 there are k random negative samples drawn for every positive (input,context) example to train the model how to differentiate the 2 cases.
 Thus, instead of a large multi-class problem we've reduced it into a **k+1** set of **binary classification** problems.
 
-![Skipgram NGS](../../../media/skipgram_NGS.png)  
+![Skipgram NGS](/media/skipgram_NGS.png)  
 Image source: Mikolov et al. (2013)
 
 

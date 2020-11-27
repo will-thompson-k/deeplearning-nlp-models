@@ -3,7 +3,7 @@
 This is the implementation of the original transformer model in the paper:  <br> &nbsp;&nbsp;&nbsp;&nbsp;
 Vaswani et al. ["Attention is All You Need"](https://arxiv.org/pdf/1706.03762.pdf) 2017. 
 
-![Depiction of Transformer architecture](../../../media/transformer_architecture.png)
+![Depiction of Transformer architecture](/media/transformer_architecture.png)
 
 Image source: Vaswani et al. (2017)
 
@@ -25,7 +25,7 @@ Check out the Jupyter notebook [here](transformer.ipynb) to run the code.
 
 ## Code
 
-You can find the implementation [here](../../models/transformer.py) with detailed comments. 
+You can find the implementation [here](nlpmodels/models/transformer.py) with detailed comments. 
 This model has a number of details
 that I do not cover here that are worth reviewing.
 
@@ -74,7 +74,7 @@ Hidden Markov Models (HMMs), Bayesian networks, et.c to more recent "deep learni
 
 Sequence models come in many different varieties of problems as seen below:
 
-![Sequence models](../../../media/seq_models.png)
+![Sequence models](/media/seq_models.png)
 
 
 Image source: Kaparthy's article on RNNs [here](http://karpathy.github.io/2015/05/21/rnn-effectiveness/).
@@ -84,7 +84,7 @@ Image source: Kaparthy's article on RNNs [here](http://karpathy.github.io/2015/0
 In the original Transformer, the task being trained is that of machine translation, i.e., taking one sentence in one 
 language and learning to translate it into another language. This is a "many-to-many" sequence problem.
 
-![Machine translation](../../../media/machine_translation.png)
+![Machine translation](/media/machine_translation.png)
 
 
 Image source: DeepAi.org [here](https://deepai.org/machine-learning-glossary-and-terms/neural-machine-translation)
@@ -101,7 +101,7 @@ states such that it can derive contextual relationships between a given word and
 
 These RNN cells form the basis of an "encoder-decoder" architecture.
 
-![Encoder decoder](../../../media/encoder-decoder.png)
+![Encoder decoder](/media/encoder-decoder.png)
 
  
 Image source: Figure 9.7.1. in this illustrated guide [here](https://d2l.ai/chapter_recurrent-modern/seq2seq.html).
@@ -160,7 +160,7 @@ Unlike the RNN, the Transformer does not process words in a sequence along the t
 a la a feed forward network. In order to encode the relative position of tokens in a sequence, the model employs a positional 
 encoding via a series of `sin(pos,wave_number)` and `cos(pos,wave_number)` functions where position is along the sequence length.
 
-![Positional encodings over sequence length](../../../media/transformer_positional_encoding.png)
+![Positional encodings over sequence length](/media/transformer_positional_encoding.png)
 
 In this plot you can see the different wave functions along the sequence length.
 
@@ -182,7 +182,7 @@ sequences. Multiple attention layers (called attention heads) are calculated sim
 in both the encoder and decoders. This architecture is thought to give enough degrees of freedom to capture the relationships
 between words.
 
-![Scaled dot-product attention](../../../media/transformer_scaled_dot_product_attention.png)
+![Scaled dot-product attention](/media/transformer_scaled_dot_product_attention.png)
 
 There are 2 forms of attention leveraged in this model: "self-attention" and "encoder-decoder" attention.
 Self-attention is used within the encoder and decoder separately to identify which tokens to "pay attention to" 
@@ -195,7 +195,7 @@ index.
 There attention patterns that end up being derived (look at the notebook to see our own) are interesting, giving context
 into the mappings that Transformers end up learning.
 
-![Attention patterns](../../../media/attention_patterns.png)
+![Attention patterns](/media/attention_patterns.png)
 
 Image source: "A Primer in BERTology: What We Know About How BERT Works", Rogers et al., 
 link [here](https://arxiv.org/pdf/2002.12327.pdf).
@@ -212,7 +212,7 @@ For a treatment on why label smoothing helps, check out this [paper](https://arx
 
 The paper uses the Noam Scheduler to adjust the learning rate on top of the Adam optimizer.
 
-![Learning rate as a function of step](../../../media/transformer_noam_optimizer.png)
+![Learning rate as a function of step](/media/transformer_noam_optimizer.png)
 
 The scheduler does the following:
 1. During the warm-up period, the LR increases linearly.

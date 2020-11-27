@@ -5,7 +5,7 @@ This is the implementation of OpenAI's style of Transformer, the "Generative Pre
 2) <ins>GPT-2</ins>: Radford et al. ["Language Models are Unsupervised Multitask Learners"](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf) (2019).
 3) <ins>GPT-3</ins>: Brown et al. ["Language Models are Few-Shot Learners"](https://arxiv.org/pdf/2005.14165.pdf) (2020).
 
-![Depiction of GPT architecture](../../../media/gpt_decoder_transformer.png)
+![Depiction of GPT architecture](/media/gpt_decoder_transformer.png)
 
 Image source: Radford et al. (2018)
 
@@ -28,8 +28,8 @@ Check out the Jupyter notebook [here](gpt.ipynb) to run the code.
 
 ## Code
 
-You can find the implementation [here](../../models/gpt.py) with detailed comments. 
-This model is nearly identical to the original Transformer [here](../../models/gpt.py), 
+You can find the implementation [here](nlpmodels/models/gpt.py) with detailed comments. 
+This model is nearly identical to the original Transformer [here](nlpmodels/models/gpt.py), 
 except that it is only a decoder.
 
 ## Usage
@@ -114,7 +114,7 @@ that transfers with little adaptation to a wider range of tasks, and therefore i
 
 The first step is to train the LM to a very large corpus of text. 
 
-![Un-supervised learning loss function](../../../media/gpt_unsup.png)
+![Un-supervised learning loss function](/media/gpt_unsup.png)
 
 Image source: Radford et al. (2018)
 
@@ -127,7 +127,7 @@ After pre-training the LM, the next step is to apply it to be tuned to a specifi
 associated labels. The loss is the usual loss function; however, they also introduce a tunable amount of further
 un-supervised learning as well.
 
-![Fine-tuning loss function](../../../media/gpt_sup.png)
+![Fine-tuning loss function](/media/gpt_sup.png)
 
 Image source: Radford et al. (2018)
 
@@ -136,7 +136,7 @@ Image source: Radford et al. (2018)
 As elaborated on in their first paper, they found that the GPT model was able to successfully be fine-tuned
 in a number of auxiliary tasks.
 
-![Fine-tuning transfer learnin](../../../media/gpt_fine_tuning.png)
+![Fine-tuning transfer learnin](/media/gpt_fine_tuning.png)
 
 Image source: Radford et al. (2018)
 
