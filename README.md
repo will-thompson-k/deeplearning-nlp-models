@@ -12,8 +12,8 @@ A small, interpretable codebase containing the re-implementation of a few "deep"
 
 BERT: Reading. Comprehending. 
 
-This is a compact review for those interested in getting into the weeds of modern DL-NLP model architectures.
-Other repos I found too sprawling to follow. This project sprung out of my own self-study. 
+This is a compact primer for those interested in starting to get into the weeds of deep NLP model architectures.
+Some other repos I found a bit too sprawling to follow.
 ( <ins>Note</ins>: These models are toy versions of each model. They are not adequately trained to be used in production. 
 )
 
