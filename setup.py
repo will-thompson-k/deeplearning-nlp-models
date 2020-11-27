@@ -10,6 +10,6 @@ setup(
     author='Will Thompson',
     author_email='',
     description='A repository containing the re-implementation of a handful of "deep" NLP models in PyTorch',
-    test_suite="nlpmodels.tests",
+    test_suite="tests",
     tests_require=['pytest'],
 )

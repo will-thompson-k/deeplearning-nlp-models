@@ -90,7 +90,7 @@ Here is a breakdown of the repository:
 - [ ] `nlpmodels/models`: The model code for each paper.
 - [ ] `nlpmodels/utils`: Contains all the auxiliary classes related to building a model, 
 including datasets, vocabulary, tokenizers, samplers and trainer classes.
-- [ ] `nlpmodels/tests`: Light (and by no means comprehensive) coverage.
+- [ ] `tests`: Light (and by no means comprehensive) coverage.
 - [ ] `nlpmodels/notebooks`: Contains the notebooks and write-ups for each model implementation.
 - [ ] `run_tests.sh`: If you want to run the tests yourself (you can also use `setup.py test`).
 - [ ] `run_pylint.sh`: If you really like linting code.

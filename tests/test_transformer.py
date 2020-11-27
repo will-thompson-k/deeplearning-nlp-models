@@ -7,7 +7,7 @@ from nlpmodels.utils import utils
 from nlpmodels.utils.transformer_batch import TransformerBatch
 from nlpmodels.utils.transformer_dataset import TransformerDataset
 from nlpmodels.utils.vocabulary import NLPVocabulary
-from nlpmodels.tests.test_data import transformer_regression_test_data
+from tests.test_data import transformer_regression_test_data
 
 utils.set_seed_everywhere()
 

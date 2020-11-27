@@ -5,7 +5,7 @@ import torch
 
 from nlpmodels.models import word2vec
 from nlpmodels.utils import utils
-from nlpmodels.tests.test_data import word2vec_regression_test_data
+from tests.test_data import word2vec_regression_test_data
 utils.set_seed_everywhere()
 
 

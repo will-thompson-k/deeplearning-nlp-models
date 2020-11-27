@@ -4,8 +4,7 @@ import torch
 import numpy as np
 from nlpmodels.models import text_cnn
 from nlpmodels.utils import utils
-from nlpmodels.utils.vocabulary import NLPVocabulary
-from nlpmodels.tests.test_data import cnn_regression_test_data
+from tests.test_data import cnn_regression_test_data
 
 utils.set_seed_everywhere()
 
