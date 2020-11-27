@@ -27,7 +27,7 @@ class TextCNNDataset(AbstractNLPDataset):
             vocab (NLPVocabulary): vocabulary.
         """
 
-        self.data = data
+        self._data = data
         self._vocab = vocab
 
     def __len__(self) -> int:
@@ -36,7 +36,7 @@ class TextCNNDataset(AbstractNLPDataset):
             size of dataset.
         """
 
-        return len(self.data)
+        return len(self._data)
 
     def __getitem__(self, idx: int) -> Tuple[torch.LongTensor, torch.LongTensor]:
         """
@@ -45,7 +45,7 @@ class TextCNNDataset(AbstractNLPDataset):
         Returns:
             Tuple of tensors (target, text) for that index.
         """
-        target, text = self.data[idx]
+        target, text = self._data[idx]
 
         return torch.LongTensor([target]), torch.LongTensor(text)
 

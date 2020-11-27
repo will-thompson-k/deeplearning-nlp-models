@@ -20,11 +20,59 @@ class TransformerBatch:
             tgt (torch.Tensor): The target input of (batch_size,max_seq_length).
             pad (int): pad index to identify the padding in each sequence.
         """
-        self.src = src  # normal source
-        self.src_mask = (src != pad).unsqueeze(1)  # 3D tensor necessary for attention
-        self.tgt = tgt[:, :-1]  # prev value of y
-        self.tgt_y = tgt[:, 1:]  # target (y)
-        self.tgt_mask = self.make_std_mask(self.tgt, pad)  # make padding conditional on point in sequence
+        self._src = src  # normal source
+        self._src_mask = (src != pad).unsqueeze(1)  # 3D tensor necessary for attention
+        self._tgt = tgt[:, :-1]  # prev value of y
+        self._tgt_y = tgt[:, 1:]  # target (y)
+        self._tgt_mask = self.make_std_mask(self.tgt, pad)  # make padding conditional on point in sequence
+
+    @property
+    def src(self) -> torch.Tensor:
+        """
+        Returns:
+            src (torch.Tensor): The source input of (batch_size,max_seq_length).
+        """
+
+        return self._src
+
+    @property
+    def src_mask(self) -> torch.Tensor:
+        """
+
+        Returns:
+             output matrix of size (batch_size,1,max_seq_length)
+            size with masked values for target sequence [True,False].
+        """
+
+        return self._src_mask
+
+    @property
+    def tgt(self) -> torch.Tensor:
+        """
+        Returns:
+            tgt (torch.Tensor): The target input shifted -1 of (batch_size,max_seq_length).
+        """
+
+        return self._tgt
+
+    @property
+    def tgt_y(self) -> torch.Tensor:
+        """
+        Returns:
+            tgt (torch.Tensor): The target input shifted +1 of (batch_size,max_seq_length).
+        """
+
+        return self._tgt
+
+    @property
+    def tgt_mask(self) -> torch.Tensor:
+        """
+        Returns:
+            output matrix of size (batch_size,max_seq_length,max_seq_length)
+            size with masked values for target sequence [True,False].
+        """
+
+        return self._tgt_mask
 
     @classmethod
     def make_std_mask(cls, tgt: torch.Tensor, pad: int) -> torch.Tensor:
@@ -36,7 +84,8 @@ class TransformerBatch:
             pad (int): pad index to identify the padding in each sequence.
 
         Returns:
-            output matrix of size (batch_size,max_seq_length,max_seq_length) size with masked values for target sequence [True,False]
+            output matrix of size (batch_size,max_seq_length,max_seq_length)
+            size with masked values for target sequence [True,False].
         """
         tgt_mask = (tgt != pad).unsqueeze(1)  # 3D tensor necessary for attention, add in the middle.
         seq_size = tgt.size(1)

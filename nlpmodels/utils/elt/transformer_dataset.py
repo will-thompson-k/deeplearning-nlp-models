@@ -21,23 +21,21 @@ class TransformerDataset(AbstractNLPDataset):
 
     def __init__(self, data: List, target_vocab: NLPVocabulary):
         """
-
         Args:
             data (List): List of source, target tuples to be used in training/eval.
             target_vocab (NLPVocabulary): Target vocabulary.
         """
 
-        self.data = data
+        self._data = data
         self._target_vocab = target_vocab
 
     def __len__(self) -> int:
         """
-
         Returns:
             size of dataset.
         """
 
-        return len(self.data)
+        return len(self._data)
 
     def __getitem__(self, idx: int) -> Tuple[torch.LongTensor, torch.LongTensor]:
         """
@@ -48,7 +46,7 @@ class TransformerDataset(AbstractNLPDataset):
         Returns:
             Tuple of tensors (source,target) for that index.
         """
-        source_integers, target_integers = self.data[idx]
+        source_integers, target_integers = self._data[idx]
 
         return torch.LongTensor(source_integers), torch.LongTensor(target_integers)
 

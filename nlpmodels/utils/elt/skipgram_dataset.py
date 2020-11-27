@@ -9,7 +9,6 @@ from torch.utils.data import DataLoader
 
 from nlpmodels.utils.elt.dataset import AbstractNLPDataset
 from nlpmodels.utils.tokenizer import tokenize_corpus_basic
-from nlpmodels.utils.utils import set_seed_everywhere
 from nlpmodels.utils.vocabulary import NLPVocabulary
 
 
@@ -19,31 +18,42 @@ class SkipGramDataset(AbstractNLPDataset):
     """
 
     def __init__(self, data: List):
-
-        self.data = data
+        """
+        Args:
+            data (List): List of (input_word_token, context_word_token) tuples.
+        """
+        self._data = data
 
     def __len__(self) -> int:
-
-        return len(self.data)
+        """
+        Returns:
+            size of dataset.
+        """
+        return len(self._data)
 
     def __getitem__(self, idx: int) -> Tuple[int, int]:
-
-        input_word_token, context_word_token = self.data[idx]
+        """
+        Args:
+        idx (int): index of dataset slice to grab.
+        Returns:
+        Tuple of tensors (target, text) for that index.
+        """
+        input_word_token, context_word_token = self._data[idx]
         return input_word_token, context_word_token
 
     @staticmethod
     def get_skipgram_context(sentence_tokens: List, context_size: int, word_probas: np.array, train=True) -> List:
         """
-                Class method to take list of tokenized text and convert into sub-sampled (input,context) pairs.
-                Note that sub-sampling only happens on the training dataset (see Mikolov et al. for details).
+        Class method to take list of tokenized text and convert into sub-sampled (input,context) pairs.
+        Note that sub-sampling only happens on the training dataset (see Mikolov et al. for details).
 
-                    Args:
-                        train_text (list): list of tokenized data to be used to derive (input,context) pairs.
-                        dictionary (NLPVocabulary): a dictionary built off of the training data to map tokens <-> idxs.
-                        context_size (int): the window around each input word to derive context pairings.
-                        train (bool): a "train" flag to indicate we want to sub-sample the training set.
-                    Returns:
-                        list of (input_idx, context_idx) pairs to be used for negative sampling loss problem.
+            Args:
+                sentence_tokens (list): list of tokenized data to be used to derive (input,context) pairs.
+                context_size (int): the window around each input word to derive context pairings.
+                word_probas (np.array): array of word probabilities found in corpus.
+                train (bool): a "train" flag to indicate we want to sub-sample the training set.
+            Returns:
+                list of (input_idx, context_idx) pairs to be used for negative sampling loss problem.
         """
         data_partitions = []
         sentence_len = len(sentence_tokens)
@@ -108,12 +118,10 @@ class SkipGramDataset(AbstractNLPDataset):
         This method grabs the raw text, tokenizes and cleans up the data, generates a dictionary,
         and generates a sub-sampled (input,context) pair for training.
 
-            Args:
-                context_size (int): size of the window to derive context words
-                thresh (float): a hyper-parameter to be used in frequent word sampling
-            Returns:
-                (NLPDataset,NLPVocabulary) tuple to be used downstream in training.
+        Returns:
+            (NLPDataset,NLPVocabulary) tuple to be used downstream in training.
         """
+
         context_size, thresh = args
         # Using the Ag News data via Hugging Faces
         train_text = load_dataset("ag_news")['train']['text']
@@ -131,11 +139,3 @@ class SkipGramDataset(AbstractNLPDataset):
     @classmethod
     def get_testing_dataloader(cls, *args):
         pass
-
-
-if __name__ == '__main__':
-    window = 5
-    t = 10.e-20  # from original paper: 10.e-5
-    set_seed_everywhere()
-    train_data, train_dict = SkipGramDataset.get_training_data(window, t)
-    print(f"train_size = {len(train_data)},dict_size={len(train_dict)}")

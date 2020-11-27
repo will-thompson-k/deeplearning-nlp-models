@@ -24,10 +24,38 @@ class GPTBatch:
             tgt (torch.Tensor): The target input of (batch_size,block_size).
             pad (int): pad index to identify the padding in each sequence.
         """
-        self.src = src  # normal source
-        self.tgt = tgt # target sequence, shifted 1, will only be used in loss function
+        self._src = src  # normal source
+        self._tgt = tgt # target sequence, shifted 1, will only be used in loss function
         # make padding conditional on point in sequence
-        self.src_mask = self.make_std_mask(self.src, pad)
+        self._src_mask = self.make_std_mask(self._src, pad)
+
+    @property
+    def src(self) -> torch.Tensor:
+        """
+        Returns:
+            src (torch.Tensor): The source input of (batch_size,block_size).
+        """
+
+        return self._src
+
+    @property
+    def tgt(self) -> torch.Tensor:
+        """
+        Returns:
+            tgt (torch.Tensor): The target input of (batch_size,block_size).
+        """
+
+        return self._tgt
+
+    @property
+    def src_mask(self) -> torch.Tensor:
+        """
+        Returns:
+            output matrix of size (batch_size,max_seq_length,max_seq_length)
+            size with masked values for target sequence [True,False]
+        """
+
+        return self._src_mask
 
     @classmethod
     def make_std_mask(cls, tgt: torch.Tensor, pad: int) -> torch.Tensor:

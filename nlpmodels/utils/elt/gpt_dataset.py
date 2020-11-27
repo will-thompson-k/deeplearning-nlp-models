@@ -27,9 +27,18 @@ class GPTDataset(AbstractNLPDataset):
             block_size (int): Size of context window.
         """
 
-        self.data = data
+        self._data = data
         self._vocab = vocab
         self._block_size = block_size
+
+    @property
+    def data(self) -> torch.Tensor:
+        """
+        Returns:
+            data (torch.Tensor): 1D tensor of integers to sample batches from.
+        """
+
+        return self._data
 
     def __len__(self) -> int:
         """

@@ -56,6 +56,15 @@ class DecoderBlock(nn.Module):
         # (6) add + norm layer
         self._add_norm_layer_3 = AddAndNormWithDropoutLayer(size, dropout)
 
+    @property
+    def size(self) -> int:
+        """
+        Returns:
+            size (int): This hyper-parameter is used for the BatchNorm layers.
+        """
+
+        return self._size
+
     def forward(self, values: torch.Tensor, memory: torch.Tensor, src_mask: torch.Tensor,
                 tgt_mask: torch.Tensor) -> torch.Tensor:
         """
@@ -92,7 +101,7 @@ class CompositeDecoder(nn.Module):
         """
         super(CompositeDecoder, self).__init__()
         self._layers = nn.ModuleList([deepcopy(layer)] * num_layers)
-        self._add_norm = nn.BatchNorm1d(layer._size, momentum=None, affine=False)
+        self._add_norm = nn.BatchNorm1d(layer.size, momentum=None, affine=False)
 
     def forward(self, values: torch.Tensor, memory: torch.Tensor, src_mask: torch.Tensor,
                 tgt_mask: torch.Tensor) -> torch.Tensor:
