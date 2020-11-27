@@ -1,3 +1,3 @@
 # pylint: disable=C0111
 
-__all__ = ["models", "tests", "utils"]
+__all__ = ["models", "utils"]

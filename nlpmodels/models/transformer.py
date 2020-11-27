@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 
 from nlpmodels.models.transformer_blocks import sublayers, attention, decoder, encoder
-from nlpmodels.utils.transformer_batch import TransformerBatch
+from nlpmodels.utils.elt.transformer_batch import TransformerBatch
 
 
 class Transformer(nn.Module):

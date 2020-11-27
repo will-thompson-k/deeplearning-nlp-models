@@ -8,17 +8,16 @@ Including:
 """
 
 from argparse import Namespace
-from typing import Tuple
+from typing import Tuple, List
 
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-import numpy as np
 
-from nlpmodels.utils import optims, label_smoother, transformer_batch, gpt_batch, vocabulary
+from nlpmodels.utils import optims, label_smoother, vocabulary
+from nlpmodels.utils.elt import transformer_batch, gpt_batch
 
 
 class Word2VecTrainer:
@@ -26,18 +25,35 @@ class Word2VecTrainer:
     Trainer class for the word2vec model.
     '''
 
-    def __init__(self, args: Namespace, model: nn.Module, train_data: DataLoader):
+    def __init__(self, args: Namespace,
+                 model: nn.Module,
+                 train_data: DataLoader,
+                 debug: bool = False):
         """
-         Args:
-             args (Namespace): a class containing all the parameters associated with run
-             model (nn.Module): a PyTorch model
-             train_data (DataLoader): a data loader that provides batches for running
-         """
+        Args:
+            args (Namespace): a class containing all the parameters associated with run
+            model (nn.Module): a PyTorch model
+            train_data (DataLoader): a data loader that provides batches for running
+            debug (bool): True/false flag for debugging
+        """
         self._args = args
         self._model = model
         self._train_data = train_data
-
         self._optimizer = optim.Adam(self._model.parameters(), lr=self._args.learning_rate)
+        self._loss_cache = []
+        # for debugging
+        self._debug = debug
+        self._iter = 0
+        self._max_iter = 10
+
+    @property
+    def loss_cache(self) -> List:
+        """
+        Returns:
+            list of cached losses.
+        """
+
+        return self._loss_cache
 
     def run(self):
         """
@@ -49,6 +65,8 @@ class Word2VecTrainer:
 
             pbar = tqdm(self._train_data)
             pbar.set_description("[Epoch {}]".format(epoch))
+
+            self._iter = 0
 
             # iterate over batches
             for data in pbar:
@@ -68,6 +86,14 @@ class Word2VecTrainer:
                 # status bar
                 pbar.set_postfix(loss=loss.item())
 
+                # debug
+                if self._debug:
+                    self._iter += 1
+                    if self._iter >= self._max_iter:
+                        break
+            # cache the last loss in an epoch
+            self._loss_cache.append(loss)
+
         print("Finished Training...")
 
 
@@ -77,26 +103,43 @@ class TransformerTrainer:
 
     Using NoamOptimizer + LabelSmoothing.
     '''
-    def __init__(self, args: Namespace, vocab_target_size: int, pad_index: int, model: nn.Module,
-                 train_data: DataLoader):
+    def __init__(self, args: Namespace,
+                 vocab_target_size: int,
+                 pad_index: int,
+                 model: nn.Module,
+                 train_data: DataLoader,
+                 debug: bool = False):
         """
         Args:
-             args (Namespace): a class containing all the parameters associated with run
-             vocab_target_size (int): size of target dictionary
-             pad_index (int): index of pad token.
-             model (nn.Module): a PyTorch model
-             train_data (DataLoader): a data loader that provides batches for running
+            args (Namespace): a class containing all the parameters associated with run
+            vocab_target_size (int): size of target dictionary
+            pad_index (int): index of pad token.
+            model (nn.Module): a PyTorch model
+            train_data (DataLoader): a data loader that provides batches for running
+            debug (bool): True/false flag for debugging
          """
         self._args = args
         self._model = model
         self._train_data = train_data
-
         self._loss_function = label_smoother.LabelSmoothingLossFunction(vocab_size=vocab_target_size,
                                                                         padding_idx=pad_index,
                                                                         smoothing=args.label_smoothing)
-
         # Noam optimizer per the paper (varies LR of Adam optimizer as a function of step)
         self._optimizer = optims.NoamOptimizer.get_transformer_noam_optimizer(args, model)
+        self._loss_cache = []
+        # for debugging
+        self._debug = debug
+        self._iter = 0
+        self._max_iter = 10
+
+    @property
+    def loss_cache(self) -> List:
+        """
+        Returns:
+            list of cached losses.
+        """
+
+        return self._loss_cache
 
     def run(self):
         """
@@ -108,6 +151,8 @@ class TransformerTrainer:
 
             pbar = tqdm(self._train_data)
             pbar.set_description("[Epoch {}]".format(epoch))
+
+            self._iter = 0
 
             # iterate over batches
             for data in pbar:
@@ -137,6 +182,14 @@ class TransformerTrainer:
                 # status bar
                 pbar.set_postfix(loss=loss.item())
 
+                # debug
+                if self._debug:
+                    self._iter += 1
+                    if self._iter >= self._max_iter:
+                        break
+
+            self._loss_cache.append(loss)
+
         print("Finished Training...")
 
     @staticmethod
@@ -163,26 +216,43 @@ class GPTTrainer:
     Instead of Cosine Decay scheduler, will reuse the Noam Optimizer.
     Also using the usual cross entropy loss.
     '''
-    def __init__(self, args: Namespace, pad_index: int, model: nn.Module,
-                 train_data: DataLoader, vocab: vocabulary.NLPVocabulary):
+    def __init__(self, args: Namespace,
+                 pad_index: int,
+                 model: nn.Module,
+                 train_data: DataLoader,
+                 vocab: vocabulary.NLPVocabulary,
+                 debug: bool = False):
         """
         Args:
-             args (Namespace): a class containing all the parameters associated with run
-             pad_index (int): index of pad token.
-             model (nn.Module): a PyTorch model
-             train_data (DataLoader): a data loader that provides batches for running
-             vocab (NLPVocabulary): vocab of model
+            args (Namespace): a class containing all the parameters associated with run
+            pad_index (int): index of pad token.
+            model (nn.Module): a PyTorch model
+            train_data (DataLoader): a data loader that provides batches for running
+            vocab (NLPVocabulary): vocab of model
+            debug (bool): True/false flag for debugging
          """
         self._args = args
         self._model = model
         self._train_data = train_data
         self._vocab = vocab
-
         # Usual cross entropy loss function
         self._loss_function = nn.CrossEntropyLoss(ignore_index=pad_index)
-
         # Note: I am using the original transformer's optimizer rather than the cosine decay function
         self._optimizer = optims.NoamOptimizer.get_transformer_noam_optimizer(args, model)
+        self._loss_cache = []
+        # for debugging
+        self._debug = debug
+        self._iter = 0
+        self._max_iter = 10
+
+    @property
+    def loss_cache(self) -> List:
+        """
+        Returns:
+            list of cached losses.
+        """
+
+        return self._loss_cache
 
     def run(self):
         """
@@ -194,6 +264,8 @@ class GPTTrainer:
 
             pbar = tqdm(self._train_data)
             pbar.set_description("[Epoch {}]".format(epoch))
+
+            self._iter = 0
 
             # iterate over batches
             for data in pbar:
@@ -221,6 +293,14 @@ class GPTTrainer:
                 # status bar
                 pbar.set_postfix(loss=loss.item())
 
+                # debug
+                if self._debug:
+                    self._iter += 1
+                    if self._iter >= self._max_iter:
+                        break
+
+            self._loss_cache.append(loss)
+
         print("Finished Training...")
 
     def _reformat_data(self, data: Tuple) -> gpt_batch.GPTBatch:
@@ -245,26 +325,43 @@ class TextCNNTrainer:
 
     Will use Adam optimizer without a learning rate scheduler.
     '''
-    def __init__(self, args: Namespace, pad_index: int, model: nn.Module,
-                 train_data: DataLoader, vocab: vocabulary.NLPVocabulary):
+    def __init__(self, args: Namespace,
+                 pad_index: int,
+                 model: nn.Module,
+                 train_data: DataLoader,
+                 vocab: vocabulary.NLPVocabulary,
+                 debug: bool = False):
         """
         Args:
-             args (Namespace): a class containing all the parameters associated with run
-             pad_index (int): index of pad token.
-             model (nn.Module): a PyTorch model
-             train_data (DataLoader): a data loader that provides batches for running
-             vocab (NLPVocabulary): vocab of model
+            args (Namespace): a class containing all the parameters associated with run
+            pad_index (int): index of pad token.
+            model (nn.Module): a PyTorch model
+            train_data (DataLoader): a data loader that provides batches for running
+            vocab (NLPVocabulary): vocab of model
+            debug (bool): True/false flag for debugging
          """
         self._args = args
         self._model = model
         self._train_data = train_data
         self._vocab = vocab
-
         # Usual cross entropy loss function
         self._loss_function = nn.CrossEntropyLoss(ignore_index=pad_index, size_average=False)
-
         # Note: I am just using Adam, no LR scheduler.
         self._optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
+        self._loss_cache = []
+        # for debugging
+        self._debug = debug
+        self._iter = 0
+        self._max_iter = 10
+
+    @property
+    def loss_cache(self) -> List:
+        """
+        Returns:
+            list of cached losses.
+        """
+
+        return self._loss_cache
 
     def run(self):
         """
@@ -278,6 +375,8 @@ class TextCNNTrainer:
             pbar.set_description("[Epoch {}]".format(epoch))
 
             correct = 0.0
+
+            self._iter = 0
 
             # iterate over batches
             for data in pbar:
@@ -306,6 +405,14 @@ class TextCNNTrainer:
 
                 # status bar
                 pbar.set_postfix(loss=loss.item(), accuracy=100.0 * int(correct)/len(self._train_data.dataset))
+
+                # debug
+                if self._debug:
+                    self._iter += 1
+                    if self._iter >= self._max_iter:
+                        break
+
+            self._loss_cache.append(loss)
 
         print("Finished Training...")
 

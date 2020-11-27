@@ -4,7 +4,7 @@ This module contains the composite GPT model.
 import torch
 import torch.nn as nn
 from nlpmodels.models.transformer_blocks import sublayers, attention, gpt_decoder
-from nlpmodels.utils.gpt_batch import GPTBatch
+from nlpmodels.utils.elt.gpt_batch import GPTBatch
 
 
 class GPT(nn.Module):

@@ -12,8 +12,8 @@ A small, interpretable codebase containing the re-implementation of a few "deep"
 
 BERT: Reading. Comprehending. 
 
-This is a compact review for those interested in getting into the weeds of modern DL-NLP model architectures.
-Other repos I found too sprawling to follow. This project sprung out of my own self-study. 
+This is a compact primer for those interested in starting to get into the weeds of deep NLP model architectures.
+Some other repos I found a bit too sprawling to follow.
 ( <ins>Note</ins>: These models are toy versions of each model. They are not adequately trained to be used in production. 
 )
 
@@ -37,12 +37,12 @@ These NLP models are presented chronologically and, as you might expect, build o
 |    Model Class               |           Model               |   Year                        | 
 | :-------------------- | :--------------------  | :--------------------  | 
 |  <ins>Embeddings</ins>|             |              | 
-|  1. |  [Word2Vec Embeddings (Self-Supervised Learning)](nlpmodels/notebooks/word2vec/README.md)   |       2014       | 
+|  1. |  [Word2Vec Embeddings (Self-Supervised Learning)](notebooks/word2vec/README.md)   |       2013       | 
 |  <ins>CNNs</ins>|             |              | 
-|  2. |  [CNN-based Text Classification (Binary Classification)](nlpmodels/notebooks/cnn/README.md)   |    2014          | 
+|  2. |  [CNN-based Text Classification (Binary Classification)](notebooks/cnn/README.md)   |    2014          | 
 |  <ins>Transformers</ins> |                |              | 
-|  3. |  [The O.G. Transformer (Machine Translation)](nlpmodels/notebooks/transformer/README.md)  |      2017        | 
-|  4. |  [OpenAI's GPT Model (Language Model)](nlpmodels/notebooks/gpt/README.md)  |   2018, 2019, 2020           | 
+|  3. |  [The O.G. Transformer (Machine Translation)](notebooks/transformer/README.md)  |      2017        | 
+|  4. |  [OpenAI's GPT Model (Language Model)](notebooks/gpt/README.md)  |   2018, 2019, 2020           | 
 
 ## Features
 
@@ -90,9 +90,10 @@ Here is a breakdown of the repository:
 - [ ] `nlpmodels/models`: The model code for each paper.
 - [ ] `nlpmodels/utils`: Contains all the auxiliary classes related to building a model, 
 including datasets, vocabulary, tokenizers, samplers and trainer classes.
-- [ ] `nlpmodels/tests`: Light (and by no means comprehensive) coverage.
-- [ ] `nlpmodels/notebooks`: Contains the notebooks and write-ups for each model implementation.
+- [ ] `tests`: Light (and by no means comprehensive) coverage.
+- [ ] `notebooks`: Contains the notebooks and write-ups for each model implementation.
 - [ ] `run_tests.sh`: If you want to run the tests yourself (you can also use `setup.py test`).
+*Warning*: Some of the regression tests cause the whole suite to take a few mins to run.
 - [ ] `run_pylint.sh`: If you really like linting code.
 
 ## Requirements
