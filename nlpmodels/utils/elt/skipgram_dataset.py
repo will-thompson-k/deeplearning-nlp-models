@@ -7,7 +7,7 @@ import numpy as np
 from datasets import load_dataset  # hugging_faces
 from torch.utils.data import DataLoader
 
-from nlpmodels.utils.dataset import AbstractNLPDataset
+from nlpmodels.utils.elt.dataset import AbstractNLPDataset
 from nlpmodels.utils.tokenizer import tokenize_corpus_basic
 from nlpmodels.utils.utils import set_seed_everywhere
 from nlpmodels.utils.vocabulary import NLPVocabulary

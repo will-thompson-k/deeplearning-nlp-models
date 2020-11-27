@@ -1,6 +1,6 @@
 import unittest
 
-from nlpmodels.utils import dataset
+from nlpmodels.utils.elt import dataset
 
 
 class TestAbstractDataset(unittest.TestCase):

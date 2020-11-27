@@ -5,7 +5,7 @@ This module contains a sampler for sampling a model output. Useful for language 
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
-from nlpmodels.utils.gpt_batch import GPTBatch
+from nlpmodels.utils.elt.gpt_batch import GPTBatch
 
 
 # Make sure we don't update the gradient.

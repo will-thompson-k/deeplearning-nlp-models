@@ -2,7 +2,7 @@ from argparse import Namespace
 
 import torch
 
-from nlpmodels.utils.gpt_dataset import GPTDataset
+from nlpmodels.utils.elt.gpt_dataset import GPTDataset
 
 
 def test_training_dataloader_batchsize():

@@ -37,7 +37,7 @@ These NLP models are presented chronologically and, as you might expect, build o
 |    Model Class               |           Model               |   Year                        | 
 | :-------------------- | :--------------------  | :--------------------  | 
 |  <ins>Embeddings</ins>|             |              | 
-|  1. |  [Word2Vec Embeddings (Self-Supervised Learning)](notebooks/word2vec/README.md)   |       2014       | 
+|  1. |  [Word2Vec Embeddings (Self-Supervised Learning)](notebooks/word2vec/README.md)   |       2013       | 
 |  <ins>CNNs</ins>|             |              | 
 |  2. |  [CNN-based Text Classification (Binary Classification)](notebooks/cnn/README.md)   |    2014          | 
 |  <ins>Transformers</ins> |                |              | 

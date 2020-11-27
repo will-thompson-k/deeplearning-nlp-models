@@ -7,7 +7,7 @@ import torch
 from torch.utils.data import DataLoader
 from torchtext.experimental.datasets import Multi30k
 
-from nlpmodels.utils.dataset import AbstractNLPDataset
+from nlpmodels.utils.elt.dataset import AbstractNLPDataset
 from nlpmodels.utils.tokenizer import tokenize_corpus_basic
 from nlpmodels.utils.vocabulary import NLPVocabulary
 

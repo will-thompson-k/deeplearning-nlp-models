@@ -29,7 +29,7 @@ Check out the Jupyter notebook [here](word2vec.ipynb) to run the code.
 ## Code
 
 You can find the implementation [here](nlpmodels/models/word2vec.py) with comments. You may also be interested
-in looking at how the input and context vectors are generated [here](../../nlpmodels/utils/skipgram_dataset.py).
+in looking at how the input and context vectors are generated [here](../../nlpmodels/utils/elt/skipgram_dataset.py).
 
 ## Usage
 

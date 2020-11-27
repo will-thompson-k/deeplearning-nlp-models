@@ -4,7 +4,7 @@ import torch
 import numpy as np
 from nlpmodels.models import gpt
 from nlpmodels.utils import utils
-from nlpmodels.utils.gpt_batch import GPTBatch
+from nlpmodels.utils.elt.gpt_batch import GPTBatch
 from nlpmodels.utils.vocabulary import NLPVocabulary
 from tests.test_data import gpt_regression_test_data
 

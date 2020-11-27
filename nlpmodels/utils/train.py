@@ -13,12 +13,11 @@ from typing import Tuple
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-import numpy as np
 
-from nlpmodels.utils import optims, label_smoother, transformer_batch, gpt_batch, vocabulary
+from nlpmodels.utils import optims, label_smoother, vocabulary
+from nlpmodels.utils.elt import transformer_batch, gpt_batch
 
 
 class Word2VecTrainer:

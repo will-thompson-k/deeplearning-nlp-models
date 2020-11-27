@@ -1,7 +1,7 @@
 import torch
 
-from nlpmodels.utils.transformer_batch import TransformerBatch
-from nlpmodels.utils.transformer_dataset import TransformerDataset
+from nlpmodels.utils.elt.transformer_batch import TransformerBatch
+from nlpmodels.utils.elt.transformer_dataset import TransformerDataset
 from nlpmodels.utils.vocabulary import NLPVocabulary
 
 

@@ -4,8 +4,8 @@ import torch
 import numpy as np
 from nlpmodels.models import transformer
 from nlpmodels.utils import utils
-from nlpmodels.utils.transformer_batch import TransformerBatch
-from nlpmodels.utils.transformer_dataset import TransformerDataset
+from nlpmodels.utils.elt.transformer_batch import TransformerBatch
+from nlpmodels.utils.elt.transformer_dataset import TransformerDataset
 from nlpmodels.utils.vocabulary import NLPVocabulary
 from tests.test_data import transformer_regression_test_data
 
