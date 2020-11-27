@@ -1,5 +1,5 @@
 # deeplearning-nlp-models
-[![Coverage Status](https://coveralls.io/repos/github/will-thompson-k/deeplearning-nlp-models/badge.svg?branch=master)](https://coveralls.io/github/will-thompson-k/deeplearning-nlp-models?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/will-thompson-k/deeplearning-nlp-models/badge.png?branch=master)](https://coveralls.io/github/will-thompson-k/deeplearning-nlp-models?branch=master)
 ![Travis (.com)](https://img.shields.io/travis/com/will-thompson-k/deeplearning-nlp-models)
 ![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/will-thompson-k/deeplearning-nlp-models)
 ![GitHub](https://img.shields.io/github/license/will-thompson-k/deeplearning-nlp-models)
