@@ -93,6 +93,7 @@ including datasets, vocabulary, tokenizers, samplers and trainer classes.
 - [ ] `tests`: Light (and by no means comprehensive) coverage.
 - [ ] `notebooks`: Contains the notebooks and write-ups for each model implementation.
 - [ ] `run_tests.sh`: If you want to run the tests yourself (you can also use `setup.py test`).
+*Warning*: Some of the regression tests cause the whole suite to take a few mins to run.
 - [ ] `run_pylint.sh`: If you really like linting code.
 
 ## Requirements
