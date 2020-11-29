@@ -65,7 +65,11 @@ class TransformerDataset(AbstractNLPDataset):
         max_sequence_length = args.max_sequence_length
         train_data, vocab_source, vocab_target = cls.get_training_data(max_sequence_length)
 
-        train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True, num_workers=2)
+        train_loader = DataLoader(train_data,
+                                  batch_size=batch_size,
+                                  shuffle=True,
+                                  num_workers=2,
+                                  pin_memory=True)
 
         return train_loader, vocab_source, vocab_target
 

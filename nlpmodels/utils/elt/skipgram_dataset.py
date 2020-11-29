@@ -107,7 +107,11 @@ class SkipGramDataset(AbstractNLPDataset):
         context, thresh, batch_size = args
 
         train_data, vocab = cls.get_training_data(context, thresh)
-        train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True, num_workers=2)
+        train_loader = DataLoader(train_data,
+                                  batch_size=batch_size,
+                                  shuffle=True,
+                                  num_workers=2,
+                                  pin_memory=True)
 
         return train_loader, vocab
 
