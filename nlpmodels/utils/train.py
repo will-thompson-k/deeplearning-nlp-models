@@ -1,6 +1,7 @@
 """
 This module contains all the trainers used for the different models in this repo.
 Including:
++ AbstractTrainer
 + Word2vecTrainer
 + TransformerTrainer
 + GPTTrainer
@@ -48,11 +49,18 @@ class AbstractTrainer(ABC):
         self._iter = 0
         self._max_iter = 10
 
+        # gpus: this assumes a single gpu architecture
+        # TODO: Add in multiple "devices" capability
+        self._device = 'cpu'
+        if torch.cuda.is_available():
+            self._device = torch.cuda.current_device()
+            self._model = torch.nn.DataParallel(self._model).to(self._device)
+
     @property
     def loss_cache(self) -> List:
         """
         Returns:
-            list of cached losses.
+            list of losses cached at the end of every epoch.
         """
 
         return self._loss_cache
@@ -157,8 +165,8 @@ class Word2VecTrainer(AbstractTrainer):
                                               debug)
 
     def _reformat_data(self, data: Tuple) -> Tuple:
-
-        return data
+        # place data on the correct device
+        return data[0].to(self._device), data[1].to(self._device)
 
     def _calc_loss_function(self, y_hat: Any, data: Any):
 
@@ -213,6 +221,10 @@ class TransformerTrainer(AbstractTrainer):
         """
         # (batch,seq) shape tensors
         source_integers, target_integers = data
+
+        # place data on the correct device
+        source_integers = source_integers.to(self._device)
+        target_integers = target_integers.to(self._device)
 
         # return a batch object with src,src_mask,tgt,tgt_mask tensors
         batch_data = transformer_batch.TransformerBatch(source_integers, target_integers, pad=0)
@@ -273,10 +285,16 @@ class GPTTrainer(AbstractTrainer):
             GPTBatch object containing data for a given batch.
         """
         # (batch,seq) shape tensors
-        src, tgt = data
+        source_integers, target_integers = data
+
+        # place data on the correct device
+        source_integers = source_integers.to(self._device)
+        target_integers = target_integers.to(self._device)
 
         # return a batch object with src,src_mask,tgt,tgt_mask tensors
-        batch_data = gpt_batch.GPTBatch(src, tgt, self._vocab.mask_index)
+        batch_data = gpt_batch.GPTBatch(source_integers,
+                                        target_integers,
+                                        self._vocab.mask_index)
 
         return batch_data
 
@@ -325,7 +343,7 @@ class TextCNNTrainer(AbstractTrainer):
 
     def _reformat_data(self, data: Tuple) -> Tuple:
 
-        return data
+        return data[0].to(self._device), data[1].to(self._device)
 
     def _calc_loss_function(self, y_hat: Any, data: Any):
 
