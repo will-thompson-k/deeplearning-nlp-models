@@ -50,7 +50,8 @@ class AbstractTrainer(ABC):
         self._max_iter = 10
 
         # gpus: this assumes a single gpu architecture
-        # TODO: Add in multiple "devices" capability
+        # Future: Add in multiple "devices" capability.
+        # (This would require a different distributed loss)
         self._device = 'cpu'
         if torch.cuda.is_available():
             self._device = torch.cuda.current_device()
