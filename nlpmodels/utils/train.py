@@ -49,9 +49,9 @@ class AbstractTrainer(ABC):
         self._iter = 0
         self._max_iter = 10
 
-        # gpus: this assumes a single gpu architecture
-        # Future: Add in multiple "devices" capability.
-        # (This would require a different distributed loss)
+        # this asks DataParallel to
+        # handle the distribution across gpus
+        # potentially will swap out with DistributedDataParallel
         self._device = 'cpu'
         if torch.cuda.is_available():
             self._device = torch.cuda.current_device()
