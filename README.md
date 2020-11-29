@@ -10,7 +10,7 @@ A small, interpretable codebase containing the re-implementation of a few "deep"
 
 ![Meta](media/bert.jpg)
 
-BERT: Reading. Comprehending. 
+BERT: Reading. Comprehending. ( <ins>Note</ins>: BERT has not been implemented as of yet). 
 
 This is a compact primer for those interested in starting to get into the weeds of deep NLP model architectures.
 Some other repos I found a bit too sprawling to follow.
