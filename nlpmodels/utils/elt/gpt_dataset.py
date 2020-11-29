@@ -73,7 +73,11 @@ class GPTDataset(AbstractNLPDataset):
         block_size = args.block_size # size of context window.
         train_data, vocab = cls.get_training_data(block_size)
 
-        train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True, num_workers=2)
+        train_loader = DataLoader(train_data,
+                                  batch_size=batch_size,
+                                  shuffle=True,
+                                  num_workers=2,
+                                  pin_memory=True)
 
         return train_loader, vocab
 

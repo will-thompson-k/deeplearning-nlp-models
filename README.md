@@ -10,7 +10,7 @@ A small, interpretable codebase containing the re-implementation of a few "deep"
 
 ![Meta](media/bert.jpg)
 
-BERT: Reading. Comprehending. 
+BERT: Reading. Comprehending. ( <ins>Note</ins>: BERT has not been implemented as of yet). 
 
 This is a compact primer for those interested in starting to get into the weeds of deep NLP model architectures.
 Some other repos I found a bit too sprawling to follow.
@@ -65,6 +65,7 @@ Future models:
 
 - [ ] Char-RNN (Kaparthy)
 - [ ] BERT
+- [ ] VAE
 
 Future repo features:
 
@@ -93,7 +94,8 @@ including datasets, vocabulary, tokenizers, samplers and trainer classes.
 - [ ] `tests`: Light (and by no means comprehensive) coverage.
 - [ ] `notebooks`: Contains the notebooks and write-ups for each model implementation.
 - [ ] `run_tests.sh`: If you want to run the tests yourself (you can also use `setup.py test`).
-*Warning*: Some of the regression tests cause the whole suite to take a few mins to run.
+*Warning*: test_trainer.py cause the whole suite to take a few mins to run. Skip that test if you
+want to test the code quickly.
 - [ ] `run_pylint.sh`: If you really like linting code.
 
 ## Requirements

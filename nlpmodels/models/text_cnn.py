@@ -1,7 +1,7 @@
 """
 This module contains the composite text-cnn model run on pre-trained word embeddings.
 """
-from typing import List
+from typing import List, Tuple
 
 import torch
 import torch.nn as nn
@@ -68,16 +68,19 @@ class TextCNN(nn.Module):
 
         # TODO: Add pre-loaded embeddings option.
 
-    def forward(self, data: torch.Tensor) -> torch.Tensor:
+    def forward(self, data: Tuple) -> torch.Tensor:
         """
         The main function call of the model.
 
         Args:
-            data (torch.Tensor):
-                a tensor of size (batch_size, max_sequence_length)
+            data (Tuple):
+                a Tuple containing a tensor of size (batch_size, max_sequence_length)
         Returns:
             a tensor of (batch_size, class_size) of probability predictions
         """
+        # this is (target, text) tuple. done for trainer normalization
+        data = data[1]
+
         # (1) get embeddings
         # (batch_size, max_sequence_length) ->
         # (batch_size,max_sequence_length, dim_model)

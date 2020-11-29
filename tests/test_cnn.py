@@ -36,7 +36,7 @@ def test_input_output_dims_gpt():
                              test_1_args.num_classes,
                              test_1_args.dropout)
     # push through model
-    y_hat = model(src_tokens)
+    y_hat = model((None, src_tokens))
 
     # assert all dimensions are correct
     assert y_hat.size() == torch.Size([test_1_args.batch_size, test_1_args.num_classes])
@@ -71,7 +71,7 @@ def test_regression_test_cnn():
                              test_2_args.num_classes,
                              test_2_args.dropout)
     # push through model
-    y_hat = model(src_tokens)
+    y_hat = model((None, src_tokens))
 
     #expected output
     expected_output = cnn_regression_test_data.CNN_REGRESSION_TEST_DATA
