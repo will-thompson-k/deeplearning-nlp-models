@@ -53,6 +53,10 @@ class TextCNN(nn.Module):
         # init weights
         self._init_weights(dim_model)
 
+        self._device = 'cpu'
+        if torch.cuda.is_available():
+            self._device = torch.cuda.current_device()
+
     def _init_weights(self, dim_model: int):
         """
         Initializes the weights of the embeddings vectors.

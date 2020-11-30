@@ -54,6 +54,10 @@ class GPT(nn.Module):
         # init weights
         self._init_weights()
 
+        self._device = 'cpu'
+        if torch.cuda.is_available():
+            self._device = torch.cuda.current_device()
+
     def _init_weights(self):
         """
         Initialize all parameters to be N(0,0.02) per GPT-1 paper.

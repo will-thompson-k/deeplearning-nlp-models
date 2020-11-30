@@ -78,6 +78,10 @@ class Transformer(nn.Module):
         # Xavier norm all the parameters that are not fixed
         self._init_parameters()
 
+        self._device = 'cpu'
+        if torch.cuda.is_available():
+            self._device = torch.cuda.current_device()
+
     def _init_parameters(self):
         """
         Initialize all parameters to be trained using Xavier Uniform.
