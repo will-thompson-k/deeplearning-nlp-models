@@ -103,6 +103,8 @@ class AbstractTrainer(ABC):
                 # step 3. compute the loss
                 loss = self._calc_loss_function(y_hat, data)
 
+                loss = loss.mean()
+
                 # step 4. back_prop
                 loss.backward()
 
