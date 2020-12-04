@@ -25,7 +25,7 @@ Check out the Jupyter notebook [here](transformer.ipynb) to run the code.
 
 ## Code
 
-You can find the implementation [here](nlpmodels/models/transformer.py) with detailed comments. 
+You can find the implementation [here](../../nlpmodels/models/transformer.py) with detailed comments. 
 This model has a number of details
 that I do not cover here that are worth reviewing.
 

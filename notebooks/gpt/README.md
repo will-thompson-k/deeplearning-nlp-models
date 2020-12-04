@@ -28,8 +28,8 @@ Check out the Jupyter notebook [here](gpt.ipynb) to run the code.
 
 ## Code
 
-You can find the implementation [here](nlpmodels/models/gpt.py) with detailed comments. 
-This model is nearly identical to the original Transformer [here](nlpmodels/models/gpt.py), 
+You can find the implementation [here](../../nlpmodels/models/gpt.py) with detailed comments. 
+This model is nearly identical to the original Transformer [here](../../nlpmodels/models/transformer.py), 
 except that it is only a decoder.
 
 ## Usage

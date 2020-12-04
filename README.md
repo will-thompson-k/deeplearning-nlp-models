@@ -4,11 +4,12 @@
 ![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/will-thompson-k/deeplearning-nlp-models)
 ![GitHub](https://img.shields.io/github/license/will-thompson-k/deeplearning-nlp-models)
 
-A small, interpretable codebase containing the re-implementation of a few "deep" NLP models in PyTorch. 
-Run notebooks on colab w/ :cloud_with_lightning: GPUs :cloud_with_lightning:.
+A small, interpretable codebase containing the re-implementation of a few "deep" NLP models in PyTorch.
+ 
+One click to train the models on colab with :cloud_with_lightning: **GPUs** :cloud_with_lightning: if your young heart desires
+ (recommended).
 
-
-This is a primer for those interested in starting to get into the weeds of DL architectures in NLP.
+This is a minimal primer for those interested in getting into the weeds of DL architectures in NLP.
 
 <ins>Current models</ins>: word2vec, CNNs, transformer, gpt.
 
