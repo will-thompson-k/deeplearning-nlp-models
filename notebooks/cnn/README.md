@@ -14,7 +14,6 @@ Image source: Kim (2014).
 - [Motivation](#Motivation)
 - [CNNs](#CNNs)
 - [Model Specifics](#Model-Specifics)
-- [Features](#Features)
 - [References](#References)
 - [Citation](#Citation)
 - [License](#License)
@@ -164,11 +163,6 @@ A few ways in which I (as well as most implementations I've seen) depart from th
 
 1. I don't load pre-trained embeddings, but instead derived them in the model training.
 2. I don't use an L2 norm on the weights.
-
-## Features
-
-- [ ] CNN feature extraction of word embeddings.
-- [ ] Torchtext::IMDB dataset usage
 
 
 ## References

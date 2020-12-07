@@ -5,11 +5,10 @@
 ![GitHub](https://img.shields.io/github/license/will-thompson-k/deeplearning-nlp-models)
 
 A small, interpretable codebase containing the re-implementation of a few "deep" NLP models in PyTorch.
- 
-One click to train the models on colab with :cloud_with_lightning: **GPUs** :cloud_with_lightning: if your young heart desires
- (recommended).
 
 This is a minimal primer for those interested in getting into the weeds of DL architectures in NLP.
+
+Direct links to run the models on colab with GPUs :cloud_with_lightning: via notebooks.
 
 <ins>Current models</ins>: word2vec, CNNs, transformer, gpt.
 

@@ -5,8 +5,8 @@ from typing import Tuple, Any, List
 
 import torch
 from torch.utils.data import DataLoader
+from datasets import load_dataset
 
-from torchtext.experimental.datasets import IMDB
 
 from nlpmodels.utils.elt.dataset import AbstractNLPDataset
 from nlpmodels.utils.tokenizer import tokenize_corpus_basic
@@ -17,7 +17,7 @@ class TextCNNDataset(AbstractNLPDataset):
     """
     Text-CNN dataset for the text-cnn problem.
 
-    Uses torchtext's experimental::IMDB dataset (sentiment analysis).
+    Uses huggingface's IMDB dataset (sentiment analysis).
     """
 
     def __init__(self, data: List, vocab: NLPVocabulary):
@@ -74,17 +74,20 @@ class TextCNNDataset(AbstractNLPDataset):
     @classmethod
     def get_training_data(cls, max_sequence_length: int) -> Tuple[AbstractNLPDataset, NLPVocabulary]:
         """
-        Download training data from torchtext, put into normalized formats.
+        Download training data from huggingfaces, put into normalized formats.
 
         Args:
             max_sequence_length (int): The max sequence length.
         Returns:
             Tuple of the dataset and source and target dictionaries.
         """
-        # download the IMDB data from torchtext.experimental for sentiment analysis
-        train_dataset, = IMDB(data_select='train')
+        # download the IMDB data from hugginfaces for sentiment analysis
+        dataset = load_dataset("imdb")['train']
         # note: targets are {0,1} and the data is not shuffled
-        train_target, train_text = zip(*train_dataset.data)
+        train_target, train_text = list(dataset.data[0]), list(dataset.data[1])
+        # convert datatypes to native python
+        train_text = [str(x) for x in train_text]
+        train_target = [x.as_py() for x in train_target]
         # tokenize the data using our tokenizer
         train_text = tokenize_corpus_basic(train_text, False)
         # throw out any data points that are > max_length

@@ -5,7 +5,7 @@ from typing import Tuple, Any, List
 
 import torch
 from torch.utils.data import DataLoader
-from torchtext.experimental.datasets import Multi30k
+from torchtext.datasets import Multi30k
 
 from nlpmodels.utils.elt.dataset import AbstractNLPDataset
 from nlpmodels.utils.tokenizer import tokenize_corpus_basic
@@ -16,7 +16,7 @@ class TransformerDataset(AbstractNLPDataset):
     """
     Transformer class for transforming and storing dataset for use in Transformer model.
 
-    Uses torchtext's Multi30k dataset.
+    Uses torchtext's  dataset.
     """
 
     def __init__(self, data: List, target_vocab: NLPVocabulary):
@@ -87,7 +87,7 @@ class TransformerDataset(AbstractNLPDataset):
         tokenizers = (tokenize_corpus_basic, tokenize_corpus_basic)
         train_dataset, _, _ = Multi30k(tokenizer=tokenizers)
         # strip source (German) and target (English)
-        train_text_source, train_text_target = zip(*train_dataset.data)
+        train_text_source, train_text_target = zip(*train_dataset._data)
         # tokenize the data
         train_text_source = tokenize_corpus_basic(train_text_source, False)
         train_text_target = tokenize_corpus_basic(train_text_target, False)

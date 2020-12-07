@@ -6,9 +6,11 @@ from typing import Tuple, Any
 
 import torch
 from torch.utils.data import DataLoader
-from torchtext.experimental.datasets import WikiText2
+from datasets import load_dataset
+from torchtext.datasets import WikiText2
 
 from nlpmodels.utils.elt.dataset import AbstractNLPDataset
+from nlpmodels.utils.tokenizer import tokenize_corpus_basic
 from nlpmodels.utils.vocabulary import NLPVocabulary
 
 
@@ -89,16 +91,15 @@ class GPTDataset(AbstractNLPDataset):
         Returns:
             Tuple of the dataset and dictionary.
         """
-        # download the WikiText2 data from torchtext.experimental for language model development
-        # this dataset already is already tokenized and converted into integers.
-        train_block, _, _ = WikiText2()
-        # grab the actual data and the vocab
-        train_dataset, train_vocab = train_block.data, train_block.vocab
+        # download the huggingfaces::wikitext language model development
+        train_dataset = load_dataset("wikitext", 'wikitext-2-raw-v1')['train']
+        # flatten the pyarrow chunks into one string
+        train_dataset = [" ".join([str(x) for x in train_dataset._data[0]])]
+        train_dataset = tokenize_corpus_basic(train_dataset, False)
         # hack: i'm going to only grab the first 300k examples. cause this is like > 1MM words
-        train_dataset = train_dataset[:300000]
-        # convert the torchtext dictionary into our internal dictionary
-        vocab = NLPVocabulary(unk_token=train_vocab.UNK, mask_token=train_vocab.itos[1])
-        cls.convert_torchtext_vocab(train_vocab, vocab)
+        # build vocabulary
+        vocab = NLPVocabulary.build_vocabulary([train_dataset[0][:300000]])
+        train_dataset = torch.LongTensor([vocab.token_to_idx[x] for x in train_dataset[0][:300000]])
         # we pass the dataset, vocab... Dataset will do the rest
         return cls(train_dataset, vocab, block_size), vocab
 
