@@ -45,6 +45,15 @@ class GPTBatch:
 
         return self._src
 
+    @src.setter
+    def src(self, value):
+        """
+        Args:
+           value (torch.Tensor): The source input of (batch_size,block_size).
+        """
+
+        self._src = value
+
     @property
     def tgt(self) -> torch.Tensor:
         """
