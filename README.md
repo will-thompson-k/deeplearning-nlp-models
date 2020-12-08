@@ -6,10 +6,9 @@
 
 A small, interpretable codebase containing the re-implementation of a few "deep" NLP models in PyTorch.
 
-Direct links to run the models on colab with GPUs :cloud_with_lightning: via notebooks.
+You will find direct links to run the models on colab with **GPUs** :cloud_with_lightning: via notebooks.
 
-This is a decent (yet incomplete) foundation for those interested in getting into the weeds of DL architectures in NLP.
-
+This is a decent (yet incomplete) starting point for those interested in getting into the weeds of DL architectures in NLP.
 
 <ins>Current models</ins>: word2vec, CNNs, transformer, gpt.
 
@@ -17,7 +16,7 @@ This is a decent (yet incomplete) foundation for those interested in getting int
 
 BERT: Reading. Comprehending.
 
-These are **toy versions** of each model. They are not adequately trained to be used in production.
+These are *toy versions* of each model. They are not adequately trained to be used in production.
 
 ## Contents
 
@@ -106,9 +105,9 @@ Here are the package requirements (found in requirements.txt)
 
 - [ ] numpy==1.19.1
 - [ ] tqdm==4.50.2
-- [ ] torch==1.6.0
+- [ ] torch==1.7.0
 - [ ] datasets==1.0.2
-- [ ] torchtext==0.7.0
+- [ ] torchtext==0.8.0
 
 
 ## Citation

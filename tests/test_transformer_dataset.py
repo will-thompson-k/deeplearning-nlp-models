@@ -1,7 +1,6 @@
 from argparse import Namespace
 
 import torch
-import pytest
 
 from nlpmodels.utils.elt.transformer_dataset import TransformerDataset
 from nlpmodels.utils.vocabulary import NLPVocabulary
@@ -31,7 +30,7 @@ def test_transformer_dataset_returns_two_tensors():
     assert type(batch[0]) == torch.Tensor and type(batch[1]) == torch.Tensor and len(batch) == 2
 
 
-@pytest.mark.skip(reason="upgrading torchtext versions to 0.8.0")
+# @pytest.mark.skip(reason="upgrading torchtext versions to 0.8.0")
 def test_training_dataloader_batchsize():
     args_test = Namespace(
         batch_size=100,
