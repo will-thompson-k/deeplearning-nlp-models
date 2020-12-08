@@ -20,10 +20,16 @@ class TransformerBatch:
             tgt (torch.Tensor): The target input of (batch_size,max_seq_length).
             pad (int): pad index to identify the padding in each sequence.
         """
-        self._src = src  # normal source
+        # normal source
+        self._src = src
         self._src_mask = (src != pad).unsqueeze(1)  # 3D tensor necessary for attention
         self._tgt = tgt[:, :-1]  # prev value of y
         self._tgt_y = tgt[:, 1:]  # target (y)
+
+        self._device = 'cpu'
+        if torch.cuda.is_available():
+            self._device = torch.cuda.current_device()
+
         self._tgt_mask = self.make_std_mask(self.tgt, pad)  # make padding conditional on point in sequence
 
     @property
@@ -74,8 +80,7 @@ class TransformerBatch:
 
         return self._tgt_mask
 
-    @classmethod
-    def make_std_mask(cls, tgt: torch.Tensor, pad: int) -> torch.Tensor:
+    def make_std_mask(self, tgt: torch.Tensor, pad: int) -> torch.Tensor:
         """
         Create a mask to hide padding and future words for target sequence.
 
@@ -89,7 +94,8 @@ class TransformerBatch:
         """
         tgt_mask = (tgt != pad).unsqueeze(1)  # 3D tensor necessary for attention, add in the middle.
         seq_size = tgt.size(1)
-        tgt_mask = tgt_mask & cls.subsequent_mask(seq_size)  # subsequent mask built off sequence size
+        # subsequent mask built off sequence size
+        tgt_mask = tgt_mask & self.subsequent_mask(seq_size).to(self._device)
         return tgt_mask
 
     @staticmethod
