@@ -98,8 +98,8 @@ class GPTDataset(AbstractNLPDataset):
         train_dataset = tokenize_corpus_basic(train_dataset, False)
         # hack: i'm going to only grab the first 300k examples. cause this is like > 1MM words
         # build vocabulary
-        vocab = NLPVocabulary.build_vocabulary([train_dataset[0][:300000]])
-        train_dataset = torch.LongTensor([vocab.token_to_idx[x] for x in train_dataset[0][:300000]])
+        vocab = NLPVocabulary.build_vocabulary([train_dataset[0]])
+        train_dataset = torch.LongTensor([vocab.token_to_idx[x] for x in train_dataset[0]])
         # we pass the dataset, vocab... Dataset will do the rest
         return cls(train_dataset, vocab, block_size), vocab
 
