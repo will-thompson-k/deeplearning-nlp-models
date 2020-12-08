@@ -6,15 +6,16 @@
 
 A small, interpretable codebase containing the re-implementation of a few "deep" NLP models in PyTorch.
 
-This is a minimal primer for those interested in getting into the weeds of DL architectures in NLP.
-
 Direct links to run the models on colab with GPUs :cloud_with_lightning: via notebooks.
+
+This is a decent (yet incomplete) foundation for those interested in getting into the weeds of DL architectures in NLP.
+
 
 <ins>Current models</ins>: word2vec, CNNs, transformer, gpt.
 
 ![Meta](media/bert.jpg)
 
-BERT: Reading. Comprehending. ( <ins>Note</ins>: BERT has not been implemented as of yet). 
+BERT: Reading. Comprehending.
 
 These are **toy versions** of each model. They are not adequately trained to be used in production.
 
