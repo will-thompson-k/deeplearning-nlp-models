@@ -58,11 +58,11 @@ This repository has the following features:
 
 After reviewing these models, the world's your oyster in terms of other models to explore:
 
-ELMO, XLNET, all the other BERTs, BART, Performer, T5, etc....
+Char-RNN, BERT, ELMO, XLNET, all the other BERTs, BART, Performer, T5, etc....
 
 ## Roadmap
 
-Future models:
+Future models to implement:
 
 - [ ] Char-RNN (Kaparthy)
 - [ ] BERT

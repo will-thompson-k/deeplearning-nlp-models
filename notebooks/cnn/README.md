@@ -81,11 +81,12 @@ of those features, say either making a feature possess a bell-curve distribution
 In terms of feature engineering/ representations, a break through in this regard was employing unsupervised training to derive semantic [embeddings](../word2vec/README.md) as features 
 (link is to implementation of Skipgram).
 Many paper results have shown a significant improvement in model performance when using these pre-trained representations. It's
-surprising to see that one could input these into a linear model and outperform TF-IDF in many situations. One downside of using embeddings
-in a linear model is that you need to pool across the embeddings in order to collapse the dimensionality, so a max/average pooling technique
+surprising to see that one could input these into a linear regression and outperform TF-IDF in many situations. One downside of using a linear model
+ is that you need to pool across the embeddings in order to collapse the dimensionality, so a max/average pooling technique
 is often required.
 
-Following this logical thread, is there a way to take these embeddings and extract further information from them?
+Following this logical thread, how can we further capture the inter-dependency between words when trying to predict
+a target? Is there a way to take these embeddings and extract further information from them?
 *How can we get at automated feature extraction?*
 
 This is where deep learning, and in particular, convolutional neural networks (CNNs) come into play.
@@ -110,26 +111,30 @@ convolution filters applied to the pixels of a picture of the Taj Mahal. One is 
 the colors. 
 
 Convolution filters and pooling layers form the bedrock of the CNN architecture. 
-These are neural network architectures that *derive* the values of a series of convolution filters 
-in order to extract useful features from a series of inputs. 
+These are neural network architectures that **automatically derive convolution filters**
+in order to boost the model's ability to learn a target. 
 
 ### Advantages of CNNs
 
-Convolution layers have many advantages in that one can vary 
-the number of filters simultaneously running over a set of inputs, as well as the properties such as:
-(1) *size of the filters* (i.e. the window size of the filter as it moves over the set of inputs); (2) *the stride or pace
-of the filters* (i.e. if it skips over the volume of inputs ); etc. One benefit of using convolution layers is that they
-may be stacked on top of each other in a series of layers. *Each layer of convolution filters is thought to derive a different
-level of feature extraction*, from the most rudimentary at the deepest levels to the finer details at the shallowest levels.
+CNNs are highly flexible. One has several knobs available when selecting these layers:
+1. *the number of simultaneous filters* (i.e., how many different simultaneous feature derivations to make from an input)
+2. *size of the filters* (i.e. the window size of the filter as it moves over the set of inputs)
+3. *the stride or pace of the filters* (i.e. if it skips over the volume of inputs ); etc. 
+
+Another benefit of using convolution layers is that they
+may be stacked on top of each other in a series of layers. Each layer of convolution filters is thought to derive a different
+level of feature extraction, from the most rudimentary at the deepest levels to the finer details at the shallowest levels.
+
 Pooling layers are interspersed between convolution layers in order to summarize (i.e. reduce the dimensionality of) 
 the information from a set of feature maps via sub-sampling.
 
 A final note is that CNNs are typically considered very fast to train compared to other typical deep 
-architectures (like say the RNN) as they process things in a simultaneous manner.
+architectures (like say the RNN) as they process a batch of data simultaneously.
 
 ### CNNs Work Well for Classification/Identification/Detection
 
-Both pooling and convolution operations are **locally invariant**, which means that their ability to detect a feature
+Both pooling and convolution operations have the highly useful property that they are **locally invariant**, 
+which means that their ability to detect a feature
 is independent of the location in the set of inputs. This lends itself very well to classification tasks. 
 
 ## Model-Specifics

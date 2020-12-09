@@ -65,12 +65,12 @@ trainer.run()
 
 ## Background
 
-### Sequence models
+### Sequence Models
 
 The Transformer is a part of the realm of "sequence models",
 models that attempt to map an input (source) sequence to an output (target) sequence. 
 Sequence models encompass a wide range of representations, from long-standing, classical probabilistic approaches such as
-Hidden Markov Models (HMMs), Bayesian networks, et.c to more recent "deep learning" models.
+Hidden Markov Models (HMMs), Conditional Random Fields (CRFs), etc. to more recent "deep learning" models.
 
 Sequence models come in many different varieties of problems as seen below:
 
@@ -79,25 +79,22 @@ Sequence models come in many different varieties of problems as seen below:
 
 Image source: Kaparthy's article on RNNs [here](http://karpathy.github.io/2015/05/21/rnn-effectiveness/).
 
-### The OG Transformer is posed as a Machine Translation model
+### The OG Transformer is Posed as a Machine Translation Model
 
 In the original Transformer, the task being trained is that of machine translation, i.e., taking one sentence in one 
 language and learning to translate it into another language. This is a "many-to-many" sequence problem.
 
-![Machine translation](/media/machine_translation.png)
-
-
-Image source: DeepAi.org [here](https://deepai.org/machine-learning-glossary-and-terms/neural-machine-translation)
-
-### The predecessor to Transformer: RNN
+### The Predecessor to Transformer: RNN
 
 
 Prior to the Transformer, the dominant architecture found in "deep" sequence models was the
 recurrent network (i.e. RNN). While the convolutional network shares parameters across space,
-the recurrent model shares parameters across the time dimension (left to right in a sequence). At each time step,
+the recurrent model shares parameters across the time dimension (for instance, left to right in a sequence. At each time step,
 a new hidden state is computed using the previous hidden state and the current sequence value. These hidden states 
 serve the function of "memory" within the model. The model hopes to encode useful enough information into these
 states such that it can derive contextual relationships between a given word and any previous words in a sequence.
+
+### Encoder-Decoder Architectures
 
 These RNN cells form the basis of an "encoder-decoder" architecture.
 
@@ -107,13 +104,13 @@ These RNN cells form the basis of an "encoder-decoder" architecture.
 Image source: Figure 9.7.1. in this illustrated guide [here](https://d2l.ai/chapter_recurrent-modern/seq2seq.html).
  
  The goal of the encoder-decoder is to take a source sequence
-and predict a target sequence (sequence-to-sequence or seq2seq). A common example of a seq2seq task is machine translation of one language to another. 
+and predict a target sequence (sequence-to-sequence or "seq2seq"). A common example of a seq2seq task is machine translation of one language to another. 
 An encoder maps the source sequence into a hidden state that is then passed to a decoder. The decoder then attempts to predict the next word in a target sequence using the encoder's hidden state(s) and
 the prior decoder hidden state(s).
 
 2 different challenges confront the RNN class of models. 
 
-### RNN and learning complex context
+### RNN and Learning Complex Context
 
 First, there is a challenge of specifying an RNN architecture capable of learning enough context to aid in 
 predicting longer and more complex sequences. This has been an area of continual innovation. The first breakthrough was to 
@@ -131,16 +128,12 @@ Then for each time step in the decoder block, a "context" state would be derived
 decoder could determine which words (via their hidden state) to "pay attention to" in the source sequence in order to predict 
 the next word. This breakthrough was shown to extend the prediction power of RNNs in longer sequences. 
 
-### Sequential computation difficult to parallelize
+### Sequential Computation Difficult to Parallelize
 
 Second, due to the sequential nature of how RNNs are computed, RNNs can be slow to train at scale.
 
-### RNNs aren't dominantly worse btw
-
 For a positive perspective on RNNs,
 see Andrej Kaparthy's blog post on RNNs [here](http://karpathy.github.io/2015/05/21/rnn-effectiveness/).
-One thing, for example, to realize about the transformer models (in particular, the language model versions such as GPT) 
-is that they have a finite context window while RNNs have theoretically an infinite context window.
 
 ## Transformer
 
@@ -165,16 +158,17 @@ encoding via a series of `sin(pos,wave_number)` and `cos(pos,wave_number)` funct
 In this plot you can see the different wave functions along the sequence length.
 
 These fixed positional encodings are added to word embeddings of the same dimension such that these tensors capture both
-relative _semantic_ (note: this is open to interpretation. neural nets do better with dense representations) 
+relative _semantic_ (note: this is open to interpretation) 
 and _positional_ relationships between words. These representations are then passed down stream into the
 encoder and decoder stacks.
+
+Note that the parameters in this layer are fixed.
 
 ### Attention (Self and Encoder-Decoder Attention)
 
 The positional embeddings described above are then passed to the encoder-decoder stacks where the attention mechanism
-is used to identify the contextual relationship between words. Attention can be thought of a mechanism that scales
-values along the input sequence by values computing using "query" and "key" pairs. While attention mechanisms are an active
-area of research, the authors used a scaled dot-product attention calculation. 
+is used to identify the inter-relationship between words in the translation task. Note that attention mechanisms are an active
+area of research and that the authors used a scaled dot-product attention calculation. 
 
 As the model trains these parameters, this mechanism
 emphasizes the importance of different terms in learning the context within a sequence as well as across the source and target

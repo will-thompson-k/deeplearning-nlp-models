@@ -70,20 +70,21 @@ trainer.run()
 GPT, which stands for "Generative Pre-trained Transformer", is a part of the realm of "sequence models" (sequence-to-sequence or "seq2seq"),
 models that attempt to map an input (source) sequence and to an output (target) sequence. 
 Sequence models encompass a wide range of representations, from long-standing, classical probabilistic approaches such as
-Hidden Markov Models (HMMs), Bayesian networks, et.c to more recent "deep learning" models such as recurrent neural networks (RNNs).
+Hidden Markov Models (HMMs), Conditional Random Fields (CRFs) etc. to more recent "deep learning" models such as recurrent neural networks (RNNs).
 
 GPT belongs to a newer the class of models known as Transformers, which we touch upon [here](../transformer/README.md).
 
 ### GPT is a Language Model Transformer
 
 Unlike the original Transformer which is originally posed as a Machine Translation model
-(i.e. translate one sequence into another sequence), the GPT is a Language Model (LM). LMs ask the natural question:
+(i.e. translate one sequence into another sequence), the GPT is a **Language Model**. LMs ask the natural question:
 given a sequence of words, what is most likely to follow? Put mathematically, LMs are concerned with predicting
-the next term(s) in a sequence conditional on all the previous points in the sequence:
+the next term(s) in a sequence conditional on a neighboring window of words. In the GPT model, this context is
+all the previous points in the sequence:
 ```python
-p(u_i|u_i-1,u_i-2,...,u_i-block_size)
+p(u_i| context) := p(u_i|u_i-1,u_i-2,...,u_i-block_size)
 ```
-In this sense, LMs are -auto-regressive- models.
+In this sense, we see that GPT is an **auto-regressive** model.
  
 To fit the Transformer architecture to an LM problem, we can take the encoder-decoder architecture of the OG Transformer
 and discard the encoder. The decoder, you will notice, inherently is concerned with predicting the next item in a sequence
@@ -101,6 +102,9 @@ Pre-trained word embeddings had been prior the most compelling evidence of unsup
 ability to help learn useful things (see notes on word2vec embeddings [here](../word2vec/README.md)). 
 Motivated by this, they hypothesized LMs as the ultimate self-supervised models that could ultimately be applied as 
 transfer learners. 
+
+Unlike embeddings, language models have the ability to capture the *contextual* meaning of a word. For instance,
+a language model can differentiate between the meaning of bear in "the right to bear arms" and "I saw a black bear".
 
 ### The GPT Approach
 
@@ -142,8 +146,10 @@ Image source: Radford et al. (2018)
 
 ## GPT-Model-Details
 
-Here are some small notes from the each paper. I highly recommend you take a crack at reading them further better
-information.
+Here are some small notes from the each paper. Note that my observations are not comprehensive and am still wrapping my head
+around GPT-3.
+
+I highly recommend reading the original papers.
 
 ### GPT-1
 
@@ -151,27 +157,28 @@ Most of the above was written based on GPT-1 observations.
 Here are some other notes:
 
 * pre-training: 
-- on BooksCorpus dataset. Didn't like Word Benchmark because it
+>- on BooksCorpus dataset. Didn't like Word Benchmark because it
 shuffled sentences, breaking up dependencies.
 * 12-layer decoder-only transformer.
-- dim_model = 768
-- num_heads = 12 (of self-attention model)
+>- dim_model = 768
+>- num_heads = 12 (of self-attention model)
 - Optimization:
-- Max learning rate of 2.5e-4
-- 2000 updates linear increase, annealed to 0 using Cosine Scheduler
-(Note: I stuck with NoamOptimizer to make life simple)
-- Weight initialization of N(0,0.02)
-- BPE with 40k merges (Note: stuck with usual word-encoding)
-- Activation functions used were GELU instead of RELU
-- Learned positions instead of original fixed Sinusoidal
-- Spacy tokenizer (Note: I used pre-built torchtext)
+>- Max learning rate of 2.5e-4
+>- 2000 updates linear increase, annealed to 0 using Cosine Scheduler
+>(Note: I stuck with NoamOptimizer to make life simple)
+>- Weight initialization of N(0,0.02)
+>- BPE with 40k merges (Note: I stuck with usual word-encoding, not BPE)
+>- Activation functions used were GELU instead of RELU
+>- Learned positions instead of original fixed Sinusoidal
+>- Spacy tokenizer (Note: I used my own tokenizer)
 * fine-tuning:
-- Same hyper-parameters as pre-training + drop-out.
-- Found 3 epochs of training was sufficient.
+>- Same hyper-parameters as pre-training + drop-out.
+>- Found 3 epochs of training was sufficient.
 
 ### GPT-2
 
-tl;dr GPT-1 with larger pre-training and **multi-task learning**.
+*tl;dr* GPT-1 with larger pre-training and **multi-task learning**.
+
 
 The largest model achieves SOTA on 7/8 benchmarks in zero-shot (i.e, no fine-tuning) setting.
 
@@ -203,7 +210,7 @@ Here is a list of some model specifics that changed since GPT-1:
 
 This paper I'm still working through. The model is now at 175B parameters with
 96 layers, 96 heads, and dim_model = 12,288. I gather than the
-attention mechanism is different. 
+attention mechanism may also be different from the canonical self-attention. 
 
 ## Features
 
