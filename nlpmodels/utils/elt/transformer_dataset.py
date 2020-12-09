@@ -1,9 +1,7 @@
 """
 This module contains the Transformer Dataset and Dataloader.
 """
-from typing import Tuple, Any, List
-
-from collections import Counter
+from typing import Tuple, Any, List, AnyStr
 
 import io
 
@@ -11,9 +9,7 @@ from functools import partial
 
 import torch
 from torch.utils.data import DataLoader
-from torchtext.datasets import Multi30k
 from torchtext.utils import download_from_url, extract_archive
-from torchtext.vocab import Vocab
 
 from nlpmodels.utils.elt.dataset import AbstractNLPDataset
 from nlpmodels.utils.tokenizer import tokenize_corpus_basic
@@ -98,32 +94,16 @@ class TransformerDataset(AbstractNLPDataset):
         train_urls = ('train.de.gz', 'train.en.gz')
         train_filepaths = [extract_archive(download_from_url(url_base + url))[0] for url in train_urls]
 
-        def build_vocab(filepath, tokenizer):
-            vocab = NLPVocabulary()
-            with io.open(filepath, encoding="utf8") as f:
-                for string_ in f:
-                    vocab.add_many(tokenizer([string_])[0])
-            return vocab
-
-        # yes, we are using the English tokenizer on German. It's a simple tokenizer.
+        # yes, we are using the English tokenizer on German.
+        # It's a simple tokenizer.
         de_tokenizer = partial(tokenize_corpus_basic, removal=False)
         en_tokenizer = partial(tokenize_corpus_basic, removal=False)
-        de_vocab = build_vocab(train_filepaths[0], de_tokenizer)
-        en_vocab = build_vocab(train_filepaths[1], en_tokenizer)
 
-        def data_process(filepaths):
-            raw_de_iter = iter(io.open(filepaths[0], encoding="utf8"))
-            raw_en_iter = iter(io.open(filepaths[1], encoding="utf8"))
-            de_tokens_list = []
-            en_tokens_list = []
-            for (raw_de, raw_en) in zip(raw_de_iter, raw_en_iter):
-                de_tokens = de_tokenizer([raw_de])[0]
-                en_tokens = en_tokenizer([raw_en])[0]
-                de_tokens_list.append(de_tokens)
-                en_tokens_list.append(en_tokens)
-            return de_tokens_list, en_tokens_list
+        de_vocab = cls.build_vocab(train_filepaths[0], de_tokenizer)
+        en_vocab = cls.build_vocab(train_filepaths[1], en_tokenizer)
 
-        train_text_source, train_text_target = data_process(train_filepaths)
+        # grab token lists in both languages.
+        train_text_source, train_text_target = cls.build_token_lists(train_filepaths, de_tokenizer, en_tokenizer)
 
         assert len(train_text_source) == len(train_text_target)
 
@@ -142,3 +122,45 @@ class TransformerDataset(AbstractNLPDataset):
 
         return cls(list(zip(train_text_source, train_text_target)),
                    dictionary_target), dictionary_source, dictionary_target
+
+    @staticmethod
+    def build_vocab(filepath: AnyStr, tokenizer):
+        """
+        This is a static method that builds an NLPVocabulary object from a file provided.
+
+        Args:
+            filepath(Anystr): This is a string for the filepath to open to build the vocab.
+            tokenizer(function): This is a function to convert a list of strings into tokens.
+
+        Returns:
+            A NLPVocabulary object built off this list.
+        """
+        vocab = NLPVocabulary()
+        with io.open(filepath, encoding="utf8") as f:
+            for string_ in f:
+                vocab.add_many(tokenizer([string_])[0])
+        return vocab
+
+    @staticmethod
+    def build_token_lists(filepaths: List, de_tokenizer, en_tokenizer):
+        """
+        This is a staticmethod used to return the data from files in a tokenized format.
+
+        Args:
+            filepaths(List): A list of both source and target lists.
+            de_tokenizer(function): The tokenizer function for German.
+            en_tokenizer(function): The tokenizer function for English.
+
+        Returns:
+            A tuple containing the list of tokens for each example.
+        """
+        raw_de_iter = iter(io.open(filepaths[0], encoding="utf8"))
+        raw_en_iter = iter(io.open(filepaths[1], encoding="utf8"))
+        de_tokens_list = []
+        en_tokens_list = []
+        for (raw_de, raw_en) in zip(raw_de_iter, raw_en_iter):
+            de_tokens = de_tokenizer([raw_de])[0]
+            en_tokens = en_tokenizer([raw_en])[0]
+            de_tokens_list.append(de_tokens)
+            en_tokens_list.append(en_tokens)
+        return de_tokens_list, en_tokens_list

@@ -53,7 +53,6 @@ This repository has the following features:
 - [ ] <ins>model overviews</ins>: A brief overview of each model's motivation and design are provided in separate README.md files.
 - [ ] <ins>Jupyter notebooks (easy to run on colab w/ GPUs)</ins>: Jupyter notebooks showing how to run the models and some simple analyses of the model results.
 - [ ] <ins>self-contained</ins>: Tokenizers, dataset loaders, dictionaries, and all the custom utilities required for each problem.
-- [ ] <ins>multiple dataset APIs</ins>: Both *HuggingFaces* and *torchtext* (i.e. Pytorch) datasets are used in examples.
 
 ## Endgame
 
@@ -90,13 +89,14 @@ Here is a breakdown of the repository:
 - [ ] `nlpmodels/models`: The model code for each paper.
 - [ ] `nlpmodels/utils`: Contains all the auxiliary classes related to building a model, 
 including datasets, vocabulary, tokenizers, samplers and trainer classes.
-(**Note:** All of the non-model files are thrown into utils. I would advise against that in a larger repo.)
+(**Note:** Most of the non-model files are thrown into utils. I would advise against that in a larger repo.)
 - [ ] `tests`: Light (and by no means comprehensive) coverage.
 - [ ] `notebooks`: Contains the notebooks and write-ups for each model implementation.
-- [ ] `run_tests.sh`: If you want to run the tests yourself (you can also use `setup.py test`).
-*Warning*: test_trainer.py cause the whole suite to take a few mins to run. Skip that test if you
-want to test the code quickly.
-- [ ] `run_pylint.sh`: If you really like linting code.
+
+A few useful commands:
+- [ ] `make test`: Run the full suite of tests (you can also use `setup.py test` and `run_tests.sh`).
+- [ ] `make test_light`: Run all tests except the regression tests.
+- [ ] `make lint`: If you really like linting code (also can run `run_pylint.sh`).
 
 ## Requirements
 
