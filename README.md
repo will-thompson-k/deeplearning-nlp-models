@@ -6,16 +6,18 @@
 
 A small, interpretable codebase containing the re-implementation of a few "deep" NLP models in PyTorch.
 
-<ins>Current models</ins>: word2vec, CNNs, transformer, gpt.
+This is presented as an (incomplete) starting point for those interested in getting into the weeds of DL architectures in NLP.
+Annotated models are presented along with some notes.
+
+There are links to run these models on colab with **GPUs** :cloud_with_lightning: via notebooks.
+
+<ins>Current models</ins>: word2vec, CNNs, transformer, gpt. (**Work in progress**)
 
 ![Meta](media/bert.jpg)
 
-BERT: Reading. Comprehending. ( <ins>Note</ins>: BERT has not been implemented as of yet). 
+BERT: Reading. Comprehending.
 
-This is a compact primer for those interested in starting to get into the weeds of deep NLP model architectures.
-Some other repos I found a bit too sprawling to follow.
-( <ins>Note</ins>: These models are toy versions of each model. They are not adequately trained to be used in production. 
-)
+Note: These are *toy versions* of each model.
 
 ## Contents
 
@@ -49,9 +51,8 @@ These NLP models are presented chronologically and, as you might expect, build o
 This repository has the following features:
 
 - [ ] <ins>model overviews</ins>: A brief overview of each model's motivation and design are provided in separate README.md files.
-- [ ] <ins>how-to's</ins>: Jupyter notebooks showing how to run the models and some simple analyses of the model results.
-- [ ] <ins>model utilities</ins>: Tokenizers, dataset loaders, dictionaries, and all the custom utilities required for each problem.
-- [ ] <ins>multiple dataset APIs</ins>: Both *HuggingFaces* and *torchtext* (i.e. Pytorch) datasets are used in examples.
+- [ ] <ins>Jupyter notebooks (easy to run on colab w/ GPUs)</ins>: Jupyter notebooks showing how to run the models and some simple analyses of the model results.
+- [ ] <ins>self-contained</ins>: Tokenizers, dataset loaders, dictionaries, and all the custom utilities required for each problem.
 
 ## Endgame
 
@@ -65,12 +66,9 @@ Future models:
 
 - [ ] Char-RNN (Kaparthy)
 - [ ] BERT
-- [ ] VAE
 
 Future repo features:
 
-- [ ] Leverage PyTorch **gpu** training (use colab to run, link to open in colab).
-- [ ] Gradient clipping
 - [ ] Tensorboard plots
 - [ ] Val set demonstrations
 - [ ] Saving checkpoints/ loading models
@@ -91,12 +89,14 @@ Here is a breakdown of the repository:
 - [ ] `nlpmodels/models`: The model code for each paper.
 - [ ] `nlpmodels/utils`: Contains all the auxiliary classes related to building a model, 
 including datasets, vocabulary, tokenizers, samplers and trainer classes.
+(**Note:** Most of the non-model files are thrown into utils. I would advise against that in a larger repo.)
 - [ ] `tests`: Light (and by no means comprehensive) coverage.
 - [ ] `notebooks`: Contains the notebooks and write-ups for each model implementation.
-- [ ] `run_tests.sh`: If you want to run the tests yourself (you can also use `setup.py test`).
-*Warning*: test_trainer.py cause the whole suite to take a few mins to run. Skip that test if you
-want to test the code quickly.
-- [ ] `run_pylint.sh`: If you really like linting code.
+
+A few useful commands:
+- [ ] `make test`: Run the full suite of tests (you can also use `setup.py test` and `run_tests.sh`).
+- [ ] `make test_light`: Run all tests except the regression tests.
+- [ ] `make lint`: If you really like linting code (also can run `run_pylint.sh`).
 
 ## Requirements
 
@@ -106,9 +106,9 @@ Here are the package requirements (found in requirements.txt)
 
 - [ ] numpy==1.19.1
 - [ ] tqdm==4.50.2
-- [ ] torch==1.6.0
+- [ ] torch==1.7.0
 - [ ] datasets==1.0.2
-- [ ] torchtext==0.7.0
+- [ ] torchtext==0.8.0
 
 
 ## Citation

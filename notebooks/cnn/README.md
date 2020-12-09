@@ -14,7 +14,6 @@ Image source: Kim (2014).
 - [Motivation](#Motivation)
 - [CNNs](#CNNs)
 - [Model Specifics](#Model-Specifics)
-- [Features](#Features)
 - [References](#References)
 - [Citation](#Citation)
 - [License](#License)
@@ -26,7 +25,7 @@ Check out the Jupyter notebook [here](text_cnn.ipynb) to run the code.
 
 ## Code
 
-You can find the implementation [here](nlpmodels/models/text_cnn.py) with detailed comments. 
+You can find the implementation [here](../../nlpmodels/models/text_cnn.py) with detailed comments. 
 This model is fairly simple, but requires thinking about CNN filter dimensions.
 I attempted to explain what to expect at each step.
 
@@ -66,7 +65,7 @@ trainer.run()
 ## Motivation
 
 The prevailing architecture found in most classic ML approaches to NLP classification is to take a series of
-heuristically defined features (such as the bag-of-word (BoW) approaches like TF-IDF) and to
+heuristically defined features (such as the bag-of-word (BoW) approaches like TF-IDF or a simple one-hot-encoding) and to
 try to train a model/estimator to combine those features. In effect, you can think of those features
 as "weak", independent predictors that a model is combining into a stronger prediction.
 
@@ -164,11 +163,6 @@ A few ways in which I (as well as most implementations I've seen) depart from th
 
 1. I don't load pre-trained embeddings, but instead derived them in the model training.
 2. I don't use an L2 norm on the weights.
-
-## Features
-
-- [ ] CNN feature extraction of word embeddings.
-- [ ] Torchtext::IMDB dataset usage
 
 
 ## References

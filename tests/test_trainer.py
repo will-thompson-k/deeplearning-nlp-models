@@ -1,10 +1,13 @@
 from argparse import Namespace
 
 import torch
-import numpy as np
 from nlpmodels.models import gpt, text_cnn, transformer, word2vec
 from nlpmodels.utils import utils, train
 from nlpmodels.utils.elt import skipgram_dataset, gpt_dataset, text_cnn_dataset, transformer_dataset
+import os
+
+# mac issue
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
 def test_word2vec_trainer_regression_test():
@@ -84,7 +87,7 @@ def test_text_cnn_trainer_regression_test():
         num_classes=2,
         dropout=0.5,
         # Training hyper-parameters
-        num_epochs=10,
+        num_epochs=4,
         learning_rate=1.e-6,
         batch_size=64
     )
@@ -104,6 +107,7 @@ def test_text_cnn_trainer_regression_test():
     assert losses[0].data >= losses[-1].data
 
 
+# @pytest.mark.skip(reason="upgrading torchtext versions to 0.8.0")
 def test_transformer_trainer_regression_test():
 
     utils.set_seed_everywhere()
@@ -119,7 +123,7 @@ def test_transformer_trainer_regression_test():
         # Label smoothing loss function hyper-parameters
         label_smoothing=0.1,
         # Training hyper-parameters
-        num_epochs=3,
+        num_epochs=10,
         learning_rate=0.0,
         batch_size=128,
     )

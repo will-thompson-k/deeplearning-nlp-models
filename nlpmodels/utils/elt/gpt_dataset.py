@@ -6,9 +6,10 @@ from typing import Tuple, Any
 
 import torch
 from torch.utils.data import DataLoader
-from torchtext.experimental.datasets import WikiText2
+from datasets import load_dataset
 
 from nlpmodels.utils.elt.dataset import AbstractNLPDataset
+from nlpmodels.utils.tokenizer import tokenize_corpus_basic
 from nlpmodels.utils.vocabulary import NLPVocabulary
 
 
@@ -64,6 +65,8 @@ class GPTDataset(AbstractNLPDataset):
     @classmethod
     def get_training_dataloader(cls, args: Any) -> Tuple[DataLoader, NLPVocabulary]:
         """
+        Returns a pytorch::Dataloader object and vocabulary ready for model training.
+
         Args:
             args: Parameters for deriving training data.
         Returns:
@@ -84,45 +87,22 @@ class GPTDataset(AbstractNLPDataset):
     @classmethod
     def get_training_data(cls, block_size: int) -> Tuple[AbstractNLPDataset, NLPVocabulary]:
         """
+        Returns the dataset class along with vocabulary object.
+
         Args:
             block_size (int): The size of the context window.
         Returns:
             Tuple of the dataset and dictionary.
         """
-        # download the WikiText2 data from torchtext.experimental for language model development
-        # this dataset already is already tokenized and converted into integers.
-        train_block, _, _ = WikiText2()
-        # grab the actual data and the vocab
-        train_dataset, train_vocab = train_block.data, train_block.vocab
+        # download the huggingfaces::wikitext language model development
+        train_dataset = load_dataset("wikitext", 'wikitext-2-raw-v1')['train']
+        # flatten the pyarrow chunks into one string
+        train_dataset = [" ".join([str(x) for x in train_dataset._data[0]])]
+        train_dataset = tokenize_corpus_basic(train_dataset, False)
         # hack: i'm going to only grab the first 300k examples. cause this is like > 1MM words
-        train_dataset = train_dataset[:300000]
-        # convert the torchtext dictionary into our internal dictionary
-        vocab = NLPVocabulary(unk_token=train_vocab.UNK, mask_token=train_vocab.itos[1])
-        cls.convert_torchtext_vocab(train_vocab, vocab)
+        # build vocabulary
+        vocab = NLPVocabulary.build_vocabulary([train_dataset[0]])
+        train_dataset = torch.LongTensor([vocab.token_to_idx[x] for x in train_dataset[0]])
         # we pass the dataset, vocab... Dataset will do the rest
         return cls(train_dataset, vocab, block_size), vocab
-
-    @classmethod
-    def convert_torchtext_vocab(cls, train_vocab, vocab: NLPVocabulary):
-        """
-        Create an internally derived dictionary instead of using PyTorch's.
-
-        Args:
-            train_vocab (torchtext vocab): PyTorch's dictionary.
-            vocab (NLPVocabulary): Vocab object we need to modify.
-        """
-        # got to change the order of some defaults, Pytorch and I don't see eye to eye apparently
-        vocab.token_to_idx[vocab.unk_token] = 0
-        vocab.idx_to_token[0] = vocab.unk_token
-        vocab.unk_index = 0
-        vocab.token_to_idx[vocab.mask_token] = 1
-        vocab.idx_to_token[1] = vocab.mask_token
-        vocab.mask_index = 1
-        # got to handle this <eos> token that is not found here.
-        del vocab.token_to_idx[vocab.eos_token], vocab.idx_to_token[vocab.eos_index]
-        del vocab._word_count
-        vocab.eos_index = -1
-        # add in the other tokens
-        vocab.idx_to_token = dict([(i, x) for i, x in enumerate(train_vocab.itos)])
-        vocab.token_to_idx = train_vocab.stoi
 

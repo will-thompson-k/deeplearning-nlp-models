@@ -20,21 +20,21 @@ class AbstractNLPDataset(Dataset, ABC):
 
     @abstractmethod
     def __len__(self):
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def __getitem__(self, idx):
-        pass
+        raise NotImplementedError
 
     @classmethod
     @abstractmethod
     def get_training_data(cls, *args):
-        pass
+        raise NotImplementedError
 
     @classmethod
     @abstractmethod
     def get_training_dataloader(cls, *args):
-        pass
+        raise NotImplementedError
 
     @staticmethod
     def padded_string_to_integer(token_list: List[List[str]],

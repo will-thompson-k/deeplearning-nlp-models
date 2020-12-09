@@ -24,8 +24,15 @@ class GPTBatch:
             tgt (torch.Tensor): The target input of (batch_size,block_size).
             pad (int): pad index to identify the padding in each sequence.
         """
-        self._src = src  # normal source
-        self._tgt = tgt # target sequence, shifted 1, will only be used in loss function
+        # normal source
+        self._src = src
+        # target sequence, shifted 1, will only be used in loss function
+        self._tgt = tgt
+
+        self._device = 'cpu'
+        if torch.cuda.is_available():
+            self._device = torch.cuda.current_device()
+
         # make padding conditional on point in sequence
         self._src_mask = self.make_std_mask(self._src, pad)
 
@@ -37,6 +44,15 @@ class GPTBatch:
         """
 
         return self._src
+
+    @src.setter
+    def src(self, value):
+        """
+        Args:
+           value (torch.Tensor): The source input of (batch_size,block_size).
+        """
+
+        self._src = value
 
     @property
     def tgt(self) -> torch.Tensor:
@@ -57,8 +73,7 @@ class GPTBatch:
 
         return self._src_mask
 
-    @classmethod
-    def make_std_mask(cls, tgt: torch.Tensor, pad: int) -> torch.Tensor:
+    def make_std_mask(self, tgt: torch.Tensor, pad: int) -> torch.Tensor:
         """
         Create a mask to hide padding and future words for src sequence.
 
@@ -74,7 +89,7 @@ class GPTBatch:
         tgt_mask = (tgt != pad).unsqueeze(1)
         seq_size = tgt.size(1)
         # subsequent mask built off sequence size
-        tgt_mask = tgt_mask & cls.subsequent_mask(seq_size)
+        tgt_mask = tgt_mask & self.subsequent_mask(seq_size).to(self._device)
         return tgt_mask
 
     @staticmethod

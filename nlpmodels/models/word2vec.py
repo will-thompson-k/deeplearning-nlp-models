@@ -55,6 +55,10 @@ class SkipGramNSModel(nn.Module):
         # Init weights
         self._init_weights()
 
+        self._device = 'cpu'
+        if torch.cuda.is_available():
+            self._device = torch.cuda.current_device()
+
     def _init_weights(self):
         """
         Initializes the weights of the embeddings vectors.
@@ -91,6 +95,8 @@ class SkipGramNSModel(nn.Module):
         negative_sample_indices = torch.multinomial(self._word_frequency,
                                                     batch_size * self._negative_sample_size,
                                                     replacement=True).view(batch_size, -1)
+
+        negative_sample_indices = negative_sample_indices.to(self._device)
 
         # Alternative: If no information on word frequencies, sample uniformly.
         # negative_sample_indices = torch.randint(0, self._vocab_size - 1,
