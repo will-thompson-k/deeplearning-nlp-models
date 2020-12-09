@@ -60,6 +60,8 @@ class AbstractTrainer(ABC):
     @property
     def loss_cache(self) -> List:
         """
+        Returns a list of cached losses for debugging.
+
         Returns:
             list of losses cached at the end of every epoch.
         """
@@ -168,11 +170,24 @@ class Word2VecTrainer(AbstractTrainer):
                                               debug)
 
     def _reformat_data(self, data: Tuple) -> Tuple:
+        """
+        A generic function to reformat data for the problem.
+
+        In this case, it's moving the data to the correct device.
+
+        Args:
+            data(Tuple): A tuple containing the input, context tensors.
+
+        Returns:
+            A tuple containing the input, context tensors on a gpu.
+        """
         # place data on the correct device
         return data[0].to(self._device), data[1].to(self._device)
 
     def _calc_loss_function(self, y_hat: Any, data: Any):
-
+        """
+        A wrapper function for calling the loss calculation.
+        """
         return y_hat
 
 
@@ -217,6 +232,10 @@ class TransformerTrainer(AbstractTrainer):
 
     def _reformat_data(self, data: Tuple) -> transformer_batch.TransformerBatch:
         """
+        A generic function to reformat data for the problem.
+
+        In this case, it's moving the data to the correct device, then creating a batch object.
+
         Args:
             data (Tuple): The tuples of LongTensors to be converted into a Batch object.
         Returns:
@@ -235,7 +254,9 @@ class TransformerTrainer(AbstractTrainer):
         return batch_data
 
     def _calc_loss_function(self, y_hat: Any, data: Any):
-
+        """
+        A wrapper function for calling the loss calculation.
+        """
         # convert y_hat into size (batch_size*max_seq_length,target_vocab_size)
         return self._loss_function(y_hat.contiguous().view(-1, y_hat.size(-1)),
                                    data.tgt_y.contiguous().view(-1))
@@ -282,6 +303,10 @@ class GPTTrainer(AbstractTrainer):
 
     def _reformat_data(self, data: Tuple) -> gpt_batch.GPTBatch:
         """
+        A generic function to reformat data for the problem.
+
+        In this case, it's moving the data to the correct device, then creating a batch object.
+
         Args:
             data (Tuple): The tuples of LongTensors to be converted into a Batch object.
         Returns:
@@ -302,7 +327,9 @@ class GPTTrainer(AbstractTrainer):
         return batch_data
 
     def _calc_loss_function(self, y_hat: Any, data: Any):
-
+        """
+        A wrapper function for calling the loss calculation.
+        """
         return self._loss_function(y_hat.view(-1, y_hat.size(-1)), data.tgt.view(-1))
 
 
@@ -345,10 +372,22 @@ class TextCNNTrainer(AbstractTrainer):
                                              debug)
 
     def _reformat_data(self, data: Tuple) -> Tuple:
+        """
+        A generic function to reformat data for the problem.
 
+        In this case, it's moving the data to the correct device.
+
+        Args:
+           data(Tuple): A tuple containing the input, context tensors.
+
+        Returns:
+           A tuple containing the input, context tensors on a gpu.
+        """
         return data[0].to(self._device), data[1].to(self._device)
 
     def _calc_loss_function(self, y_hat: Any, data: Any):
-
+        """
+        A wrapper function for calling the loss calculation.
+        """
         return self._loss_function(y_hat, data[0].view(-1))
 

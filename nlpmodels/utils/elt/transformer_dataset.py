@@ -18,9 +18,9 @@ from nlpmodels.utils.vocabulary import NLPVocabulary
 
 class TransformerDataset(AbstractNLPDataset):
     """
-    Transformer class for transforming and storing dataset for use in Transformer model.
+    Transformer dataset class for transforming and storing dataset for training the Transformer model.
 
-    Uses torchtext's  dataset.
+    Uses torchtext helper functions to load Multi30k dataset.
     """
 
     def __init__(self, data: List, target_vocab: NLPVocabulary):

@@ -135,11 +135,3 @@ class SkipGramDataset(AbstractNLPDataset):
         dictionary.set_proba_thresh(thresh)
         train_data = cls.get_target_context_data(train_text, dictionary, context_size, train=True)
         return cls(train_data), dictionary
-
-    @classmethod
-    def get_testing_data(cls, *args):
-        pass
-
-    @classmethod
-    def get_testing_dataloader(cls, *args):
-        pass
